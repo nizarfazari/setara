@@ -3,6 +3,8 @@ import { Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 const { Title } = Typography;
 
+
+
 const Home = () => {
   const navigate = useNavigate()
   return (

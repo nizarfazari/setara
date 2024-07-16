@@ -3,17 +3,16 @@ import type { FormProps } from 'antd';
 import { Button, Form, Input } from 'antd';
 import './login.css'
 
-type FieldType = {
-  username?: string;
-  password?: string;
-  remember?: string;
+type LoginType = {
+  username: string;
+  password: string;
 };
 
-const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
+const onFinish: FormProps<LoginType>['onFinish'] = (values) => {
   console.log('Success:', values);
 };
 
-const onFinishFailed: FormProps<FieldType>['onFinishFailed'] = (errorInfo) => {
+const onFinishFailed: FormProps<LoginType>['onFinishFailed'] = (errorInfo) => {
   console.log('Failed:', errorInfo);
 };
 
@@ -31,7 +30,7 @@ const Login = () => {
           onFinishFailed={onFinishFailed}
           autoComplete="off"
         >
-          <Form.Item<FieldType>
+          <Form.Item<LoginType>
             name="username"
             rules={[{ required: true, message: 'Mohon Masukan Username!' }]}
           >
@@ -41,7 +40,7 @@ const Login = () => {
             </div>
           </Form.Item>
 
-          <Form.Item<FieldType>
+          <Form.Item<LoginType>
             name="password"
             rules={[{ required: true, message: 'Mohon Masukan Password!' }]}
           >

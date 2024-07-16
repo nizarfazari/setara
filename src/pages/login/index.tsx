@@ -36,7 +36,7 @@ const Login = () => {
             rules={[{ required: true, message: 'Mohon Masukan Username!' }]}
           >
             <div className='input-group'>
-              <Input className='input-label' placeholder='asdas' />
+              <Input className='input-label' placeholder='Masukan Username ID Anda' />
               <label htmlFor="" className='required'>Username ID</label>
             </div>
           </Form.Item>
@@ -46,7 +46,7 @@ const Login = () => {
             rules={[{ required: true, message: 'Mohon Masukan Password!' }]}
           >
             <div className='input-group'>
-              <Input.Password className='input-label' />
+              <Input.Password className='input-label' placeholder='Masukan Password Anda'/>
               <label htmlFor="" className='required'>Katasandi</label>
             </div>
           </Form.Item>

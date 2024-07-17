@@ -1,4 +1,3 @@
-import Navbar from '../components/Navbar';
 import Breadcrumb from '../components/Breadcumb';
 import { Button } from 'antd';
 import { Typography } from 'antd';
@@ -11,7 +10,6 @@ const Home = () => {
   const navigate = useNavigate()
   return (
     <>
-      <Navbar />
       <div className='container mx-auto'>
         <Breadcrumb title='E-Wallet' subtitle='Silahkan Pilih E-Wallet yang ingin Anda Transfer' />
         <div className="font-bold text-center p-10">

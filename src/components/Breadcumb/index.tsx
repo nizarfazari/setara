@@ -7,7 +7,7 @@ type Props = {
 
 const Breadcrumb: React.FC<Props> = ({ title, subtitle }) => {
   return (
-    <div className="container flex mx-auto px-1">
+    <div className="container mx-auto px-8 flex">
       <img className="" src="/images/icons/ArrowLeft.svg" alt="Arrow left" />
       <div className="container mt-6">
         <h5 className="text-neutral-400 text-heading-5 text-nunito font-bold">{title}</h5>

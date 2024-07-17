@@ -1,0 +1,42 @@
+.ant-form-item .ant-form-item-label label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+  display: none;
+}
+
+:where(.css-dev-only-do-not-override-p8b6i).ant-form-vertical
+  .ant-form-item:not(.ant-form-item-horizontal)
+  .ant-form-item-label
+  > label::after {
+  visibility: visible;
+  display: inline-block;
+  margin-inline-start: 5px;
+  margin-inline-end: 5px;
+  color: #DD411E;
+  font-size: 18px;
+  font-family: SimSun, sans-serif;
+  line-height: 1;
+  content: "*";
+}
+
+.ant-form-item .ant-form-item-label > label { 
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.ant-input {
+    padding: 18px 24px;
+}
+
+@media only screen and (max-width: 768px) {
+    :where(.css-dev-only-do-not-override-p8b6i).ant-card .ant-card-body {
+        padding: 0;
+    }
+
+    .ant-form-item .ant-form-item-label > label { 
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .ant-input {
+        padding: 12px 15px;
+    }
+}

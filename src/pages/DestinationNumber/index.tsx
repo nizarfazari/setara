@@ -4,6 +4,7 @@ import ContactList from "../../components/ContactList";
 import Avatar from "../../assets/images/avatar.svg";
 import { Card, Flex } from "antd";
 import "./style.css";
+import Breadcrumb from "../../components/Breadcumb";
 
 const DAFTAR_FAVORIT = [
   {
@@ -49,9 +50,13 @@ const DAFTAR_TERSIMPAN = [
 export default function DestinationNumberPage() {
   return (
     <div className="container">
-      <div className="w-full my-12 flex flex-col lg:flex-row gap-6 justify-center items-start">
+      <div className="my-[30px]">
+      <Breadcrumb title='OVO' subtitle='Masukkan Nomor Tujuan Transfer' />
+
+      </div>
+      <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">
         <DestinationNumber />
-        <Card className="border-white lg:border-[#E4EDFF] w-full lg:max-w-[546px]" id="contacts">
+        <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
           <Flex vertical gap={30} align="start">
             <ContactList header="Daftar Favorit" contacts={DAFTAR_FAVORIT} />
             <ContactList header="Daftar Tersimpan" contacts={DAFTAR_TERSIMPAN} />

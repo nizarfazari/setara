@@ -23,6 +23,22 @@
   padding: 18px 24px;
 }
 
+.ant-checkbox .ant-checkbox-inner {
+  width: 24px;
+  height: 24px;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #115DA9;
+  border-color: #115DA9;
+}
+
+.ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover 
+.ant-checkbox-checked:not(.ant-checkbox-disabled) 
+.ant-checkbox-inner{
+  background-color: #115DA9;
+}
+
 @media only screen and (max-width: 768px) {
   .ant-card .ant-card-body {
     padding: 0;

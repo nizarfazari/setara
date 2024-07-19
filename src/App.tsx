@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import AppProvider from "./context";
-import Login from "./pages/login";
+import Login from "./pages/Login";
 import Home from "./pages/homepage";
 import TransactionFailed from "./pages/transactionFailed";
 import DestinationNumberPage from "./pages/DestinationNumber";

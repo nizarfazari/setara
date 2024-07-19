@@ -35,7 +35,7 @@ const Home = () => {
   };
   const data = {
     name: "Andika Putra",
-    norek: 289137654,
+    norek: 2892112321,
     balance: 5000000,
     income: 15000000,
     expenses: 10000000,
@@ -107,47 +107,57 @@ const Home = () => {
     return transactions;
   };
 
+
+  const formatNorek = (norek: string | number) => {
+    const str = norek.toString();
+
+    if (str.length % 4 === 0) {
+      return str;
+    }
+    return str.replace(/(.{4})/g, '$1-');
+  };
+
   const transactions = getTransactionsForMonth();
 
   return (
-    <div className="md:max-w-7xl pt-5 mx-auto container">
+    <div className="mx-auto container mt-5">
       <h1 className="text-heading-5 font-bold text-primary-100">
         Halo, {data.name}
       </h1>
-      <p className="text-primary-100 text">{data.norek}</p>
-      <div className="py-3">
-        <h5 className="text-primary-100 font-bold text-heading-6 py-3">
-          Informasi Saldo Rekening
-        </h5>
-        <div className=" bg-primary-100 rounded-lg md:w-1/3">
-          <div className="flex gap-7 p-5">
+      <div className="my-3">
+
+        <div className=" bg-primary-100 rounded-lg md:w-1/3 px-7 py-5">
+          <h5 className="text-white font-bold text-heading-6 mb-7">
+            Informasi Saldo Rekening
+          </h5>
+          <div className="flex gap-7 ">
             <img src={profilpict} className="w-16 h-16" />
             <div>
               <h5 className="text-neutral-50">Total Saldo</h5>
               <h5 className="text-heading-6 font-semibold text-neutral-50">
-                {" "}
+
                 Rp {data.balance.toLocaleString("id-ID")}
               </h5>
-              <p className="text-neutral-100 text-caption-small">
-                No. Rekening:{" "}
-                <span className="font-semibold text-caption-large">
-                  {data.norek}
+              <p className="text-neutral-100 text-caption-small mt-3">
+                No. Rekening:
+                <span className="font-bold text-caption-large ml-2">
+                  {formatNorek(data.norek)}
                 </span>
               </p>
             </div>
           </div>
         </div>
-        <div className="py-5">
+        <div className="my-10">
           <h1 className="text-primary-100 font-bold text-heading-6 py-3">
             Menu
           </h1>
-          <div className="grid grid-cols-3 md:grid-cols-6 p-4 gap-y-4 shadow-md rounded-lg">
+          <div className="grid grid-cols-3 md:grid-cols-6 py-4 gap-y-4 rounded-lg border border-primary-300 ">
             <div className=" text-center">
               <img
                 src={iconInfo}
                 onClick={showModal}
                 alt="info"
-                className="mx-auto w-16 p-3 shadow-md"
+                className="mx-auto w-16 p-3 shadow-md rounded-xl border border-primary-300 cursor-pointer"
               />
               <Modal
                 open={isModalOpen}
@@ -182,7 +192,7 @@ const Home = () => {
               <img
                 src={iconTransfer}
                 alt="info"
-                className="mx-auto w-16 p-3 shadow-md"
+                className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer "
               />
               <p className="pt-2">Transfer</p>
             </div>
@@ -190,7 +200,7 @@ const Home = () => {
               <img
                 src={iconEwallet}
                 alt="info"
-                className="mx-auto w-16 p-3 shadow-md"
+                className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
               />
               <p className="pt-2">E-Wallet</p>
             </div>
@@ -198,7 +208,7 @@ const Home = () => {
               <img
                 src={iconBuy}
                 alt="info"
-                className="mx-auto w-16 p-3 shadow-md"
+                className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
               />
               <p className="pt-2">Pembelian</p>
             </div>
@@ -206,7 +216,7 @@ const Home = () => {
               <img
                 src={iconInvest}
                 alt="info"
-                className="mx-auto w-16 p-3 shadow-md"
+                className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
               />
               <p className="pt-2">Investasi</p>
             </div>
@@ -214,7 +224,7 @@ const Home = () => {
               <img
                 src={iconCardless}
                 alt="info"
-                className="mx-auto w-16 p-3 shadow-md"
+                className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
               />
               <p className="pt-2">Cardless</p>
             </div>
@@ -251,8 +261,8 @@ const Home = () => {
                         transaction.type.includes("Transfer Antar")
                           ? iconTransFav
                           : transaction.type.includes("E-Wallet")
-                          ? iconTransFav
-                          : iconTopupFav
+                            ? iconTransFav
+                            : iconTopupFav
                       }
                       alt="icon"
                     />
@@ -325,11 +335,10 @@ const Home = () => {
               <div className="items-center container">
                 <h5>Selisih</h5>
                 <h5
-                  className={`${
-                    (transactions?.balance ?? 0) < 0
-                      ? "text-red-500"
-                      : "text-green-500"
-                  } text-heading-6 font-bold`}
+                  className={`${(transactions?.balance ?? 0) < 0
+                    ? "text-red-500"
+                    : "text-green-500"
+                    } text-heading-6 font-bold`}
                 >
                   Rp {transactions?.balance.toLocaleString("id-ID")}
                 </h5>

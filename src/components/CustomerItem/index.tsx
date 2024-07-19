@@ -7,11 +7,12 @@ type TContactItemProps = {
   name: string;
   type: string;
   number: string;
-  isFavorite: boolean;
+  isFavorite?: boolean;
   avatar: string;
 };
 
-export default function ContactItem({ name, type, number, isFavorite, avatar }: TContactItemProps) {
+export default function CustomerItem({ name, type, number, isFavorite, avatar }: TContactItemProps) {
+  console.log(isFavorite);
   return (
     <Flex justify="space-between" className="text-primary-100 font-bold cursor-pointer" align="center">
       <Flex gap="1rem">
@@ -26,10 +27,8 @@ export default function ContactItem({ name, type, number, isFavorite, avatar }: 
           </Flex>
         </Flex>
       </Flex>
-      {isFavorite ? (
-        <Heart weight="fill" className="size-[22px] md:size-[32px]" />
-      ) : (
-        <Heart className="size-[22px] md:size-[32px]" />
+      {isFavorite !== undefined && (
+        <Heart weight={`${isFavorite ? "fill" : "regular"}`} className="size-[22px] md:size-[32px]" />
       )}
     </Flex>
   );

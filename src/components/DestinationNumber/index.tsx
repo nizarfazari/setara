@@ -1,12 +1,16 @@
 import React from "react";
 import { Button, Card, Checkbox, Form, FormProps, Input } from "antd";
 import "./style.css";
+import { useNavigate } from "react-router-dom";
 
 type TDestinationNumber = number;
 
 export default function DestinationNumber() {
+  const navigate = useNavigate();
+
   const onFinish: FormProps<TDestinationNumber>["onFinish"] = (values) => {
     console.log("Success:", values);
+    navigate("/amount-topup")
   };
 
   const onFinishFailed: FormProps<TDestinationNumber>["onFinishFailed"] = (errorInfo) => {

@@ -2,7 +2,7 @@
   display: none;
 }
 
-.ant-form-vertical .ant-form-item:not(.ant-form-item-horizontal) .ant-form-item-label > label::after {
+.ant-form-item .ant-form-item-label label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::after {
   visibility: visible;
   display: inline-block;
   margin-inline-start: 5px;

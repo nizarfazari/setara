@@ -1,6 +1,6 @@
 import React from "react";
 import DestinationNumber from "../../components/DestinationNumber";
-import ContactList from "../../components/ContactList";
+import CustomerList from "../../components/CustomerList";
 import Avatar from "../../assets/images/avatar.svg";
 import { Card, Flex } from "antd";
 import "./style.css";
@@ -58,8 +58,8 @@ export default function DestinationNumberPage() {
         <DestinationNumber />
         <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
           <Flex vertical gap={30} align="start">
-            <ContactList header="Daftar Favorit" contacts={DAFTAR_FAVORIT} />
-            <ContactList header="Daftar Tersimpan" contacts={DAFTAR_TERSIMPAN} />
+            <CustomerList header="Daftar Favorit" contacts={DAFTAR_FAVORIT} />
+            <CustomerList header="Daftar Tersimpan" contacts={DAFTAR_TERSIMPAN} />
           </Flex>
         </Card>
       </div>

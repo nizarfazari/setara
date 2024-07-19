@@ -5,6 +5,8 @@ import Home from "./pages/Home";
 import DestinationNumberPage from "./pages/DestinationNumber";
 import PlainLayout from "./layouts/PlainLayout";
 import AmountTopUpPage from "./pages/AmountTopUp";
+import TransferWallet from "./pages/TransferWallet";
+import TransferBCA from "./pages/TransferBCA";
 
 function App() {
   return (
@@ -15,6 +17,8 @@ function App() {
             <Route index element={<Home />} />
             <Route path="/destination-number" element={<DestinationNumberPage />} />
             <Route path="/amount-topup" element={<AmountTopUpPage />} />
+            <Route path="/e-wallet" element={<TransferWallet />} />
+            <Route path="/transfer-bca" element={<TransferBCA />} />
           </Route>
           <Route path="/login" element={<Login />} />
         </Routes>

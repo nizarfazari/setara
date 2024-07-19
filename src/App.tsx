@@ -7,8 +7,8 @@ import PlainLayout from './layouts/PlainLayout';
 import AmountTopUpPage from './pages/AmountTopUp';
 import TransferWallet from './pages/TransferWallet';
 import TransferBCA from './pages/TransferBCA';
-import Home from './pages/homepage';
-import TransactionFailed from './pages/transactionFailed';
+import Home from './pages/Home';
+import TransactionFailed from './pages/TransactionFailed';
 
 function App() {
   return (

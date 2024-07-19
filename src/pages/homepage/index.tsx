@@ -15,8 +15,6 @@ import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
-
-// Import Swiper styles
 import "swiper/css";
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Button, Modal } from "antd";
 import profilpict from "../../assets/homepage/Ellipse 15.png";
 import iconInfo from "../../assets/homepage/icon-info.png";
@@ -7,9 +7,11 @@ import iconEwallet from "../../assets/homepage/icon-ewallet.png";
 import iconBuy from "../../assets/homepage/icon-buy.png";
 import iconInvest from "../../assets/homepage/icon-invest.png";
 import iconCardless from "../../assets/homepage/info-cardless.png";
-import iconTransFav from "../../assets/homepage/icon-transfer-fav.png";
-import iconTopupFav from "../../assets/homepage/icon-topup-fav.png";
+import iconTransFav from "../../assets/homepage/icon-trans-fav.png";
+import iconTopupFav from "../../assets/homepage/icon-ewallet-fav2.png";
+import iconArrow from "../../assets/icons/ic_arrow.svg";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { Swiper as SwiperClass } from 'swiper';
 import { Autoplay, Navigation } from "swiper/modules";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import "swiper/css";
@@ -20,6 +22,7 @@ import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space } from "antd";
 
 const Home = () => {
+  const swiperRef = useRef<SwiperClass | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const showModal = () => {
@@ -39,61 +42,60 @@ const Home = () => {
     balance: 5000000,
     income: 15000000,
     expenses: 10000000,
-    favoriteTransactions: {
-      datas: [
-        {
-          id: 1,
-          type: "Transfer Antar Rekening BCA",
-          amount: 500000,
-          date: "2024-07-01",
-          name: "NASYILA HANI",
-        },
-        {
-          id: 2,
-          name: "ADITYA SYARIF",
-          type: "Pembayaran Listrik",
-          amount: 300000,
-          date: "2024-07-03",
-        },
-        {
-          id: 3,
-          name: "MAMAN ABDURAHMAN",
-          type: "Top Up OVO",
-          amount: 200000,
-          date: "2024-07-02",
-        },
-        {
-          id: 4,
-          name: "MBAPPE",
-          type: "Top Up OVO",
-          amount: 150000,
-          date: "2024-07-04",
-        },
-      ],
-    },
-    transactionsPerMonth: [
+    avatar: profilpict,
+    favoriteTransactions: [
       {
-        month: "Januari",
-        income: 1000000,
-        expenses: 500000,
-        balance: 500000,
+        id: 1,
+        type: "Transfer Antar Rekening BCA",
+        amount: 500000,
+        date: "2024-07-01",
+        name: "NASYILA HANI",
       },
       {
-        month: "Februari",
+        id: 2,
+        name: "ADITYA SYARIF",
+        type: "Transfer Antar Rekening BCA",
+        amount: 300000,
+        date: "2024-07-03",
+      },
+      {
+        id: 3,
+        name: "MAMAN ABDURAHMAN",
+        type: "Top Up OVO",
+        amount: 200000,
+        date: "2024-07-02",
+      },
+      {
+        id: 4,
+        name: "MBAPPE",
+        type: "Top Up OVO",
+        amount: 150000,
+        date: "2024-07-04",
+      },
+    ],
+    transactionsPerMonth: [
+      {
+        month: "Januari 2024",
+        income: 1000000,
+        expenses: 5000000,
+        balance: -4000000,
+      },
+      {
+        month: "Februari 2024",
         income: 1200000,
         expenses: 600000,
         balance: 600000,
       },
       {
-        month: "Maret",
+        month: "Maret 2024",
         income: 1300000,
         expenses: 700000,
-        balance: 700000,
+        balance: 600000,
       },
     ],
   };
 
-  const [selectedMonth, setSelectedMonth] = useState("Januari");
+  const [selectedMonth, setSelectedMonth] = useState("Januari 2024");
 
   const handleMonthChange = (key: any) => {
     const month = data.transactionsPerMonth[key].month;
@@ -121,7 +123,7 @@ const Home = () => {
         </h5>
         <div className=" bg-primary-100 rounded-lg md:w-1/3">
           <div className="flex gap-7 p-5">
-            <img src={profilpict} className="w-16 h-16" />
+            <img src={data.avatar} className="w-16 h-16" />
             <div>
               <h5 className="text-neutral-50">Total Saldo</h5>
               <h5 className="text-heading-6 font-semibold text-neutral-50">
@@ -142,7 +144,7 @@ const Home = () => {
             Menu
           </h1>
           <div className="grid grid-cols-3 md:grid-cols-6 p-4 gap-y-4 shadow-md rounded-lg">
-            <div className=" text-center">
+            <div className=" text-center ">
               <img
                 src={iconInfo}
                 onClick={showModal}
@@ -166,7 +168,7 @@ const Home = () => {
                   Info Saldo
                 </h1>
 
-                <div className="border rounded-lg p-3 my-7">
+                <div className="border rounded-xl p-5 my-7 shadow-sm">
                   <p className="text-primary-100">12/07/2024</p>
                   <p className="text-primary-100 font-semibold py-2">
                     {data.norek}
@@ -220,19 +222,21 @@ const Home = () => {
             </div>
           </div>
         </div>
-        <div>
+        <div className="pt-5 pb-3">
           <h1 className="text-primary-100 text-heading-6 font-bold">
             Transaksi Favorit
           </h1>
           <div className="py-3">
             <Swiper
-              modules={[Autoplay, Navigation]}
+              modules={[Navigation, Autoplay]}
               loop={true}
               autoplay={{
-                delay: 2500,
+                delay: 4000,
                 disableOnInteraction: false,
               }}
-              navigation={false}
+              onBeforeInit={(swiper) => {
+                swiperRef.current = swiper;
+              }}
               spaceBetween={15}
               slidesPerView={1.5}
               breakpoints={{
@@ -243,19 +247,31 @@ const Home = () => {
               onSlideChange={() => console.log("slide change")}
               onSwiper={(swiper) => console.log(swiper)}
             >
-              {data.favoriteTransactions.datas.map((transaction) => (
+              {data.favoriteTransactions.map((transaction) => (
                 <SwiperSlide key={transaction.id}>
                   <div className="border rounded-lg p-3">
-                    <img
-                      src={
-                        transaction.type.includes("Transfer Antar")
-                          ? iconTransFav
-                          : transaction.type.includes("E-Wallet")
-                          ? iconTransFav
-                          : iconTopupFav
-                      }
-                      alt="icon"
-                    />
+                    <div
+                      className={`flex gap-2 items-center py-1 px-2 w-20 bg-primary-100 rounded-3xl text-white text-caption-large`}
+                    >
+                      <img
+                        src={
+                          transaction.type.includes("Transfer")
+                            ? iconTransFav
+                            : iconTopupFav
+                        }
+                        alt={
+                          transaction.type.includes("Transfer")
+                            ? "transfav"
+                            : "topupfav"
+                        }
+                        className="w-[10px] items-center h-[10px]"
+                      />
+                      <p className="text-caption-small">
+                        {transaction.type.includes("Transfer")
+                          ? "Transfer"
+                          : "Top Up"}
+                      </p>
+                    </div>
                     <h5 className="text-caption-small pt-3">
                       {transaction.type}
                     </h5>
@@ -265,6 +281,14 @@ const Home = () => {
                   </div>
                 </SwiperSlide>
               ))}
+              <div className="md:flex justify-center gap-3 pt-4 hidden">
+                <button onClick={() => swiperRef.current?.slidePrev()}>
+                  <img src={iconArrow} />
+                </button>
+                <button onClick={() => swiperRef.current?.slideNext()}>
+                <img src={iconArrow} className="rotate-180" />
+                </button>
+              </div>
             </Swiper>
           </div>
         </div>

@@ -36,6 +36,7 @@ const Home = () => {
   const handleCancel = () => {
     setIsModalOpen(false);
   };
+
   const data = {
     name: "Andika Putra",
     norek: 289137654,
@@ -43,56 +44,122 @@ const Home = () => {
     income: 15000000,
     expenses: 10000000,
     avatar: profilpict,
-    favoriteTransactions: [
+    userTersimpan: [
       {
         id: 1,
+        no_rekening: 34556534,
         type: "Transfer Antar Rekening BCA",
-        amount: 500000,
-        date: "2024-07-01",
+        name_bank: "BCA",
         name: "NASYILA HANI",
+        isFavorite: true,
       },
       {
         id: 2,
+        no_rekening: 34590534,
         name: "ADITYA SYARIF",
         type: "Transfer Antar Rekening BCA",
-        amount: 300000,
-        date: "2024-07-03",
+        name_bank: "BCA",
+        isFavorite: true,
       },
       {
         id: 3,
+        no_rekening: 89655644,
         name: "MAMAN ABDURAHMAN",
         type: "Top Up OVO",
-        amount: 200000,
-        date: "2024-07-02",
+        name_bank: "BCA", 
+        isFavorite: true,
       },
       {
         id: 4,
-        name: "MBAPPE",
+        no_rekening: 884556534,
+        name: "DEWI PUSPITA",
         type: "Top Up OVO",
-        amount: 150000,
-        date: "2024-07-04",
+        name_bank: "BCA", 
+        isFavorite: true,
+      },
+      {
+        id: 5,
+        no_rekening: 987654321,
+        name: "AGUS SUHENDRA",
+        type: "Transfer Antar Rekening BCA",
+        name_bank: "BCA",
+        isFavorite: true,
+      },
+      {
+        id: 6,
+        no_rekening: 123456789,
+        name: "SITI NURHALIZA",
+        type: "Top Up GoPay",
+        name_bank: "BCA", 
+        isFavorite: false,
+      },
+      {
+        id: 7,
+        no_rekening: 223344556,
+        name: "ANDI WIBOWO",
+        type: "Transfer Antar Rekening BCA",
+        name_bank: "BCA",
+        isFavorite: false,
+      },
+      {
+        id: 8,
+        no_rekening: 998877665,
+        name: "RAHMAWATI",
+        type: "Top Up DANA",
+        name_bank: "BCA",
+        isFavorite: false,
+      },
+      {
+        id: 9,
+        no_rekening: 554433221,
+        name: "JOKO SUSILO",
+        type: "Transfer Antar Rekening BCA",
+        name_bank: "BCA", 
+        isFavorite: true,
+      },
+      {
+        id: 10,
+        no_rekening: 667788990,
+        name: "KARTINI",
+        type: "Top Up ShopeePay",
+        name_bank: "ShopeePay", 
+        isFavorite: true,
       },
     ],
     transactionsPerMonth: [
       {
         month: "Januari 2024",
         income: 1000000,
-        expenses: 5000000,
-        balance: -4000000,
+        expenses: 500000,
+        balance: 500000
       },
       {
         month: "Februari 2024",
         income: 1200000,
         expenses: 600000,
-        balance: 600000,
+        balance: 600000
       },
       {
         month: "Maret 2024",
         income: 1300000,
         expenses: 700000,
-        balance: 600000,
+        balance: 1100000
+      },
+      {
+        month: "April 2024",
+        income: 700000,
+        expenses: 800000,
+        balance: 100000
+      },
+      {
+        month: "Mei 2024",
+        income: 1500000,
+        expenses: 1900000,
+        balance: 400000
       },
     ],
+    totalUsers: 10, 
+    totalFavorites: 6, 
   };
 
   const [selectedMonth, setSelectedMonth] = useState("Januari 2024");
@@ -247,7 +314,7 @@ const Home = () => {
               onSlideChange={() => console.log("slide change")}
               onSwiper={(swiper) => console.log(swiper)}
             >
-              {data.favoriteTransactions.map((transaction) => (
+              {data.userTersimpan?.filter(transaction => transaction.isFavorite === true).map((transaction) => (
                 <SwiperSlide key={transaction.id}>
                   <div className="border rounded-lg p-3">
                     <div

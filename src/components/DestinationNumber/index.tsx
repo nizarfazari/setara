@@ -5,12 +5,16 @@ import { useNavigate } from "react-router-dom";
 
 type TDestinationNumber = number;
 
-export default function DestinationNumber() {
+interface PropsDestinationNumber {
+  pathUrl: string;
+}
+
+const DestinationNumber: React.FC<PropsDestinationNumber> = ({ pathUrl }) => {
   const navigate = useNavigate();
 
   const onFinish: FormProps<TDestinationNumber>["onFinish"] = (values) => {
     console.log("Success:", values);
-    navigate("/amount-topup")
+    navigate(`${pathUrl}/destination-number`)
   };
 
   const onFinishFailed: FormProps<TDestinationNumber>["onFinishFailed"] = (errorInfo) => {
@@ -44,3 +48,6 @@ export default function DestinationNumber() {
     </Card>
   );
 }
+
+
+export default DestinationNumber;

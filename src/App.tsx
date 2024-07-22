@@ -7,6 +7,8 @@ import PlainLayout from "./layouts/PlainLayout";
 
 import TransferWallet from "./pages/TransferWallet";
 import TransferBCA from "./pages/TransferBCA";
+import AmountTopUpPage from "./pages/E-Wallet/AmountTopUp";
+import ConfirmationPIN from "./pages/E-Wallet/ConfirmationPin";
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
           <Route path="/e-wallet" element={<PlainLayout />}>
             <Route index element={<TransferWallet />} />
             <Route path="/e-wallet/:slug" element={<DestinationNumberPage />} />
+            <Route path="/e-wallet/:slug/destination-number" element={<AmountTopUpPage />} />
+            <Route path="/e-wallet/:slug/confirmation" element={<ConfirmationPIN />} />
           </Route>
           <Route path="/login" element={<Login />} />
         </Routes>

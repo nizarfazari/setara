@@ -8,6 +8,8 @@ import TransferWallet from './pages/TransferWallet';
 import TransferBCA from './pages/TransferBCA';
 import Home from './pages/homepage';
 import TransactionFailed from './pages/transactionFailed';
+import Mutasi from './pages/Mutasi';
+import BuktiTransfer from './pages/BuktiTransfer';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
             <Route path="/e-wallet" element={<TransferWallet />} />
             <Route path="/transfer-bca" element={<TransferBCA />} />
             <Route path="/transaction-failed" element={<TransactionFailed />} />
+            <Route path="/mutasi" element={<Mutasi />} />
+            <Route path="/mutasi/:id" element={<BuktiTransfer />} />
           </Route>
           <Route path="/login" element={<Login />} />
         </Routes>

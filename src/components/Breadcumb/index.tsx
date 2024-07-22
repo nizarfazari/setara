@@ -8,7 +8,7 @@ type Props = {
 
 const Breadcrumb: React.FC<Props> = ({ title, subtitle }) => {
   return (
-    <div className="flex gap-4 ">
+    <div className="flex gap-4 mt-5 lg:mt-10">
       <ArrowLeft size={27} weight="bold" color='#343330' className='mt-[5px]' />
       <div className="font-bold">
         <h5 className="text-neutral-400 text-heading-5  ">{title}</h5>

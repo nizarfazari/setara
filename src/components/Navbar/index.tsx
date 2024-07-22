@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { List, X, House, Receipt, User, Bell } from "@phosphor-icons/react";
 
 const Navbar = () => {
@@ -26,9 +26,9 @@ const Navbar = () => {
     }, []);
 
     return (
-        <header className="bg-primary-100 py-4" >
-            <div className="container flex justify-between items-center max-w-[1240px] mx-auto">
-                <img src="/images/logo.png" alt="Logo" className="h-12" />
+        <header className="bg-primary-100 py-4">
+            <div className="container flex justify-between items-center max-w-[1240px]">
+                <img src="/images/logo.png" alt="Logo" className="h-8" />
                 <ul className='hidden md:flex gap-6 text-white'>
                     <a href="#beranda" className="gap-[6px] flex items-center">
                         <House size={20} color='#fff' weight="fill" />

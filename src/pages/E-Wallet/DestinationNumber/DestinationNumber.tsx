@@ -1,10 +1,10 @@
 import React from "react";
-import DestinationNumber from "../../components/DestinationNumber";
-import CustomerList from "../../components/CustomerList";
-import Avatar from "../../assets/images/avatar.svg";
+import DestinationNumber from "../../../components/DestinationNumber";
+import CustomerList from "../../../components/CustomerList";
+import Avatar from "/images/avatar.svg";
 import { Card, Flex } from "antd";
 import "./style.css";
-import Breadcrumb from "../../components/Breadcumb";
+import Breadcrumb from "../../../components/Breadcumb";
 
 const DAFTAR_FAVORIT = [
   {

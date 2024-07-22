@@ -14,7 +14,7 @@ const DestinationNumber: React.FC<PropsDestinationNumber> = ({ pathUrl }) => {
 
   const onFinish: FormProps<TDestinationNumber>["onFinish"] = (values) => {
     console.log("Success:", values);
-    navigate(`${pathUrl}/destination-number`)
+    navigate(`${pathUrl}/nomor-tujuan`)
   };
 
   const onFinishFailed: FormProps<TDestinationNumber>["onFinishFailed"] = (errorInfo) => {

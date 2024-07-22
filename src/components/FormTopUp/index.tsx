@@ -14,7 +14,7 @@ export default function FormTopUp() {
   const onFinish: FormProps<TFormTopUp>["onFinish"] = (values) => {
     console.log("Success:", values);
 
-    navigate(`/e-wallet/${slug}/confirmation`)
+    navigate(`/bca/${slug}/konfirmasi`)
   };
 
   const onFinishFailed: FormProps<TFormTopUp>["onFinishFailed"] = (errorInfo) => {

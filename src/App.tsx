@@ -8,7 +8,8 @@ import AmountTopUpPage from './pages/AmountTopUp';
 import TransferWallet from './pages/TransferWallet';
 import TransferBCA from './pages/TransferBCA';
 import Home from './pages/Home';
-import TransactionFailed from './pages/TransactionFailed';
+import TransactionFailed from './pages/transactionFailed';
+
 
 function App() {
   return (

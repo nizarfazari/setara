@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import { Button, Modal } from "antd";
+
 import profilpict from "../../assets/homepage/Ellipse 15.png";
 import iconInfo from "../../assets/homepage/icon-info.png";
 import iconTransfer from "../../assets/homepage/icon-transfer.png";
@@ -10,20 +10,26 @@ import iconCardless from "../../assets/homepage/info-cardless.png";
 import iconTransFav from "../../assets/homepage/icon-trans-fav.png";
 import iconTopupFav from "../../assets/homepage/icon-ewallet-fav2.png";
 import iconArrow from "../../assets/icons/ic_arrow.svg";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Swiper as SwiperClass } from 'swiper';
-import { Autoplay, Navigation } from "swiper/modules";
+import iconCopy from "../../assets/icons/ic_copy.svg";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { IoEye, IoEyeOff } from "react-icons/io5";
+import { GoDotFill } from "react-icons/go";
+import { Swiper as SwiperClass } from "swiper";
+import { Autoplay, Navigation } from "swiper/modules";
+import { Button, Modal } from "antd";
+import { DownOutlined } from "@ant-design/icons";
+import { Dropdown, Space } from "antd";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
 import "swiper/css";
-import { DownOutlined } from "@ant-design/icons";
-import { Dropdown, Space } from "antd";
 
 const Home = () => {
   const swiperRef = useRef<SwiperClass | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isBalanceHidden, setIsBalanceHidden] = useState(false);
+  const dots = new Array(7).fill(null);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -66,7 +72,7 @@ const Home = () => {
         no_rekening: 89655644,
         name: "MAMAN ABDURAHMAN",
         type: "Top Up OVO",
-        name_bank: "BCA", 
+        name_bank: "BCA",
         isFavorite: true,
       },
       {
@@ -74,7 +80,7 @@ const Home = () => {
         no_rekening: 884556534,
         name: "DEWI PUSPITA",
         type: "Top Up OVO",
-        name_bank: "BCA", 
+        name_bank: "BCA",
         isFavorite: true,
       },
       {
@@ -90,7 +96,7 @@ const Home = () => {
         no_rekening: 123456789,
         name: "SITI NURHALIZA",
         type: "Top Up GoPay",
-        name_bank: "BCA", 
+        name_bank: "BCA",
         isFavorite: false,
       },
       {
@@ -114,7 +120,7 @@ const Home = () => {
         no_rekening: 554433221,
         name: "JOKO SUSILO",
         type: "Transfer Antar Rekening BCA",
-        name_bank: "BCA", 
+        name_bank: "BCA",
         isFavorite: true,
       },
       {
@@ -122,7 +128,7 @@ const Home = () => {
         no_rekening: 667788990,
         name: "KARTINI",
         type: "Top Up ShopeePay",
-        name_bank: "ShopeePay", 
+        name_bank: "ShopeePay",
         isFavorite: true,
       },
     ],
@@ -131,35 +137,35 @@ const Home = () => {
         month: "Januari 2024",
         income: 1000000,
         expenses: 500000,
-        balance: 500000
+        balance: 500000,
       },
       {
         month: "Februari 2024",
         income: 1200000,
         expenses: 600000,
-        balance: 600000
+        balance: 600000,
       },
       {
         month: "Maret 2024",
         income: 1300000,
         expenses: 700000,
-        balance: 1100000
+        balance: 1100000,
       },
       {
         month: "April 2024",
         income: 700000,
         expenses: 800000,
-        balance: 100000
+        balance: 100000,
       },
       {
         month: "Mei 2024",
         income: 1500000,
         expenses: 1900000,
-        balance: 400000
+        balance: 400000,
       },
     ],
-    totalUsers: 10, 
-    totalFavorites: 6, 
+    totalUsers: 10,
+    totalFavorites: 6,
   };
 
   const [selectedMonth, setSelectedMonth] = useState("Januari 2024");
@@ -178,6 +184,21 @@ const Home = () => {
 
   const transactions = getTransactionsForMonth();
 
+  const copyToClipboard = () => {
+    navigator.clipboard
+      .writeText(data.norek.toString())
+      .then(() => {
+        console.log("No. Rekening copied to clipboard");
+      })
+      .catch((err) => {
+        console.error("Could not copy text: ", err);
+      });
+  };
+
+  const toggleBalanceVisibility = () => {
+    setIsBalanceHidden(!isBalanceHidden);
+  };
+
   return (
     <div className="md:max-w-7xl pt-5 mx-auto container">
       <h1 className="text-heading-5 font-bold text-primary-100">
@@ -188,21 +209,49 @@ const Home = () => {
         <h5 className="text-primary-100 font-bold text-heading-6 py-3">
           Informasi Saldo Rekening
         </h5>
-        <div className=" bg-primary-100 rounded-lg md:w-1/3">
-          <div className="flex gap-7 p-5">
+        <div className=" bg-primary-100 rounded-xl md:w-1/3 text-neutral-100">
+          <div className="flex gap-7 p-5 items-center">
             <img src={data.avatar} className="w-16 h-16" />
             <div>
-              <h5 className="text-neutral-50">Total Saldo</h5>
-              <h5 className="text-heading-6 font-semibold text-neutral-50">
-                {" "}
-                Rp {data.balance.toLocaleString("id-ID")}
-              </h5>
-              <p className="text-neutral-100 text-caption-small">
-                No. Rekening:{" "}
+              <p className="text-caption-small">No. Rekening: </p>
+              <div className="flex gap-2">
                 <span className="font-semibold text-caption-large">
                   {data.norek}
                 </span>
-              </p>
+                <button>
+                  {" "}
+                  <img onClick={copyToClipboard} src={iconCopy} />
+                </button>
+              </div>
+
+              <div className="items-center h-16 pt-3">
+                <h5 className="text-neutral-50">Total Saldo</h5>
+                <div className="flex gap-2">
+                  <h5 className="text-heading-6 font-semibold text-neutral-50">
+                    {isBalanceHidden ? (
+                      <span className="text-neutral-50 flex gap-0">
+                        {dots.map((_, index) => (
+                          <GoDotFill key={index} />
+                        ))}
+                      </span>
+                    ) : (
+                      `Rp ${data.balance.toLocaleString("id-ID")}`
+                    )}
+                  </h5>
+                  <button onClick={toggleBalanceVisibility} className="">
+                    {isBalanceHidden ? (
+                      <span className="text-neutral-100">
+                        <IoEye />
+                      </span>
+                    ) : (
+                      <span className="text-neutral-50">
+                        <IoEyeOff />
+                      </span>
+                    )}
+                  </button>
+                </div>
+              </div>
+              <div className="flex gap-3"></div>
             </div>
           </div>
         </div>
@@ -314,46 +363,48 @@ const Home = () => {
               onSlideChange={() => console.log("slide change")}
               onSwiper={(swiper) => console.log(swiper)}
             >
-              {data.userTersimpan?.filter(transaction => transaction.isFavorite === true).map((transaction) => (
-                <SwiperSlide key={transaction.id}>
-                  <div className="border rounded-lg p-3">
-                    <div
-                      className={`flex gap-2 items-center py-1 px-2 w-20 bg-primary-100 rounded-3xl text-white text-caption-large`}
-                    >
-                      <img
-                        src={
-                          transaction.type.includes("Transfer")
-                            ? iconTransFav
-                            : iconTopupFav
-                        }
-                        alt={
-                          transaction.type.includes("Transfer")
-                            ? "transfav"
-                            : "topupfav"
-                        }
-                        className="w-[10px] items-center h-[10px]"
-                      />
-                      <p className="text-caption-small">
-                        {transaction.type.includes("Transfer")
-                          ? "Transfer"
-                          : "Top Up"}
-                      </p>
+              {data.userTersimpan
+                ?.filter((transaction) => transaction.isFavorite === true)
+                .map((transaction) => (
+                  <SwiperSlide key={transaction.id}>
+                    <div className="border rounded-lg p-3">
+                      <div
+                        className={`flex gap-2 items-center py-1 px-2 w-20 bg-primary-100 rounded-3xl text-white text-caption-large`}
+                      >
+                        <img
+                          src={
+                            transaction.type.includes("Transfer")
+                              ? iconTransFav
+                              : iconTopupFav
+                          }
+                          alt={
+                            transaction.type.includes("Transfer")
+                              ? "transfav"
+                              : "topupfav"
+                          }
+                          className="w-[10px] items-center h-[10px]"
+                        />
+                        <p className="text-caption-small">
+                          {transaction.type.includes("Transfer")
+                            ? "Transfer"
+                            : "Top Up"}
+                        </p>
+                      </div>
+                      <h5 className="text-caption-small pt-3">
+                        {transaction.type}
+                      </h5>
+                      <h5 className="text-primary-100 text-caption-small font-semibold">
+                        {transaction.name}
+                      </h5>
                     </div>
-                    <h5 className="text-caption-small pt-3">
-                      {transaction.type}
-                    </h5>
-                    <h5 className="text-primary-100 text-caption-small font-semibold">
-                      {transaction.name}
-                    </h5>
-                  </div>
-                </SwiperSlide>
-              ))}
+                  </SwiperSlide>
+                ))}
               <div className="md:flex justify-center gap-3 pt-4 hidden">
                 <button onClick={() => swiperRef.current?.slidePrev()}>
                   <img src={iconArrow} />
                 </button>
                 <button onClick={() => swiperRef.current?.slideNext()}>
-                <img src={iconArrow} className="rotate-180" />
+                  <img src={iconArrow} className="rotate-180" />
                 </button>
               </div>
             </Swiper>
@@ -397,7 +448,7 @@ const Home = () => {
                     </div>
 
                     <h5 className="text-primary-100 font-bold text-heading-6 py-3">
-                      Rp {transactions?.income.toLocaleString("id-ID")}
+                      Rp{transactions?.income.toLocaleString("id-ID")}
                     </h5>
                   </div>
                 </div>
@@ -409,7 +460,7 @@ const Home = () => {
                     <p>Pengeluaran</p>
                   </div>
                   <h5 className="text-primary-100 font-bold text-heading-6 py-3">
-                    Rp {transactions?.expenses.toLocaleString("id-ID")}
+                    Rp{transactions?.expenses.toLocaleString("id-ID")}
                   </h5>
                 </div>
               </div>
@@ -422,7 +473,7 @@ const Home = () => {
                       : "text-green-500"
                   } text-heading-6 font-bold`}
                 >
-                  Rp {transactions?.balance.toLocaleString("id-ID")}
+                  Rp{transactions?.balance.toLocaleString("id-ID")}
                 </h5>
               </div>
             </div>

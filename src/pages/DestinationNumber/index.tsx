@@ -75,8 +75,8 @@ export default function DestinationNumberPage() {
         <DestinationNumber />
         <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
           <Flex vertical gap={30} align="start">
-            <CustomerList header="Daftar Favorit" contacts={DAFTAR_FAVORIT} />
-            <CustomerList header="Daftar Tersimpan" contacts={DAFTAR_TERSIMPAN} />
+            <CustomerList header="Daftar Favorit" contacts={DAFTAR_FAVORIT} tujuan={tujuan ? tujuan : 'bca'} />
+            <CustomerList header="Daftar Tersimpan" contacts={DAFTAR_TERSIMPAN} tujuan={tujuan ? tujuan : 'bca'} />
           </Flex>
         </Card>
       </div>

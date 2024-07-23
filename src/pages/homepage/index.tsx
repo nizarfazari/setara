@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { Button, Modal } from "antd";
 import profilpict from "../../assets/homepage/Ellipse 15.png";
 import iconInfo from "../../assets/homepage/icon-info.png";

@@ -3,8 +3,10 @@ import { useState } from "react"
 import './mutasi.css'
 import { Button, InputNumber, Modal, Radio, RadioChangeEvent, Space } from "antd"
 import { SlidersHorizontal } from '@phosphor-icons/react';
+import { useNavigate } from "react-router-dom";
 
 const Mutasi = () => {
+  const navigate = useNavigate()
   const [filteredBy, setFilteredBy] = useState<string>('semua')
   const [modal2Open, setModal2Open] = useState(false)
   const [value, setValue] = useState(1);
@@ -17,28 +19,28 @@ const Mutasi = () => {
   const data = [
     {
       status: 'SUKSES',
-      id: '11/07/FTSCY/W5953185',
+      id: 'W5953185',
       destination: 'Transfer M-Banking DB',
       amount: '10.000',
       time: '17:16:20 WIB'
     },
     {
       status: 'SUKSES',
-      id: '11/07/FTSCY/W5953185',
+      id: 'W5953185',
       destination: 'Transfer M-Banking DB',
       amount: '10.000',
       time: '17:16:20 WIB'
     },
     {
       status: 'SUKSES',
-      id: '11/07/FTSCY/W5953185',
+      id: 'W5953185',
       destination: 'Transfer M-Banking DB',
       amount: '10.000',
       time: '17:16:20 WIB'
     },
     {
       status: 'SUKSES',
-      id: '11/07/FTSCY/W5953185',
+      id: 'W5953185',
       destination: 'Transfer M-Banking DB',
       amount: '10.000',
       time: '17:16:20 WIB'
@@ -111,7 +113,7 @@ const Mutasi = () => {
                 <div className="text-right">
                   <p className="text-red-700 font-semibold">- Rp. {row.amount},00</p>
                   <p className="text-slate-500 font-light">{row.time}</p>
-                  <p className="underline text-primary-100 font-semibold">Lihat Bukti Transfer</p>
+                  <p onClick={() => navigate(`/mutasi/${row.id}`)} className="cursor-pointer underline text-primary-100 font-semibold">Lihat Bukti Transfer</p>
                 </div>
               </div>
             )

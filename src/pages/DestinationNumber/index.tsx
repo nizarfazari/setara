@@ -1,10 +1,10 @@
-import React from "react";
 import DestinationNumber from "../../components/DestinationNumber";
 import CustomerList from "../../components/CustomerList";
 import Avatar from "../../assets/images/avatar.svg";
 import { Card, Flex } from "antd";
 import "./style.css";
 import Breadcrumb from "../../components/Breadcumb";
+import { useParams } from "react-router-dom";
 
 const DAFTAR_FAVORIT = [
   {
@@ -48,10 +48,27 @@ const DAFTAR_TERSIMPAN = [
 ];
 
 export default function DestinationNumberPage() {
+  const { tujuan } = useParams()
+  const destinations = ['bca', 'ovo', 'shopee-pay', 'go-pay', 'dana', 'link-aja']
+
+  function toTitleCase(str: string) {
+    const lowerCaseList = ["of", "and"]
+
+    return str.replace(
+      /\p{L}+/gu,
+      function(txt) {
+        if (str.indexOf(txt) !== 0 && lowerCaseList.includes(txt.toLowerCase())) {
+          return txt.toLowerCase();
+        }
+        return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+      }
+    );
+  }
+
   return (
     <div className="container">
       <div className="my-[30px]">
-      <Breadcrumb title='OVO' subtitle='Masukkan Nomor Tujuan Transfer' />
+      <Breadcrumb title={(tujuan && destinations.includes(tujuan)) ? `Transfer ${toTitleCase(tujuan)}` : 'Transfer'} subtitle='Masukkan Nomor Tujuan Transfer' />
 
       </div>
       <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">

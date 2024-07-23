@@ -19,8 +19,8 @@ export default function CustomerList({ header, contacts }: TContactList) {
         >
           <Flex vertical gap={12}>
             {contacts.map((contact, index) => (
-              <Card className="border-white lg:border-primary-300" id="contact-item">
-                <CustomerItem key={index} {...contact} />
+              <Card className="border-white lg:border-primary-300" id="contact-item" key={index}>
+                <CustomerItem  {...contact} />
               </Card>
             ))}
           </Flex>

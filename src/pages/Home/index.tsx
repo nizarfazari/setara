@@ -1,19 +1,19 @@
 import React, { useRef, useState } from "react";
 
-import profilpict from "../../assets/homepage/Ellipse 15.png";
-import iconInfo from "../../assets/homepage/icon-info.png";
-import iconTransfer from "../../assets/homepage/icon-transfer.png";
-import iconEwallet from "../../assets/homepage/icon-ewallet.png";
-import iconBuy from "../../assets/homepage/icon-buy.png";
-import iconInvest from "../../assets/homepage/icon-invest.png";
-import iconCardless from "../../assets/homepage/info-cardless.png";
-import iconTransFav from "../../assets/homepage/icon-trans-fav.png";
-import iconTopupFav from "../../assets/homepage/icon-ewallet-fav2.png";
-import iconArrow from "../../assets/icons/ic_arrow.svg";
-import iconCopy from "../../assets/icons/ic_copy.svg";
+import profilpict from "/images/homepage/Ellipse 15.png";
+import iconInfo from "/images/homepage/icon-info.png";
+import iconTransfer from "/images/homepage/icon-transfer.png";
+import iconEwallet from "/images/homepage/icon-ewallet.png";
+import iconBuy from "/images/homepage/icon-buy.png";
+import iconInvest from "/images/homepage/icon-invest.png";
+import iconCardless from "/images/homepage/info-cardless.png";
+import iconTransFav from "/images/homepage/icon-trans-fav.png";
+import iconTopupFav from "/images/homepage/icon-ewallet-fav2.png";
+import iconArrow from "/images/icons/ic_arrow.svg";
+import iconCopy from "/images/icons/ic_copy.svg";
 import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { IoEye, IoEyeOff } from "react-icons/io5";
+import { Eye, EyeSlash } from "@phosphor-icons/react";
 import { GoDotFill } from "react-icons/go";
 import { Swiper as SwiperClass } from "swiper";
 import { Autoplay, Navigation } from "swiper/modules";
@@ -24,6 +24,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
 import "swiper/css";
+import { Link } from "react-router-dom";
 
 const Home = () => {
   const swiperRef = useRef<SwiperClass | null>(null);
@@ -170,7 +171,7 @@ const Home = () => {
 
   const [selectedMonth, setSelectedMonth] = useState("Januari 2024");
 
-  const handleMonthChange = (key: number ) => {
+  const handleMonthChange = (key: number) => {
     const month = data.transactionsPerMonth[key].month;
     setSelectedMonth(month);
   };
@@ -240,11 +241,11 @@ const Home = () => {
                   <button onClick={toggleBalanceVisibility} className="">
                     {isBalanceHidden ? (
                       <span className="text-neutral-100">
-                        <IoEye />
+                       <Eye />
                       </span>
                     ) : (
                       <span className="text-neutral-50">
-                        <IoEyeOff />
+                        <EyeSlash />
                       </span>
                     )}
                   </button>
@@ -304,22 +305,24 @@ const Home = () => {
             </Modal>
             <p className="pt-2">Info</p>
           </div>
-          <div className=" text-center">
+          <Link to={'/bca'} className=" text-center">
             <img
               src={iconTransfer}
               alt="info"
               className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer "
             />
             <p className="pt-2">Transfer</p>
-          </div>
-          <div className=" text-center">
+          </Link>
+          <Link
+          to={'/e-wallet'}
+           className=" text-center">
             <img
               src={iconEwallet}
               alt="info"
               className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
             />
             <p className="pt-2">E-Wallet</p>
-          </div>
+          </Link>
           <div className=" text-center">
             <img
               src={iconBuy}

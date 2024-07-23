@@ -1,10 +1,12 @@
 import React from "react";
-import DestinationNumber from "../../components/DestinationNumber";
-import CustomerList from "../../components/CustomerList";
-import Avatar from "../../assets/images/avatar.svg";
+import DestinationNumber from "../../../components/DestinationNumber";
+import CustomerList from "../../../components/CustomerList";
+import Avatar from "/images/avatar.svg";
 import { Card, Flex } from "antd";
 import "./style.css";
-import Breadcrumb from "../../components/Breadcumb";
+import Breadcrumb from "../../../components/Breadcumb";
+import { useParams } from "react-router-dom";
+import { capitalFirstLetter } from "../../../utils";
 
 const DAFTAR_FAVORIT = [
   {
@@ -48,14 +50,16 @@ const DAFTAR_TERSIMPAN = [
 ];
 
 export default function DestinationNumberPage() {
+  const { slug } = useParams<{ slug: string }>();
+
   return (
     <div className="container">
       <div className="my-[30px]">
-      <Breadcrumb title='OVO' subtitle='Masukkan Nomor Tujuan Transfer' />
+      <Breadcrumb title={capitalFirstLetter(slug) ?? 'OVO'} subtitle='Masukkan Nomor Tujuan Transfer' />
 
       </div>
       <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">
-        <DestinationNumber />
+        <DestinationNumber  pathUrl={`/e-wallet/${slug}`}/>
         <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
           <Flex vertical gap={30} align="start">
             <CustomerList header="Daftar Favorit" contacts={DAFTAR_FAVORIT} />

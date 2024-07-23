@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, Card, Checkbox, Form, FormProps, Input } from "antd";
 import "./style.css";
 import { useNavigate } from "react-router-dom";

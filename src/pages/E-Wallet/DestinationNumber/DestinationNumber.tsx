@@ -6,6 +6,7 @@ import { Card, Flex } from "antd";
 import "./style.css";
 import Breadcrumb from "../../../components/Breadcumb";
 import { useParams } from "react-router-dom";
+import { capitalFirstLetter } from "../../../utils";
 
 const DAFTAR_FAVORIT = [
   {
@@ -54,7 +55,7 @@ export default function DestinationNumberPage() {
   return (
     <div className="container">
       <div className="my-[30px]">
-      <Breadcrumb title='OVO' subtitle='Masukkan Nomor Tujuan Transfer' />
+      <Breadcrumb title={capitalFirstLetter(slug) ?? 'OVO'} subtitle='Masukkan Nomor Tujuan Transfer' />
 
       </div>
       <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">

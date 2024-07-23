@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import Breadcrumb from '../../components/Breadcumb';
+import { useNavigate } from 'react-router-dom';
 
 const wallets = [
     { id: 1, name: 'OVO', imgSrc: '/images/e-wallet/ovo.png', slug: 'ovo' },
-    { id: 2, name: 'ShopeePay', imgSrc: '/images/e-wallet/shopee.png', slug: 'shopeepay' },
-    { id: 3, name: 'GoPay', imgSrc: '/images/e-wallet/gopay.png', slug: 'gopay' },
+    { id: 2, name: 'Shopee-Pay', imgSrc: '/images/e-wallet/shopee.png', slug: 'shopeepay' },
+    { id: 3, name: 'Go-Pay', imgSrc: '/images/e-wallet/gopay.png', slug: 'gopay' },
     { id: 4, name: 'Dana', imgSrc: '/images/e-wallet/dana.png', slug: 'dana' },
-    { id: 5, name: 'LinkAja', imgSrc: '/images/e-wallet/link-aja.png', slug: 'linkaja' },
+    { id: 5, name: 'Link-Aja', imgSrc: '/images/e-wallet/link-aja.png', slug: 'linkaja' },
 ];
 
 const TransferWallet: React.FC = () => {
+    const navigate = useNavigate()
     const [selectedWallet, setSelectedWallet] = useState<number | null>(null);
 
     const handleWalletClick = (id: number) => {
@@ -17,7 +19,7 @@ const TransferWallet: React.FC = () => {
     };
 
     return (
-        <div className="container my-[30px]">
+        <div className="container mb-[30px]">
             <Breadcrumb title='E-Wallet' subtitle='Silahkan Pilih E-Wallet yang ingin Anda Transfer' />
             <div className="card shadow-2xl py-[32px] sm:px-[64px] px-[50px] rounded-xl mt-14">
                 <div className="e-wallet flex flex-wrap sm:justify-evenly justify-center items-start gap-8 min-h-[160px] min-w-[160px]">
@@ -25,6 +27,7 @@ const TransferWallet: React.FC = () => {
                         <div
                             key={wallet.id}
                             className='text-center flex flex-col items-center'
+                            onClick={() => navigate(`/transfer/${wallet.name.toLowerCase()}`)}
                         >
                             <div
                                 onClick={() => handleWalletClick(wallet.id)}

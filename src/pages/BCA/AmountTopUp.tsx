@@ -2,6 +2,7 @@ import Breadcrumb from "../../components/Breadcumb";
 import { Card, Flex } from "antd";
 import CustomerItem from "../../components/CustomerItem";
 import FormTopUp from "../../components/FormTopUp";
+import { useParams } from "react-router-dom";
 
 const USER = {
   name: "Felin Agustina",
@@ -11,11 +12,11 @@ const USER = {
 };
 
 export default function AmountTopUpPage() {
-  
+  const { slug } = useParams()
   return (
     <div className="container">
       <div className="my-[30px]">
-        <Breadcrumb title="OVO" subtitle="Masukkan Nominal Transaksi" />
+        <Breadcrumb title={slug ? slug : 'Transfer'} subtitle="Masukkan Nominal Transaksi" />
       </div>
       <div className="w-full lg:max-w-[546px]">
         <Card className="border-white md:border-primary-300">

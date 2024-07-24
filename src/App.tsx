@@ -3,6 +3,7 @@ import AppProvider from './context'
 import Login from './pages/Login'
 import Home from './pages/Home';
 import TransactionFailed from './pages/TransaksiGagal';
+import TransactionSuccess from './pages/TransaksiBerhasil';
 import Mutasi from './pages/Mutasi/index';
 import BuktiTransfer from './pages/BuktiTransfer';
 import Notifikasi from './pages/Notifikasi';
@@ -16,8 +17,6 @@ import DestinationNumberBCA from "./pages/BCA/DestinationNumber/DestinationNumbe
 import KonfirmasiBCA from './pages/BCA/Confirmation';
 import ConfirmationPINBCA from "./pages/BCA/ConfirmationPin";
 import PlainLayout from "./layouts/PlainLayout";
-
-/*
 
 /*
   E Wallet
@@ -36,6 +35,7 @@ function App() {
           <Route path="/" element={<PlainLayout />}>
             <Route index element={<Home />} />
             <Route path="/transaksi-gagal" element={<TransactionFailed />} />
+            <Route path="/transaksi-berhasil" element={<TransactionSuccess />} />
             <Route path="/mutasi" element={<Mutasi />} />
             <Route path="/mutasi/:id" element={<BuktiTransfer />} />
             <Route path="/notifikasi" element={<Notifikasi />} />

@@ -1,7 +1,7 @@
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import AppProvider from './context'
-import Login from './pages/Login'
+import Login from './pages/login'
 import DestinationNumberPage from './pages/DestinationNumber';
 import PlainLayout from './layouts/PlainLayout';
 import AmountTopUpPage from './pages/AmountTopUp';
@@ -9,7 +9,7 @@ import TransferWallet from './pages/TransferWallet';
 import Transfer from './pages/Transfer';
 import Home from './pages/Home';
 import TransactionFailed from './pages/TransaksiGagal';
-import Mutasi from './pages/Mutasi';
+import Mutasi from './pages/Mutasi/index';
 import BuktiTransfer from './pages/BuktiTransfer';
 
 function App() {

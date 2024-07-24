@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-
 import profilpict from "../../assets/homepage/Ellipse 15.png";
 import iconInfo from "../../assets/homepage/icon-info.png";
 import iconTransfer from "../../assets/homepage/icon-transfer.png";
@@ -9,11 +8,7 @@ import iconInvest from "../../assets/homepage/icon-invest.png";
 import iconCardless from "../../assets/homepage/info-cardless.png";
 import iconTransFav from "../../assets/homepage/icon-trans-fav.png";
 import iconTopupFav from "../../assets/homepage/icon-ewallet-fav2.png";
-import iconArrow from "../../assets/icons/ic_arrow.svg";
-import iconCopy from "../../assets/icons/ic_copy.svg";
-import { FaArrowDown, FaArrowUp } from "react-icons/fa";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { IoEye, IoEyeOff } from "react-icons/io5";
 import { GoDotFill } from "react-icons/go";
 import { Swiper as SwiperClass } from "swiper";
 import { Autoplay, Navigation } from "swiper/modules";
@@ -25,9 +20,18 @@ import "swiper/css/navigation";
 import "swiper/css/free-mode";
 import "swiper/css";
 import { useNavigate } from "react-router-dom";
+import {
+  ArrowCircleLeft,
+  ArrowCircleRight,
+  ArrowDown,
+  ArrowUp,
+  CopySimple,
+  Eye,
+  EyeSlash,
+} from "@phosphor-icons/react";
 
 const Home = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const swiperRef = useRef<SwiperClass | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBalanceHidden, setIsBalanceHidden] = useState(false);
@@ -168,7 +172,7 @@ const Home = () => {
 
   const [selectedMonth, setSelectedMonth] = useState("Januari 2024");
 
-  const handleMonthChange = (key: number ) => {
+  const handleMonthChange = (key: number) => {
     const month = data.transactionsPerMonth[key].month;
     setSelectedMonth(month);
   };
@@ -180,14 +184,13 @@ const Home = () => {
     return transactions;
   };
 
-
   const formatNorek = (norek: string | number) => {
     const str = norek.toString();
 
     if (str.length % 4 === 0) {
       return str;
     }
-    return str.replace(/(.{4})/g, '$1-');
+    return str.replace(/(.{4})/g, "$1-");
   };
 
   const transactions = getTransactionsForMonth();
@@ -196,7 +199,6 @@ const Home = () => {
     navigator.clipboard
       .writeText(data.norek.toString())
       .then(() => {
-        console.log("No. Rekening copied to clipboard");
         notification.success({
           message: "Success",
           description: "No. Rekening berhasil disalin",
@@ -218,7 +220,6 @@ const Home = () => {
         Halo, {data.name}
       </h1>
       <div className="my-3">
-
         <div className=" bg-primary-100 rounded-lg md:w-1/3 px-7 py-5">
           <h5 className="text-white font-bold text-heading-6 mb-7">
             Informasi Saldo Rekening
@@ -243,23 +244,23 @@ const Home = () => {
                   <button onClick={toggleBalanceVisibility} className="">
                     {isBalanceHidden ? (
                       <span className="text-neutral-100">
-                        <IoEye />
+                        <Eye weight="fill" />
                       </span>
                     ) : (
                       <span className="text-neutral-50">
-                        <IoEyeOff />
+                        <EyeSlash weight="fill" />
                       </span>
                     )}
                   </button>
                 </div>
               </div>
-              <p className="text-neutral-100 text-caption-small mt-3">
+              <p className="text-neutral-100 text-caption-small mt-3 flex gap-2 items-center">
                 No. Rekening:
-                <span className="font-bold text-caption-large ml-2">
+                <span className="font-bold text-caption-large">
                   {formatNorek(data.norek)}
                 </span>
-                <button className="ml-4">
-                  <img onClick={copyToClipboard} src={iconCopy} />
+                <button onClick={copyToClipboard} className=" items-center ">
+                  <CopySimple size={16} weight="fill" />
                 </button>
               </p>
             </div>
@@ -267,9 +268,7 @@ const Home = () => {
         </div>
       </div>
       <div className="my-10">
-        <h1 className="text-primary-100 font-bold text-heading-6 py-3">
-          Menu
-        </h1>
+        <h1 className="text-primary-100 font-bold text-heading-6 py-3">Menu</h1>
         <div className="grid grid-cols-3 md:grid-cols-6 py-4 gap-y-4 rounded-lg border border-primary-300 ">
           <div className=" text-center">
             <img
@@ -307,7 +306,7 @@ const Home = () => {
             </Modal>
             <p className="pt-2">Info</p>
           </div>
-          <div className=" text-center" onClick={() => navigate('/transfer')}>
+          <div className=" text-center" onClick={() => navigate("/transfer")}>
             <img
               src={iconTransfer}
               alt="info"
@@ -315,7 +314,7 @@ const Home = () => {
             />
             <p className="pt-2">Transfer</p>
           </div>
-          <div className=" text-center" onClick={() => navigate('/top-up')}>
+          <div className=" text-center" onClick={() => navigate("/top-up")}>
             <img
               src={iconEwallet}
               alt="info"
@@ -413,12 +412,12 @@ const Home = () => {
                   </div>
                 </SwiperSlide>
               ))}
-            <div className="md:flex justify-center gap-3 pt-4 hidden">
-              <button onClick={() => swiperRef.current?.slidePrev()}>
-                <img src={iconArrow} />
+            <div className="md:flex justify-center gap-3 pt-4 hidden ho">
+              <button onClick={() => swiperRef.current?.slidePrev()} >
+                <ArrowCircleLeft size={25} color="gray"/>
               </button>
               <button onClick={() => swiperRef.current?.slideNext()}>
-                <img src={iconArrow} className="rotate-180" />
+                <ArrowCircleRight size={25} color="gray"/>
               </button>
             </div>
           </Swiper>
@@ -432,12 +431,10 @@ const Home = () => {
           <div className="border rounded-lg max-w-[440px]">
             <Dropdown
               menu={{
-                items: data.transactionsPerMonth.map(
-                  (transaction, index) => ({
-                    label: transaction.month,
-                    key: index.toString(),
-                  })
-                ),
+                items: data.transactionsPerMonth.map((transaction, index) => ({
+                  label: transaction.month,
+                  key: index.toString(),
+                })),
                 onClick: (e) => handleMonthChange(+e.key),
               }}
               trigger={["click"]}
@@ -455,9 +452,7 @@ const Home = () => {
               <div className="border px-5 py-3 w-full rounded-lg">
                 <div className="">
                   <div className="flex gap-1">
-                    <span className="pt-1 text-green-400">
-                      <FaArrowDown />
-                    </span>
+                      <ArrowUp weight="fill" size={20} className="text-green-500" />
                     <p>Pemasukan</p>
                   </div>
 
@@ -468,9 +463,7 @@ const Home = () => {
               </div>
               <div className="border px-5 py-3 w-full rounded-lg">
                 <div className="flex gap-1">
-                  <span className="pt-0.5 text-red-600">
-                    <FaArrowUp />
-                  </span>
+                <ArrowDown weight="fill" size={20} className="text-red-500" />
                   <p>Pengeluaran</p>
                 </div>
                 <h5 className="text-primary-100 font-bold text-heading-6 py-3">
@@ -481,10 +474,11 @@ const Home = () => {
             <div className="">
               <h5>Selisih</h5>
               <h5
-                className={`${(transactions?.balance ?? 0) < 0
-                  ? "text-red-500"
-                  : "text-green-500"
-                  } text-heading-6 font-bold`}
+                className={`${
+                  (transactions?.balance ?? 0) < 0
+                    ? "text-red-500"
+                    : "text-green-500"
+                } text-heading-6 font-bold`}
               >
                 Rp{transactions?.balance.toLocaleString("id-ID")}
               </h5>

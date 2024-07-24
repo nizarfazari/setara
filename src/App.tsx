@@ -1,4 +1,3 @@
-
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import AppProvider from './context'
 import Login from './pages/Login'
@@ -17,7 +16,9 @@ import DestinationNumberBCA from "./pages/BCA/DestinationNumber/DestinationNumbe
 import ConfirmationPINBCA from "./pages/BCA/ConfirmationPin";
 import PlainLayout from "./layouts/PlainLayout";
 
-/* 
+/*
+
+/*
   E Wallet
 */
 import TransferWallet from "./pages/E-Wallet";

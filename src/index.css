@@ -5,42 +5,53 @@
 @tailwind utilities;
 
 
-body {
-    font-family: "Nunito Sans", sans-serif;
+* {
+  font-family: "Nunito Sans", sans-serif;
 }
 
 
 @layer utilities {
+  .container {
+    width: 92%;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  @media (min-width: 640px) {
     .container {
-      width: 92%;
-      margin-left: auto;
-      margin-right: auto;
-    }
-  
-    @media (min-width: 640px) {
-      .container {
-        max-width: 640px;
-      }
-    }
-    @media (min-width: 768px) {
-      .container {
-        max-width: 768px;
-      }
-    }
-    @media (min-width: 1024px) {
-      .container {
-        max-width: 1024px;
-      }
-    }
-    @media (min-width: 1280px) {
-      .container {
-        max-width: 1280px;
-      }
-    }
-    @media (min-width: 1536px) {
-      .container {
-        max-width: 1536px;
-      }
+      max-width: 640px;
     }
   }
-  
+
+  @media (min-width: 768px) {
+    .container {
+      max-width: 768px;
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .container {
+      max-width: 1024px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .container {
+      max-width: 1280px;
+    }
+  }
+
+  @media (min-width: 1536px) {
+    .container {
+      max-width: 1536px;
+    }
+  }
+}
+
+
+
+label.required::after {
+  content: '*';
+  color: red;
+  margin-left: 5px;
+}

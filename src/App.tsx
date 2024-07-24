@@ -4,7 +4,7 @@ import AppProvider from './context'
 import Login from './pages/Login'
 import Home from './pages/Home';
 import TransactionFailed from './pages/TransaksiGagal';
-import Mutasi from './pages/Mutasi';
+import Mutasi from './pages/Mutasi/index';
 import BuktiTransfer from './pages/BuktiTransfer';
 
 /* 

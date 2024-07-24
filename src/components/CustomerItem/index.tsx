@@ -1,4 +1,3 @@
-import React from "react";
 import { Flex } from "antd";
 import dotIcon from "../../assets/icons/ic_dot.svg";
 import { Heart } from "@phosphor-icons/react";

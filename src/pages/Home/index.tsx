@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import profilpict from "../../assets/homepage/Ellipse 15.png";
 import iconInfo from "../../assets/homepage/icon-info.png";
@@ -19,13 +19,15 @@ import { Swiper as SwiperClass } from "swiper";
 import { Autoplay, Navigation } from "swiper/modules";
 import { Button, Modal } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import { Dropdown, Space } from "antd";
+import { Dropdown, Space, notification } from "antd";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
 import "swiper/css";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const navigate = useNavigate()
   const swiperRef = useRef<SwiperClass | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBalanceHidden, setIsBalanceHidden] = useState(false);
@@ -34,10 +36,6 @@ const Home = () => {
   const showModal = () => {
     setIsModalOpen(true);
   };
-
-  // const handleOk = () => {
-  //   setIsModalOpen(false);
-  // };
 
   const handleCancel = () => {
     setIsModalOpen(false);
@@ -199,6 +197,11 @@ const Home = () => {
       .writeText(data.norek.toString())
       .then(() => {
         console.log("No. Rekening copied to clipboard");
+        notification.success({
+          message: "Success",
+          description: "No. Rekening berhasil disalin",
+          duration: 2, // durasi dalam detik
+        });
       })
       .catch((err) => {
         console.error("Could not copy text: ", err);
@@ -304,7 +307,7 @@ const Home = () => {
             </Modal>
             <p className="pt-2">Info</p>
           </div>
-          <div className=" text-center">
+          <div className=" text-center" onClick={() => navigate('/transfer')}>
             <img
               src={iconTransfer}
               alt="info"
@@ -312,7 +315,7 @@ const Home = () => {
             />
             <p className="pt-2">Transfer</p>
           </div>
-          <div className=" text-center">
+          <div className=" text-center" onClick={() => navigate('/top-up')}>
             <img
               src={iconEwallet}
               alt="info"

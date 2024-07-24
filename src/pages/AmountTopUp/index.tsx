@@ -1,4 +1,3 @@
-import React from "react";
 import Breadcrumb from "../../components/Breadcumb";
 import { Card, Flex } from "antd";
 import CustomerItem from "../../components/CustomerItem";

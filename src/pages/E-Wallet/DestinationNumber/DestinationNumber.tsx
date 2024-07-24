@@ -1,4 +1,3 @@
-import React from "react";
 import DestinationNumber from "../../../components/DestinationNumber";
 import CustomerList from "../../../components/CustomerList";
 import Avatar from "/images/avatar.svg";

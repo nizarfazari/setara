@@ -1,7 +1,11 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import AppProvider from "./context";
-import Login from "./pages/Login";
-import Home from "./pages/Home";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import AppProvider from './context'
+import Login from './pages/Login'
+import Home from './pages/Home';
+import TransactionFailed from './pages/TransaksiGagal';
+import Mutasi from './pages/Mutasi/index';
+import BuktiTransfer from './pages/BuktiTransfer';
+import Notifikasi from './pages/Notifikasi';
 
 /* 
   BCA
@@ -12,7 +16,9 @@ import DestinationNumberBCA from "./pages/BCA/DestinationNumber/DestinationNumbe
 import ConfirmationPINBCA from "./pages/BCA/ConfirmationPin";
 import PlainLayout from "./layouts/PlainLayout";
 
-/* 
+/*
+
+/*
   E Wallet
 */
 import TransferWallet from "./pages/E-Wallet";
@@ -27,6 +33,10 @@ function App() {
         <Routes>
           <Route path="/" element={<PlainLayout />}>
             <Route index element={<Home />} />
+            <Route path="/transaksi-gagal" element={<TransactionFailed />} />
+            <Route path="/mutasi" element={<Mutasi />} />
+            <Route path="/mutasi/:id" element={<BuktiTransfer />} />
+            <Route path="/notifikasi" element={<Notifikasi />} />
           </Route>
           <Route path="/e-wallet" element={<PlainLayout />}>
             <Route index element={<TransferWallet />} />

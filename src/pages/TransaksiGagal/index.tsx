@@ -1,5 +1,4 @@
-import React from "react";
-import image from "../../assets/error/Feeling sorry-pana 1.png";
+import image from "/images/error/Feeling sorry-pana 1.png";
 import { useNavigate } from "react-router-dom";
 
 const TransactionFailed = () => {

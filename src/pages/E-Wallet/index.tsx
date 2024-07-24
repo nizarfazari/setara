@@ -20,7 +20,7 @@ const TransferWallet: React.FC = () => {
     return (
         <div className="container my-[30px]">
             <Breadcrumb title='E-Wallet' subtitle='Silahkan Pilih E-Wallet yang ingin Anda Transfer' />
-            <div className="card shadow-2xl py-[32px] sm:px-[64px] px-[50px] rounded-xl mt-14">
+            <div className="card shadow-2xl py-[32px] sm:px-[64px] px-[50px] rounded-xl lg:mt-14">
                 <div className="e-wallet flex flex-wrap sm:justify-evenly justify-center items-start gap-8 min-h-[160px] min-w-[160px]">
                     {wallets.map(wallet => (
                         <Link

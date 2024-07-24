@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, Form, FormProps, Input, InputNumber } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -14,7 +13,7 @@ export default function FormTopUp() {
   const onFinish: FormProps<TFormTopUp>["onFinish"] = (values) => {
     console.log("Success:", values);
 
-    navigate(`/bca/${slug}/konfirmasi`)
+    navigate(`/bca/${slug}/tinjau`)
   };
 
   const onFinishFailed: FormProps<TFormTopUp>["onFinishFailed"] = (errorInfo) => {

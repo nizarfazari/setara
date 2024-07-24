@@ -54,15 +54,14 @@ export default function DestinationNumberPage() {
   return (
     <div className="container">
       <div className="my-[30px]">
-      <Breadcrumb title={capitalFirstLetter(slug) ?? 'OVO'} subtitle='Masukkan Nomor Tujuan Transfer' />
-
+        <Breadcrumb title={capitalFirstLetter(slug)} subtitle='Masukkan Nomor Tujuan Transfer' />
       </div>
       <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">
-        <DestinationNumber  pathUrl={`/e-wallet/${slug}`}/>
+        <DestinationNumber  pathUrl={`/e-wallet/${slug}`} contacts={DAFTAR_TERSIMPAN}/>
         <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
           <Flex vertical gap={30} align="start">
-            <CustomerList header="Daftar Favorit" contacts={DAFTAR_FAVORIT} />
-            <CustomerList header="Daftar Tersimpan" contacts={DAFTAR_TERSIMPAN} />
+            <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Favorit" contacts={DAFTAR_FAVORIT} />
+            <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Tersimpan" contacts={DAFTAR_TERSIMPAN} />
           </Flex>
         </Card>
       </div>

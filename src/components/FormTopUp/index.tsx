@@ -1,19 +1,21 @@
 import { Button, Form, FormProps, Input, InputNumber } from "antd";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 type TFormTopUp = {
   amount: number;
   notes?: string;
 };
 
-export default function FormTopUp() {
+type PropsFormTopup = {
+  pathUrl: string;
+}
 
+const FormTopUp: React.FC<PropsFormTopup> = ({pathUrl}) => {
   const navigate = useNavigate();
-  const { slug } = useParams<{ slug: string }>();
+
   const onFinish: FormProps<TFormTopUp>["onFinish"] = (values) => {
     console.log("Success:", values);
-
-    navigate(`/bca/${slug}/tinjau`)
+    navigate(`${pathUrl}/tinjau`)
   };
 
   const onFinishFailed: FormProps<TFormTopUp>["onFinishFailed"] = (errorInfo) => {
@@ -29,6 +31,7 @@ export default function FormTopUp() {
         required
       >
         <InputNumber<number>
+          type="number"
           prefix="Rp."
           formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
           parser={(value) => value?.replace(/\.\s?|(,*)/g, "") as unknown as number}
@@ -38,7 +41,7 @@ export default function FormTopUp() {
       </Form.Item>
 
       <Form.Item label="Catatan" name="notes">
-        <Input type="string" placeholder="Masukkan Catatan (Opsional)" />
+        <Input type="text" placeholder="Masukkan Catatan (Opsional)" />
       </Form.Item>
 
       <Button
@@ -50,3 +53,5 @@ export default function FormTopUp() {
     </Form>
   );
 }
+
+export default FormTopUp

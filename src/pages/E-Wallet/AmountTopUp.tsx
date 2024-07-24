@@ -12,7 +12,7 @@ const USER = {
 };
 
 export default function AmountTopUpPage() {
-  const { slug } = useParams()
+  const { slug } = useParams<{ slug: string }>();
 
   const toTitleCase = (str: string) => {
     return str.toLowerCase().split(' ').map((word: string) => {
@@ -32,7 +32,7 @@ export default function AmountTopUpPage() {
               <h5 className="text-primary-100 mb-2 text-body-small md:text-heading-5">Penerima</h5>
               <CustomerItem {...USER} />
             </div>
-            <FormTopUp />
+            <FormTopUp pathUrl={`/e-wallet/${slug}`}/>
           </Flex>
         </Card>
       </div>

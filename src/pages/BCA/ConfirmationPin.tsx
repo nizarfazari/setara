@@ -3,6 +3,7 @@ import * as React from 'react';
 import Breadcrumb from '../../components/Breadcumb';
 import type { FormProps } from 'antd';
 import { Button, Form, Input } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 
 interface IConfirmationPINProps {
@@ -20,12 +21,13 @@ const onFinishFailed: FormProps<LoginType>['onFinishFailed'] = (errorInfo) => {
 
 const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
     const [form] = Form.useForm();
+    const navigate = useNavigate()
 
     const onFinish: FormProps<LoginType>['onFinish'] = (values) => {
         const correctPIN = "1234";
         if (values.pin === correctPIN) {
             console.log('Success:', values);
-            // Perform the successful login action here
+            navigate('/transaksi-berhasil')
         } else {
             console.log('Incorrect PIN');
             form.setFields([

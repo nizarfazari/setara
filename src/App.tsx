@@ -6,6 +6,7 @@ import Home from './pages/Home';
 import TransactionFailed from './pages/TransaksiGagal';
 import Mutasi from './pages/Mutasi/index';
 import BuktiTransfer from './pages/BuktiTransfer';
+import Notifikasi from './pages/Notifikasi';
 
 /* 
   BCA
@@ -34,6 +35,7 @@ function App() {
             <Route path="/transaksi-gagal" element={<TransactionFailed />} />
             <Route path="/mutasi" element={<Mutasi />} />
             <Route path="/mutasi/:id" element={<BuktiTransfer />} />
+            <Route path="/notifikasi" element={<Notifikasi />} />
           </Route>
           <Route path="/e-wallet" element={<PlainLayout />}>
             <Route index element={<TransferWallet />} />

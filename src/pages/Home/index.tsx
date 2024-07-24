@@ -307,7 +307,7 @@ const Home = () => {
             </Modal>
             <p className="pt-2">Info</p>
           </div>
-          <div className=" text-center" onClick={() => navigate('/transfer')}>
+          <div className=" text-center" onClick={() => navigate('/bca')}>
             <img
               src={iconTransfer}
               alt="info"
@@ -315,7 +315,7 @@ const Home = () => {
             />
             <p className="pt-2">Transfer</p>
           </div>
-          <div className=" text-center" onClick={() => navigate('/top-up')}>
+          <div className=" text-center" onClick={() => navigate('/e-wallet')}>
             <img
               src={iconEwallet}
               alt="info"

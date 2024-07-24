@@ -1,5 +1,6 @@
 import React from "react";
 import { Button, Form, FormProps, Input, InputNumber } from "antd";
+import { useNavigate, useParams } from "react-router-dom";
 
 type TFormTopUp = {
   amount: number;
@@ -7,8 +8,13 @@ type TFormTopUp = {
 };
 
 export default function FormTopUp() {
+
+  const navigate = useNavigate();
+  const { slug } = useParams<{ slug: string }>();
   const onFinish: FormProps<TFormTopUp>["onFinish"] = (values) => {
     console.log("Success:", values);
+
+    navigate(`/bca/${slug}/konfirmasi`)
   };
 
   const onFinishFailed: FormProps<TFormTopUp>["onFinishFailed"] = (errorInfo) => {
@@ -20,7 +26,7 @@ export default function FormTopUp() {
       <Form.Item
         name="amount"
         label="Nominal Top Up"
-        rules={[{ required: true, message: "Nominal Tidak Boleh Kosong" }, { type: "number", min: 10000 , message: "Minimum transfer adalah 10.000, mohon isikan kembali"}]}
+        rules={[{ required: true, message: "Nominal Tidak Boleh Kosong" }, { type: "number", min: 10000, message: "Minimum transfer adalah 10.000, mohon isikan kembali" }]}
         required
       >
         <InputNumber<number>

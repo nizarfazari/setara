@@ -3,7 +3,7 @@ import Breadcrumb from "../../components/Breadcumb"
 
 const BuktiTransfer = () => {
   return (
-    <div className="container pb-[50px]">
+    <div className="container py-5 lg:py-[50px] pb-[50px]">
       <Breadcrumb
         title="Bukti Transfer" 
         subtitle="Periksa Rincian Keuangan Anda"

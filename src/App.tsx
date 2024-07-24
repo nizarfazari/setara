@@ -2,15 +2,27 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import AppProvider from './context'
 import Login from './pages/Login'
-import DestinationNumberPage from './pages/DestinationNumber';
-import PlainLayout from './layouts/PlainLayout';
-import AmountTopUpPage from './pages/AmountTopUp';
-import TransferWallet from './pages/TransferWallet';
-import Transfer from './pages/Transfer';
 import Home from './pages/Home';
 import TransactionFailed from './pages/TransaksiGagal';
 import Mutasi from './pages/Mutasi';
 import BuktiTransfer from './pages/BuktiTransfer';
+
+/* 
+  BCA
+*/
+import TransferBCA from "./pages/BCA";
+import AmountTopUpBCA from "./pages/BCA/AmountTopUp";
+import DestinationNumberBCA from "./pages/BCA/DestinationNumber/DestinationNumber";
+import ConfirmationPINBCA from "./pages/BCA/ConfirmationPin";
+import PlainLayout from "./layouts/PlainLayout";
+
+/* 
+  E Wallet
+*/
+import TransferWallet from "./pages/E-Wallet";
+import DestinationNumberPage from "./pages/E-Wallet/DestinationNumber/DestinationNumber";
+import AmountTopUpPage from "./pages/E-Wallet/AmountTopUp";
+import ConfirmationPIN from "./pages/E-Wallet/ConfirmationPin";
 
 function App() {
   return (
@@ -19,13 +31,21 @@ function App() {
         <Routes>
           <Route path="/" element={<PlainLayout />}>
             <Route index element={<Home />} />
-            <Route path="/top-up" element={<TransferWallet />} />
-            <Route path="/transfer" element={<Transfer />} />
-            <Route path="/transfer/:tujuan" element={<DestinationNumberPage />} />
-            <Route path="/transfer/:tujuan/:nomor" element={<AmountTopUpPage />} />
-            <Route path="/transaction-failed" element={<TransactionFailed />} />
+            <Route path="/transaksi-gagal" element={<TransactionFailed />} />
             <Route path="/mutasi" element={<Mutasi />} />
             <Route path="/mutasi/:id" element={<BuktiTransfer />} />
+          </Route>
+          <Route path="/e-wallet" element={<PlainLayout />}>
+            <Route index element={<TransferWallet />} />
+            <Route path="/e-wallet/:slug" element={<DestinationNumberPage />} />
+            <Route path="/e-wallet/:slug/nomor-tujuan" element={<AmountTopUpPage />} />
+            <Route path="/e-wallet/:slug/konfirmasi" element={<ConfirmationPIN />} />
+          </Route>
+          <Route path="/bca" element={<PlainLayout />}>
+            <Route index element={<TransferBCA />} />
+            <Route path="/bca/:slug" element={<DestinationNumberBCA />} />
+            <Route path="/bca/:slug/nomor-tujuan" element={<AmountTopUpBCA />} />
+            <Route path="/bca/:slug/konfirmasi" element={<ConfirmationPINBCA />} />
           </Route>
           <Route path="/login" element={<Login />} />
         </Routes>

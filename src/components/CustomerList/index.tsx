@@ -1,17 +1,14 @@
+import React from "react";
 import CustomerItem from "../CustomerItem";
 import { Card, Flex } from "antd";
 import "./style.css";
-import { useNavigate } from "react-router-dom";
 
 type TContactList = {
   header: string;
   contacts: { name: string; type: string; number: string; isFavorite?: boolean; avatar: string }[];
-  tujuan: string;
 };
 
-export default function CustomerList({ header, contacts, tujuan }: TContactList) {
-  const navigate = useNavigate()
-
+export default function CustomerList({ header, contacts }: TContactList) {
   return (
     <div className="text-primary-100 w-full">
       <h5 className="font-bold mb-3 text-body-small md:text-heading-5">{`${header} (${contacts.length})`}</h5>
@@ -22,8 +19,8 @@ export default function CustomerList({ header, contacts, tujuan }: TContactList)
         >
           <Flex vertical gap={12}>
             {contacts.map((contact, index) => (
-              <Card onClick={() => navigate(`/transfer/${tujuan}/${contact.number}`)} className="border-white lg:border-primary-300" id="contact-item">
-                <CustomerItem key={index} {...contact} />
+              <Card className="border-white lg:border-primary-300" id="contact-item" key={index}>
+                <CustomerItem  {...contact} />
               </Card>
             ))}
           </Flex>

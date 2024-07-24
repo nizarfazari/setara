@@ -48,7 +48,7 @@ const Mutasi = () => {
   ]
 
   return (
-    <div className="container pb-[50px]">
+    <div className="container py-5 lg:py-[50px] pb-[50px]">
       <Breadcrumb
         title="Mutasi Rekening" 
         subtitle="Pantai Pengeluaran dan Pemasukan Rekening"

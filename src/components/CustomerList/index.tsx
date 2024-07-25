@@ -2,13 +2,17 @@ import React from "react";
 import CustomerItem from "../CustomerItem";
 import { Card, Flex } from "antd";
 import "./style.css";
+import { useNavigate } from "react-router-dom";
 
 type TContactList = {
+  pathUrl: string;
   header: string;
   contacts: { name: string; type: string; number: string; isFavorite?: boolean; avatar: string }[];
 };
 
-export default function CustomerList({ header, contacts }: TContactList) {
+export default function CustomerList({ pathUrl, header, contacts }: TContactList) {
+  const navigate = useNavigate();
+
   return (
     <div className="text-primary-100 w-full">
       <h5 className="font-bold mb-3 text-body-small md:text-heading-5">{`${header} (${contacts.length})`}</h5>
@@ -19,7 +23,7 @@ export default function CustomerList({ header, contacts }: TContactList) {
         >
           <Flex vertical gap={12}>
             {contacts.map((contact, index) => (
-              <Card className="border-white lg:border-primary-300" id="contact-item" key={index}>
+              <Card className="border-white lg:border-primary-300" id="contact-item" key={index} onClick={ () => navigate(`${pathUrl}/nominal-topup`)}>
                 <CustomerItem  {...contact} />
               </Card>
             ))}

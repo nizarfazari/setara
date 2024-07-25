@@ -36,7 +36,7 @@ const DestinationNumber: React.FC<PropsDestinationNumber> = ({ pathUrl, contacts
     if (e.target.value == "") {
       setFilteredContact([]);
     } else {
-      const filterContact = contacts.filter((contact) => contact.number.includes(e.target.value));
+      const filterContact = contacts.filter((contact) => contact.number.includes(e.target.value) || contact.name.toLowerCase().includes(e.target.value.toLowerCase()));
       setFilteredContact(filterContact);
     }
   };
@@ -57,7 +57,7 @@ const DestinationNumber: React.FC<PropsDestinationNumber> = ({ pathUrl, contacts
           rules={[{ required: true, message: "Nomor Tidak Boleh Kosong" }]}
           required
         >
-          <Input type="number" placeholder="Cari Nomor Tujuan" onChange={handleSearch} />
+          <Input type="text" placeholder="Cari Nomor Tujuan" onChange={handleSearch} />
         </Form.Item>
       </Form>
 

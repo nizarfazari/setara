@@ -29,6 +29,7 @@ import {
   Eye,
   EyeSlash,
 } from "@phosphor-icons/react";
+import { useAuth } from "../../hooks/useAuth";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -36,7 +37,8 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBalanceHidden, setIsBalanceHidden] = useState(false);
   const dots = new Array(7).fill(null);
-
+  const { logout, user } = useAuth()
+  console.log(user);
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -219,6 +221,7 @@ const Home = () => {
       <h1 className="text-heading-5 font-bold text-primary-100">
         Halo, {data.name}
       </h1>
+      <button onClick={() => logout()}>Logo out</button>
       <div className="my-3">
         <div className=" bg-primary-100 rounded-lg md:w-1/3 px-7 py-5">
           <h5 className="text-white font-bold text-heading-6 mb-7">
@@ -414,10 +417,10 @@ const Home = () => {
               ))}
             <div className="md:flex justify-center gap-3 pt-4 hidden ho">
               <button onClick={() => swiperRef.current?.slidePrev()} >
-                <ArrowCircleLeft size={25} color="gray"/>
+                <ArrowCircleLeft size={25} color="gray" />
               </button>
               <button onClick={() => swiperRef.current?.slideNext()}>
-                <ArrowCircleRight size={25} color="gray"/>
+                <ArrowCircleRight size={25} color="gray" />
               </button>
             </div>
           </Swiper>
@@ -452,7 +455,7 @@ const Home = () => {
               <div className="border px-5 py-3 w-full rounded-lg">
                 <div className="">
                   <div className="flex gap-1">
-                      <ArrowUp weight="fill" size={20} className="text-green-500" />
+                    <ArrowUp weight="fill" size={20} className="text-green-500" />
                     <p>Pemasukan</p>
                   </div>
 
@@ -463,7 +466,7 @@ const Home = () => {
               </div>
               <div className="border px-5 py-3 w-full rounded-lg">
                 <div className="flex gap-1">
-                <ArrowDown weight="fill" size={20} className="text-red-500" />
+                  <ArrowDown weight="fill" size={20} className="text-red-500" />
                   <p>Pengeluaran</p>
                 </div>
                 <h5 className="text-primary-100 font-bold text-heading-6 py-3">
@@ -474,11 +477,10 @@ const Home = () => {
             <div className="">
               <h5>Selisih</h5>
               <h5
-                className={`${
-                  (transactions?.balance ?? 0) < 0
+                className={`${(transactions?.balance ?? 0) < 0
                     ? "text-red-500"
                     : "text-green-500"
-                } text-heading-6 font-bold`}
+                  } text-heading-6 font-bold`}
               >
                 Rp{transactions?.balance.toLocaleString("id-ID")}
               </h5>

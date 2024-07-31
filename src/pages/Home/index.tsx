@@ -186,7 +186,10 @@ const Home = () => {
     return transactions;
   };
 
-  const formatNorek = (norek: string | number) => {
+  const formatNorek = (norek: string | number | undefined) => {
+    if (typeof norek === 'undefined') {
+      return 0
+    }
     const str = norek.toString();
 
     if (str.length % 4 === 0) {
@@ -219,7 +222,7 @@ const Home = () => {
   return (
     <div className="mx-auto container mt-5 mb-20">
       <h1 className="text-heading-5 font-bold text-primary-100">
-        Halo, {data.name}
+        Halo, {user?.user.name}
       </h1>
       <button onClick={() => logout()}>Logo out</button>
       <div className="my-3">
@@ -228,7 +231,7 @@ const Home = () => {
             Informasi Saldo Rekening
           </h5>
           <div className="flex gap-7 ">
-            <img src={profilpict} className="w-16 h-16" />
+            <img src={user?.user.avatar_path} className="w-16 h-16" />
             <div>
               <div className="items-center">
                 <h5 className="text-neutral-50">Total Saldo</h5>
@@ -260,7 +263,7 @@ const Home = () => {
               <p className="text-neutral-100 text-caption-small mt-3 flex gap-2 items-center">
                 No. Rekening:
                 <span className="font-bold text-caption-large">
-                  {formatNorek(data.norek)}
+                  {formatNorek(user?.user.account_number)}
                 </span>
                 <button onClick={copyToClipboard} className=" items-center ">
                   <CopySimple size={16} weight="fill" />
@@ -478,8 +481,8 @@ const Home = () => {
               <h5>Selisih</h5>
               <h5
                 className={`${(transactions?.balance ?? 0) < 0
-                    ? "text-red-500"
-                    : "text-green-500"
+                  ? "text-red-500"
+                  : "text-green-500"
                   } text-heading-6 font-bold`}
               >
                 Rp{transactions?.balance.toLocaleString("id-ID")}

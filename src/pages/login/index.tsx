@@ -29,7 +29,7 @@ const Login = () => {
       const data = await response.json();
       if (!response.ok) {
         console.log(data)
-        throw new Error(data.errors ?? 'Failed to sign in');
+        throw new Error(data.errors ?? 'Email atau Password Salah');
 
       }
       openNotificationWithIcon('success', 'Success', data.message)
@@ -91,7 +91,7 @@ const Login = () => {
               {loading ? 'Loading...' : 'Masuk'}
             </Button>
           </Form.Item>
-          <p className='text-body-large font-normal text-black-600 text-center'>Tidak Punya Akun? <span className='text-[#2050DD]'>Daftar</span></p>
+          {/* <p className='text-body-large font-normal text-black-600 text-center'>Tidak Punya Akun? <span className='text-[#2050DD]'>Daftar</span></p> */}
         </Form>
 
       </div>

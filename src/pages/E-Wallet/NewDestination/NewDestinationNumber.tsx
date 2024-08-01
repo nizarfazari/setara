@@ -2,18 +2,25 @@ import React, { useState } from "react";
 import Breadcrumb from "../../../components/Breadcumb";
 import { useNavigate, useParams } from "react-router-dom";
 import { capitalFirstLetter } from "../../../utils";
-import { Button, Card, Checkbox, Flex, Form, Input, InputNumber, Select } from "antd";
+import { Button, Card, Checkbox, Flex, Form, FormProps, Input, InputNumber, Select } from "antd";
 const { Option } = Select;
 import "./style.css";
 import { CheckCircle } from "@phosphor-icons/react";
+import axios from "axios";
+import { useAuth } from "../../../hooks/useAuth";
+
+type FieldType = {
+  destinationNumber: number;
+};
 
 export default function NewDestinationNumberPage() {
   const [form] = Form.useForm();
+  const { user } = useAuth();
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [isVerified, setIsVerified] = useState(false);
 
-  const onFinish = (values: unknown) => {
+  const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
     console.log("Success:", values);
     navigate(`/e-wallet/${slug}/tinjau`);
   };
@@ -23,19 +30,39 @@ export default function NewDestinationNumberPage() {
   };
 
   const handleDestinationNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(e.target.value == ""){
+    if (e.target.value == "") {
       setIsVerified(false);
       form.resetFields();
     }
-  }
+  };
 
-  const handleVerifiedNumber = () => {
-    const verified = true;
-    if (verified) {
-      setIsVerified(!isVerified);
-      form.setFields([{ name: "name", value: "JOHN DOE" }]);
+  const handleVerifiedNumber = async () => {
+    if (form.getFieldValue("destinationNumber")) {
+      try {
+        const response = await axios.get(
+          `https://setara-api-service-production.up.railway.app/api/v1/user/search-no-ewallet/${form.getFieldValue("destinationNumber")}`,
+          {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${user?.token}`,
+            },
+          }
+        );
+        const data = await response.data;
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+
+      const verified = true;
+      if (verified) {
+        setIsVerified(!isVerified);
+        form.setFields([{ name: "name", value: "JOHN DOE" }]);
+      } else {
+        form.setFields([{ name: "destinationNumber", errors: ["NOMOR TIDAK TERDAFTAR"] }]);
+      }
     } else {
-      form.setFields([{ name: "destinationNumber", errors: ["NOMOR TIDAK TERDAFTAR"] }]);
+      form.setFields([{ name: "destinationNumber", errors: ["Nomor Tidak Boleh Kosong"] }]);
     }
   };
 
@@ -60,7 +87,12 @@ export default function NewDestinationNumberPage() {
           >
             <div>
               <div className="flex items-center gap-2 flex-col md:flex-row md:gap-4">
-                <Input type="number" placeholder="Masukkan Nomor" className="flex-[80%]" onChange={handleDestinationNumberChange}/>
+                <Input
+                  type="number"
+                  placeholder="Masukkan Nomor"
+                  className="flex-[80%]"
+                  onChange={handleDestinationNumberChange}
+                />
                 <Button
                   onClick={handleVerifiedNumber}
                   className="flex-[20%] bg-primary-100 text-white w-full py-[10px] rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"

@@ -6,6 +6,9 @@ import "./style.css";
 import Breadcrumb from "../../../components/Breadcumb";
 import { useParams } from "react-router-dom";
 import { capitalFirstLetter } from "../../../utils";
+import { useEffect } from "react";
+import axios from "axios";
+import { useAuth } from "../../../hooks/useAuth";
 
 const DAFTAR_FAVORIT = [
   {
@@ -50,6 +53,27 @@ const DAFTAR_TERSIMPAN = [
 
 export default function DestinationNumberPage() {
   const { slug } = useParams<{ slug: string }>();
+  const { user } = useAuth();
+  
+  const fetchSavedEwallet = async () => {
+    try {
+      const response = await axios.get(`https://setara-api-service-production.up.railway.app/api/v1/saved-ewallet-users/${slug}` , {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${user?.token}`,
+        },
+        
+      })
+      const data = await response.data;
+      console.log(data)
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchSavedEwallet()
+  }, []);
 
   return (
     <div className="container">

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import profilpict from "/images/homepage/Ellipse 15.png";
 import iconInfo from "/images/homepage/icon-info.png";
 import iconTransfer from "/images/homepage/icon-transfer.png";
@@ -12,7 +12,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import { GoDotFill } from "react-icons/go";
 import { Swiper as SwiperClass } from "swiper";
 import { Autoplay, Navigation } from "swiper/modules";
-import { Button, Modal } from "antd";
+import { Button, Modal, Skeleton } from "antd";
 import { DownOutlined } from "@ant-design/icons";
 import { Dropdown, Space, notification } from "antd";
 import "swiper/css";
@@ -30,15 +30,43 @@ import {
   EyeSlash,
 } from "@phosphor-icons/react";
 import { useAuth } from "../../hooks/useAuth";
+import axios, { AxiosError } from "axios";
+
+
+interface CombinedItem {
+  id: string;
+  owner_id: string;
+  favorite: boolean;
+  name: string;
+  image_path: string;
+  type: "transfer" | "topup";
+  account_number?: string;
+  bank_name?: string;
+  account_name?: string;
+  ewallet_user_id?: string;
+  ewallet_user_phone_number?: string;
+  ewallet_name?: string;
+}
+
+interface MonthlyReport {
+  income: number;
+  expense: number;
+  total: number;
+}
 
 const Home = () => {
   const navigate = useNavigate();
   const swiperRef = useRef<SwiperClass | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isBalanceHidden, setIsBalanceHidden] = useState(false);
+  const [balance, setBalance] = useState<number | null>(null);
+  const [error, setError] = useState<AxiosError | null>(null);
+  const [monthlyReport, setMonthlyReport] = useState<MonthlyReport | null>(null);
+  const [favorites, setFavorites] = useState<CombinedItem[]>([]);
+  const [selectedMonth, setSelectedMonth] = useState("Januari 2024");
+
   const dots = new Array(7).fill(null);
-  const { logout, user } = useAuth()
-  console.log(user);
+  const { logout, user } = useAuth();
   const showModal = () => {
     setIsModalOpen(true);
   };
@@ -47,137 +75,144 @@ const Home = () => {
     setIsModalOpen(false);
   };
 
+  const fetchFavorites = async () => {
+    try {
+      const [response1, response2] = await Promise.all([
+        axios.get<{
+          data: { favorites: CombinedItem[] };
+        }>(
+          "https://setara-api-service-production.up.railway.app/api/v1/saved-accounts",
+          {
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+            },
+          }
+        ),
+        axios.get<{
+          data: { favorites: CombinedItem[] };
+        }>(
+          "https://setara-api-service-production.up.railway.app/api/v1/saved-ewallet-users",
+          {
+            headers: {
+              Authorization: `Bearer ${user?.token}`,
+            },
+          }
+        ),
+      ]);
+
+      const favoritesWithType = response1.data.data.favorites.map(
+        (account) => ({
+          ...account,
+          type: "transfer" as const,
+        })
+      );
+
+      const savedEwalletUsersWithType = response2.data.data.favorites.map(
+        (ewalletUser) => ({
+          ...ewalletUser,
+          type: "topup" as const,
+        })
+      );
+
+      const combinedData: CombinedItem[] = [
+        ...favoritesWithType,
+        ...savedEwalletUsersWithType,
+      ];
+      setFavorites(combinedData);
+      console.log(combinedData);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+  if (user) {
+    fetchFavorites();
+  }
+
+  const fetchBalance = async () => {
+    const token = user?.token;
+    try {
+      const response = await axios.get(
+        `https://setara-api-service-production.up.railway.app/api/v1/user/getBalance`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setBalance(response.data.data.balance);
+    } catch (error) {
+      setError(error as AxiosError);
+    }
+  };
+
+  const fetchMonthlyReport = async (month: any, year: any) => {
+    const token = user?.token;
+    try {
+      const response = await axios.get(
+        `https://setara-api-service-production.up.railway.app/api/v1/transactions/getMonthlyReport`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: { month, year },
+        }
+      );
+      setMonthlyReport(response.data.data);
+    } catch (error) {
+      setError(error as AxiosError);
+    }
+  };
+
+  useEffect(() => {
+    fetchBalance();
+  }, []);
+
   const data = {
-    name: "Andika Putra",
-    norek: 2892112321,
-    balance: 5000000,
-    income: 15000000,
-    expenses: 10000000,
-    avatar: profilpict,
-    userTersimpan: [
-      {
-        id: 1,
-        no_rekening: 34556534,
-        type: "Transfer Antar Rekening BCA",
-        name_bank: "BCA",
-        name: "NASYILA HANI",
-        isFavorite: true,
-      },
-      {
-        id: 2,
-        no_rekening: 34590534,
-        name: "ADITYA SYARIF",
-        type: "Transfer Antar Rekening BCA",
-        name_bank: "BCA",
-        isFavorite: true,
-      },
-      {
-        id: 3,
-        no_rekening: 89655644,
-        name: "MAMAN ABDURAHMAN",
-        type: "Top Up OVO",
-        name_bank: "BCA",
-        isFavorite: true,
-      },
-      {
-        id: 4,
-        no_rekening: 884556534,
-        name: "DEWI PUSPITA",
-        type: "Top Up OVO",
-        name_bank: "BCA",
-        isFavorite: true,
-      },
-      {
-        id: 5,
-        no_rekening: 987654321,
-        name: "AGUS SUHENDRA",
-        type: "Transfer Antar Rekening BCA",
-        name_bank: "BCA",
-        isFavorite: true,
-      },
-      {
-        id: 6,
-        no_rekening: 123456789,
-        name: "SITI NURHALIZA",
-        type: "Top Up GoPay",
-        name_bank: "BCA",
-        isFavorite: false,
-      },
-      {
-        id: 7,
-        no_rekening: 223344556,
-        name: "ANDI WIBOWO",
-        type: "Transfer Antar Rekening BCA",
-        name_bank: "BCA",
-        isFavorite: false,
-      },
-      {
-        id: 8,
-        no_rekening: 998877665,
-        name: "RAHMAWATI",
-        type: "Top Up DANA",
-        name_bank: "BCA",
-        isFavorite: false,
-      },
-      {
-        id: 9,
-        no_rekening: 554433221,
-        name: "JOKO SUSILO",
-        type: "Transfer Antar Rekening BCA",
-        name_bank: "BCA",
-        isFavorite: true,
-      },
-      {
-        id: 10,
-        no_rekening: 667788990,
-        name: "KARTINI",
-        type: "Top Up ShopeePay",
-        name_bank: "ShopeePay",
-        isFavorite: true,
-      },
-    ],
     transactionsPerMonth: [
       {
         month: "Januari 2024",
-        income: 1000000,
-        expenses: 500000,
-        balance: 500000,
       },
       {
         month: "Februari 2024",
-        income: 1200000,
-        expenses: 600000,
-        balance: 600000,
       },
       {
         month: "Maret 2024",
-        income: 1300000,
-        expenses: 700000,
-        balance: 1100000,
       },
       {
         month: "April 2024",
-        income: 700000,
-        expenses: 800000,
-        balance: 100000,
       },
       {
         month: "Mei 2024",
-        income: 1500000,
-        expenses: 1900000,
-        balance: 400000,
+      },
+      {
+        month: "Juni 2024",
+      },
+      {
+        month: "Juli 2024",
+      },
+      {
+        month: "Agustus 2024",
       },
     ],
-    totalUsers: 10,
-    totalFavorites: 6,
   };
 
-  const [selectedMonth, setSelectedMonth] = useState("Januari 2024");
 
   const handleMonthChange = (key: number) => {
     const month = data.transactionsPerMonth[key].month;
     setSelectedMonth(month);
+    const [monthName, year] = month.split(" ");
+    const monthIndex =
+      new Date(Date.parse(monthName + " 1, 2024")).getMonth() + 1;
+    fetchMonthlyReport(monthIndex, year);
   };
+
+  useEffect(() => {
+    const [monthName, year] = selectedMonth.split(" ");
+    const monthIndex = new Date(Date.parse(monthName + " 1, 2024")).getMonth() + 1;
+    fetchMonthlyReport(monthIndex, year);
+  }, [selectedMonth]);
 
   const getTransactionsForMonth = () => {
     const transactions = data.transactionsPerMonth.find(
@@ -185,10 +220,12 @@ const Home = () => {
     );
     return transactions;
   };
+  
+  const monthlyTransactions = getTransactionsForMonth();
 
   const formatNorek = (norek: string | number | undefined) => {
-    if (typeof norek === 'undefined') {
-      return 0
+    if (typeof norek === "undefined") {
+      return 0;
     }
     const str = norek.toString();
 
@@ -198,21 +235,31 @@ const Home = () => {
     return str.replace(/(.{4})/g, "$1-");
   };
 
-  const transactions = getTransactionsForMonth();
+
 
   const copyToClipboard = () => {
-    navigator.clipboard
-      .writeText(data.norek.toString())
-      .then(() => {
-        notification.success({
-          message: "Success",
-          description: "No. Rekening berhasil disalin",
-          duration: 2, // durasi dalam detik
+    const accountNumber = user?.user?.account_number;
+
+    if (accountNumber) {
+      navigator.clipboard
+        .writeText(accountNumber.toString())
+        .then(() => {
+          notification.success({
+            message: "Success",
+            description: "No. Rekening berhasil disalin",
+            duration: 2, // Duration in seconds
+          });
+        })
+        .catch((err) => {
+          console.error("Could not copy text: ", err);
         });
-      })
-      .catch((err) => {
-        console.error("Could not copy text: ", err);
+    } else {
+      notification.error({
+        message: "Error",
+        description: "No. Rekening tidak tersedia",
+        duration: 2, // Duration in seconds
       });
+    }
   };
 
   const toggleBalanceVisibility = () => {
@@ -224,7 +271,7 @@ const Home = () => {
       <h1 className="text-heading-5 font-bold text-primary-100">
         Halo, {user?.user.name}
       </h1>
-      <button onClick={() => logout()}>Logo out</button>
+      <button onClick={() => logout()}>Log out</button>
       <div className="my-3">
         <div className=" bg-primary-100 rounded-lg md:w-1/3 px-7 py-5">
           <h5 className="text-white font-bold text-heading-6 mb-7">
@@ -243,8 +290,21 @@ const Home = () => {
                           <GoDotFill key={index} />
                         ))}
                       </span>
+                    ) : balance !== null ? (
+                      <span>Rp {balance.toLocaleString("id-ID")}</span>
                     ) : (
-                      `Rp ${data.balance.toLocaleString("id-ID")}`
+                      <>
+                        <Skeleton.Button
+                          active
+                          className="w-full h-7 col-span-full"
+                          size="large"
+                        />
+                        <Skeleton.Button
+                          active
+                          className="w-full h-7 col-span-full"
+                          size="large"
+                        />
+                      </>
                     )}
                   </h5>
                   <button onClick={toggleBalanceVisibility} className="">
@@ -303,16 +363,16 @@ const Home = () => {
               <div className="border rounded-xl p-5 my-7 shadow-sm">
                 <p className="text-primary-100">12/07/2024</p>
                 <p className="text-primary-100 font-semibold py-2">
-                  {data.norek}
+                  {formatNorek(user?.user.account_number)}
                 </p>
                 <p className="text-body-large font-semibold">
-                  Rp {data.balance.toLocaleString("id-ID")}
+                  Rp {balance?.toLocaleString("id-ID")}
                 </p>
               </div>
             </Modal>
             <p className="pt-2">Info</p>
           </div>
-          <div className=" text-center" onClick={() => navigate('/bca')}>
+          <div className=" text-center" onClick={() => navigate("/bca")}>
             <img
               src={iconTransfer}
               alt="info"
@@ -320,7 +380,7 @@ const Home = () => {
             />
             <p className="pt-2">Transfer</p>
           </div>
-          <div className=" text-center" onClick={() => navigate('/e-wallet')}>
+          <div className=" text-center" onClick={() => navigate("/e-wallet")}>
             <img
               src={iconEwallet}
               alt="info"
@@ -359,32 +419,29 @@ const Home = () => {
           Transaksi Favorit
         </h1>
         <div className="py-3">
-          <Swiper
-            modules={[Navigation, Autoplay]}
-            loop={true}
-            autoplay={{
-              delay: 4000,
-              disableOnInteraction: false,
-            }}
-            onBeforeInit={(swiper) => {
-              swiperRef.current = swiper;
-            }}
-            spaceBetween={15}
-            slidesPerView={1.5}
-            breakpoints={{
-              768: {
-                slidesPerView: 2,
-              },
-              1024: {
-                slidesPerView: 3,
-              },
-            }}
-            onSlideChange={() => console.log("slide change")}
-            onSwiper={(swiper) => console.log(swiper)}
-          >
-            {data.userTersimpan
-              ?.filter((transaction) => transaction.isFavorite === true)
-              .map((transaction) => (
+          {favorites.length > 0 ? (
+            <Swiper
+              modules={[Navigation, Autoplay]}
+              loop={true}
+              autoplay={{
+                delay: 4000,
+                disableOnInteraction: false,
+              }}
+              onBeforeInit={(swiper) => {
+                swiperRef.current = swiper;
+              }}
+              spaceBetween={15}
+              slidesPerView={1.5}
+              breakpoints={{
+                768: {
+                  slidesPerView: 2,
+                },
+                1024: {
+                  slidesPerView: 3,
+                },
+              }}
+            >
+              {favorites.map((transaction) => (
                 <SwiperSlide key={transaction.id}>
                   <div className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4">
                     <div
@@ -392,43 +449,66 @@ const Home = () => {
                     >
                       <img
                         src={
-                          transaction.type.includes("Transfer")
+                          transaction.type === "transfer"
                             ? iconTransFav
                             : iconTopupFav
                         }
                         alt={
-                          transaction.type.includes("Transfer")
+                          transaction.type === "transfer"
                             ? "transfav"
                             : "topupfav"
                         }
                         className="w-[10px] items-center h-[10px]"
                       />
                       <p className="text-caption-small">
-                        {transaction.type.includes("Transfer")
+                        {transaction.type === "transfer"
                           ? "Transfer"
                           : "Top Up"}
                       </p>
                     </div>
-                    <h5 className="xl:text-body-large text-body-small pt-3">
-                      {transaction.type}
+                    <h5 className="xl:text-body-large text-body-small pt-3 capitalize">
+                      {transaction.type === "transfer"
+                        ? "Transfer Antar BCA"
+                        : `Top Up ${transaction.ewallet_name}`}
                     </h5>
                     <h5 className="text-primary-100 xl:text-heading-6 text-body-small font-semibold">
-                      {transaction.name}
+                      {transaction.type === "transfer"
+                        ? transaction.account_name
+                        : transaction.ewallet_name}
                     </h5>
                   </div>
                 </SwiperSlide>
               ))}
-            <div className="md:flex justify-center gap-3 pt-4 hidden ho">
-              <button onClick={() => swiperRef.current?.slidePrev()} >
-                <ArrowCircleLeft size={25} color="gray" />
-              </button>
-              <button onClick={() => swiperRef.current?.slideNext()}>
-                <ArrowCircleRight size={25} color="gray" />
-              </button>
+              <div className="md:flex justify-center gap-3 pt-4 hidden">
+                <button onClick={() => swiperRef.current?.slidePrev()}>
+                  <ArrowCircleLeft size={25} color="gray" />
+                </button>
+                <button onClick={() => swiperRef.current?.slideNext()}>
+                  <ArrowCircleRight size={25} color="gray" />
+                </button>
+              </div>
+            </Swiper>
+          ) : (
+            <div className="flex space-x-4 justify-center w-full">
+              {[1, 2, 3].map((_, index) => (
+                <div
+                  key={index}
+                  className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4 w-full max-w-7xl"
+                >
+                  <div className="animate-pulse flex flex-col space-y-3 w-full">
+                    <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-primary-100 rounded-3xl text-white text-caption-large">
+                     
+                    </div>
+                    <div className="bg-gray-400 h-5 rounded w-3/4"></div>
+                    <div className="bg-gray-400 h-5 rounded w-1/2"></div>
+                  </div>
+                </div>
+              ))}
             </div>
-          </Swiper>
+          )}
         </div>
       </div>
+
       <div className="">
         <h1 className="text-primary-100 text-heading-6 font-bold py-3">
           Catatan Keuangan
@@ -458,12 +538,15 @@ const Home = () => {
               <div className="border px-5 py-3 w-full rounded-lg">
                 <div className="">
                   <div className="flex gap-1">
-                    <ArrowUp weight="fill" size={20} className="text-green-500" />
+                    <ArrowUp
+                      weight="fill"
+                      size={20}
+                      className="text-green-500"
+                    />
                     <p>Pemasukan</p>
                   </div>
-
                   <h5 className="text-primary-100 font-bold text-heading-6 py-3">
-                    Rp{transactions?.income.toLocaleString("id-ID")}
+                    Rp{monthlyReport?.income}
                   </h5>
                 </div>
               </div>
@@ -473,19 +556,20 @@ const Home = () => {
                   <p>Pengeluaran</p>
                 </div>
                 <h5 className="text-primary-100 font-bold text-heading-6 py-3">
-                  Rp{transactions?.expenses.toLocaleString("id-ID")}
+                  Rp{monthlyReport?.expense}
                 </h5>
               </div>
             </div>
             <div className="">
               <h5>Selisih</h5>
               <h5
-                className={`${(transactions?.balance ?? 0) < 0
-                  ? "text-red-500"
-                  : "text-green-500"
-                  } text-heading-6 font-bold`}
+                className={`${
+                  (monthlyReport?.total ?? 0) < 0
+                    ? "text-red-500"
+                    : "text-green-500"
+                } text-heading-6 font-bold`}
               >
-                Rp{transactions?.balance.toLocaleString("id-ID")}
+                Rp{monthlyReport?.total}
               </h5>
             </div>
           </div>

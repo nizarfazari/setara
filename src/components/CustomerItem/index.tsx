@@ -18,7 +18,7 @@ export default function CustomerItem({ name, type, number, isFavorite, avatar }:
       <Flex gap="1rem">
         <img src={avatar} alt="avatar" className="size-[47px] md:size-[54px]" />
         <Flex vertical gap={4} justify="center">
-          <h6 className="text-caption-small md:text-body-large">{name.toUpperCase()}</h6>
+          <h6 className="text-caption-small md:text-body-large">{name}</h6>
           <Flex gap={5} align="center">
             <span className="text-[10px] leading-[14px] font-normal md:font-bold md:text-caption-large">{type}</span>
             {/* <Dot size={32} /> */}

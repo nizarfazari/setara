@@ -1,0 +1,55 @@
+.ant-form-item .ant-form-item-label label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::before {
+  display: none;
+}
+
+.ant-form-item .ant-form-item-label label.ant-form-item-required:not(.ant-form-item-required-mark-optional)::after {
+  visibility: visible;
+  display: inline-block;
+  margin-inline-start: 5px;
+  margin-inline-end: 5px;
+  color: #dd411e;
+  font-size: 18px;
+  font-family: SimSun, sans-serif;
+  line-height: 1;
+  content: "*";
+}
+
+.ant-form-item .ant-form-item-label > label {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.ant-input {
+  padding: 18px 24px;
+}
+
+.ant-checkbox .ant-checkbox-inner {
+  width: 24px;
+  height: 24px;
+}
+
+.ant-checkbox-checked .ant-checkbox-inner {
+  background-color: #115DA9;
+  border-color: #115DA9;
+}
+
+.ant-checkbox-wrapper:not(.ant-checkbox-wrapper-disabled):hover 
+.ant-checkbox-checked:not(.ant-checkbox-disabled) 
+.ant-checkbox-inner{
+  background-color: #115DA9;
+}
+
+@media only screen and (max-width: 768px) {
+  .ant-card .ant-card-body {
+    padding: 0;
+  }
+
+  .ant-form-item .ant-form-item-label > label {
+    font-size: 14px;
+    font-weight: 600;
+  }
+
+  .ant-input {
+    padding: 12px 15px;
+  }
+}

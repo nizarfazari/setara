@@ -1,8 +1,29 @@
 import { Button, Card } from "antd"
 import Breadcrumb from "../../components/Breadcumb"
 import { useNavigate, useParams } from "react-router-dom"
+import { useEffect, useState } from "react";
 
 const Konfirmasi = () => {
+  const [contact, setContact] = useState();
+  useEffect(() => {
+    fetch(`https://setara-api-service-production.up.railway.app/api/v1/transactions/bca-transfer`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJKQU5FMTIzNCIsImlhdCI6MTcyMjUzMzA3MSwiZXhwIjoxNzIyNjE5NDcxfQ.QG79R-kMDdlmXkUpWI3Pn4-IEzf2HzKKXradVJK1Ofs' // Ganti dengan token yang valid
+      }
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        setContact(data);
+      })
+      .catch((err) => {
+        if (err.name === "AbortError") {
+          console.log("fetch aborted.");
+        }
+      });
+  }, []);
+  console.log(contact)
   const navigate = useNavigate()
   const { slug } = useParams()
   

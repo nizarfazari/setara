@@ -60,7 +60,7 @@ function App() {
                 <Route path="/bca" element={<PlainLayout />}>
                   <Route index element={<TransferBCA />} />
                   <Route path="/bca/:slug" element={<DestinationNumberBCA />} />
-                  <Route path="/bca/:slug/nominal-topup" element={<AmountTopUpBCA />} />
+                  <Route path="/bca/:slug/nominal-topup/:id" element={<AmountTopUpBCA />} />
                   <Route path="/bca/:slug/tinjau" element={<KonfirmasiBCA />} />
                   <Route path="/bca/:slug/nomor-tujuan-baru" element={<NewDestinationNumberBCA />} />
                   <Route path="/bca/:slug/konfirmasi" element={<ConfirmationPINBCA />} />

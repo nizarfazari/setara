@@ -32,7 +32,6 @@ import {
 import { useAuth } from "../../hooks/useAuth";
 import axios, { AxiosError } from "axios";
 
-
 interface CombinedItem {
   id: string;
   owner_id: string;
@@ -61,7 +60,10 @@ const Home = () => {
   const [isBalanceHidden, setIsBalanceHidden] = useState(false);
   const [balance, setBalance] = useState<number | null>(null);
   const [error, setError] = useState<AxiosError | null>(null);
-  const [monthlyReport, setMonthlyReport] = useState<MonthlyReport | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [monthlyReport, setMonthlyReport] = useState<MonthlyReport | null>(
+    null
+  );
   const [favorites, setFavorites] = useState<CombinedItem[]>([]);
   const [selectedMonth, setSelectedMonth] = useState("Januari 2024");
 
@@ -86,6 +88,7 @@ const Home = () => {
             headers: {
               Authorization: `Bearer ${user?.token}`,
             },
+            timeout: 7000,
           }
         ),
         axios.get<{
@@ -96,6 +99,7 @@ const Home = () => {
             headers: {
               Authorization: `Bearer ${user?.token}`,
             },
+            timeout: 7000,
           }
         ),
       ]);
@@ -118,13 +122,21 @@ const Home = () => {
         ...favoritesWithType,
         ...savedEwalletUsersWithType,
       ];
-      setFavorites(combinedData);
-      console.log(combinedData);
+
+      if (combinedData.length === 0) {
+        setErrorMessage("Belum ada akun favorit yang ditambahkan.");
+      } else {
+        setFavorites(combinedData);
+      }
     } catch (error) {
+      if (axios.isAxiosError(error) && error.code === "ECONNABORTED") {
+        setErrorMessage("Request timeout. Belum ada transaksi akun favorit.");
+      } else {
+        setErrorMessage("Terjadi kesalahan saat mengambil data.");
+      }
       console.error(error);
     }
   };
-
 
   if (user) {
     fetchFavorites();
@@ -198,7 +210,6 @@ const Home = () => {
     ],
   };
 
-
   const handleMonthChange = (key: number) => {
     const month = data.transactionsPerMonth[key].month;
     setSelectedMonth(month);
@@ -210,7 +221,8 @@ const Home = () => {
 
   useEffect(() => {
     const [monthName, year] = selectedMonth.split(" ");
-    const monthIndex = new Date(Date.parse(monthName + " 1, 2024")).getMonth() + 1;
+    const monthIndex =
+      new Date(Date.parse(monthName + " 1, 2024")).getMonth() + 1;
     fetchMonthlyReport(monthIndex, year);
   }, [selectedMonth]);
 
@@ -220,7 +232,7 @@ const Home = () => {
     );
     return transactions;
   };
-  
+
   const monthlyTransactions = getTransactionsForMonth();
 
   const formatNorek = (norek: string | number | undefined) => {
@@ -234,8 +246,6 @@ const Home = () => {
     }
     return str.replace(/(.{4})/g, "$1-");
   };
-
-
 
   const copyToClipboard = () => {
     const accountNumber = user?.user?.account_number;
@@ -419,7 +429,11 @@ const Home = () => {
           Transaksi Favorit
         </h1>
         <div className="py-3">
-          {favorites.length > 0 ? (
+          {errorMessage ? (
+            <p className="text-primary-100 text-body-large font-semibold">
+              {errorMessage}
+            </p>
+          ) : favorites.length > 0 ? (
             <Swiper
               modules={[Navigation, Autoplay]}
               loop={true}
@@ -496,9 +510,7 @@ const Home = () => {
                   className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4 w-full max-w-7xl"
                 >
                   <div className="animate-pulse flex flex-col space-y-3 w-full">
-                    <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-primary-100 rounded-3xl text-white text-caption-large">
-                     
-                    </div>
+                    <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-primary-100 rounded-3xl text-white text-caption-large"></div>
                     <div className="bg-gray-400 h-5 rounded w-3/4"></div>
                     <div className="bg-gray-400 h-5 rounded w-1/2"></div>
                   </div>

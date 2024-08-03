@@ -1,4 +1,4 @@
-import React from "react";
+import { Dispatch, SetStateAction } from "react";
 import CustomerItem from "../CustomerItem";
 import { Card, Flex } from "antd";
 import "./style.css";
@@ -6,10 +6,12 @@ import "./style.css";
 type TContactList = {
   pathUrl: string;
   header: string;
-  contacts: { name: string; type: string; number: string; isFavorite?: boolean; avatar: string }[];
+  refresh: boolean;
+  setRefresh: Dispatch<SetStateAction<boolean>>;
+  contacts: { id: string; name: string; type: string; number: string; isFavorite?: boolean; avatar: string }[];
 };
 
-export default function CustomerList({ header, contacts }: TContactList) {
+export default function CustomerList({ header, contacts, refresh, setRefresh }: TContactList) {
 
   return (
     <div className="text-primary-100 w-full">
@@ -22,7 +24,7 @@ export default function CustomerList({ header, contacts }: TContactList) {
           <Flex vertical gap={12}>
             {contacts.map((contact, index) => (
               <Card className="border-white lg:border-primary-300" id="contact-item" key={index}>
-                <CustomerItem  no={""} service_name={""} account_name={""} bank_name={""} account_number={""} user_image_path={""} {...contact} />
+                <CustomerItem  no={""} service_name={""} account_name={""} bank_name={""} account_number={""} user_image_path={""} {...contact} refresh={refresh} setRefresh={setRefresh}/>
               </Card>
             ))}
           </Flex>

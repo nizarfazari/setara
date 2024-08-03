@@ -45,6 +45,7 @@ interface CombinedItem {
   ewallet_user_id?: string;
   ewallet_user_phone_number?: string;
   ewallet_name?: string;
+  ewallet_user_name?: string;
 }
 
 interface MonthlyReport {
@@ -60,6 +61,7 @@ const Home = () => {
   const [isBalanceHidden, setIsBalanceHidden] = useState(false);
   const [balance, setBalance] = useState<number | null>(null);
   const [error, setError] = useState<AxiosError | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [monthlyReport, setMonthlyReport] = useState<MonthlyReport | null>(
     null
@@ -79,6 +81,7 @@ const Home = () => {
 
   const fetchFavorites = async () => {
     try {
+      setLoading(true); // Start loading
       const [response1, response2] = await Promise.all([
         axios.get<{
           data: { favorites: CombinedItem[] };
@@ -88,7 +91,7 @@ const Home = () => {
             headers: {
               Authorization: `Bearer ${user?.token}`,
             },
-            timeout: 7000,
+            timeout: 5000, // 5-second timeout
           }
         ),
         axios.get<{
@@ -99,17 +102,15 @@ const Home = () => {
             headers: {
               Authorization: `Bearer ${user?.token}`,
             },
-            timeout: 7000,
+            timeout: 5000, // 5-second timeout
           }
         ),
       ]);
 
-      const favoritesWithType = response1.data.data.favorites.map(
-        (account) => ({
-          ...account,
-          type: "transfer" as const,
-        })
-      );
+      const favoritesWithType = response1.data.data.favorites.map((account) => ({
+        ...account,
+        type: "transfer" as const,
+      }));
 
       const savedEwalletUsersWithType = response2.data.data.favorites.map(
         (ewalletUser) => ({
@@ -123,24 +124,27 @@ const Home = () => {
         ...savedEwalletUsersWithType,
       ];
 
-      if (combinedData.length === 0) {
-        setErrorMessage("Belum ada akun favorit yang ditambahkan.");
-      } else {
-        setFavorites(combinedData);
-      }
+      setFavorites(combinedData);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.code === "ECONNABORTED") {
-        setErrorMessage("Request timeout. Belum ada transaksi akun favorit.");
+      if (axios.isAxiosError(error)) {
+        if (error.code === "ECONNABORTED") {
+          setErrorMessage("Belum ada transaksi akun favorit.");
+        } else {
+          setErrorMessage("Terjadi kesalahan saat mengambil data.");
+        }
       } else {
-        setErrorMessage("Terjadi kesalahan saat mengambil data.");
+        setErrorMessage("Terjadi kesalahan yang tidak terduga.");
       }
-      console.error(error);
+    } finally {
+      setLoading(false); 
     }
   };
 
-  if (user) {
-    fetchFavorites();
-  }
+  useEffect(() => {
+    if (user) {
+      fetchFavorites();
+    }
+  }, [user]);
 
   const fetchBalance = async () => {
     const token = user?.token;
@@ -424,16 +428,32 @@ const Home = () => {
           </div>
         </div>
       </div>
-      <div className="pt-5 pb-3">
-        <h1 className="text-primary-100 text-heading-6 font-bold">
-          Transaksi Favorit
-        </h1>
-        <div className="py-3">
-          {errorMessage ? (
-            <p className="text-primary-100 text-body-large font-semibold">
-              {errorMessage}
-            </p>
-          ) : favorites.length > 0 ? (
+      <div className="pt-0 pb-3">
+      {loading ? ( 
+        <div className="flex space-x-4 justify-center w-full">
+          {[1, 2, 3].map((_, index) => (
+            <div
+              key={index}
+              className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4 w-full max-w-7xl"
+            >
+              <div className="animate-pulse flex flex-col space-y-3 w-full">
+                <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-primary-100 rounded-3xl text-white text-caption-large"></div>
+                <div className="bg-gray-400 h-5 rounded w-3/4"></div>
+                <div className="bg-gray-400 h-5 rounded w-1/2"></div>
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : errorMessage ? ( // Show error message if there's an error
+        <p className="text-primary-100 text-body-large font-semibold">
+          {errorMessage}
+        </p>
+      ) : favorites.length > 0 ? (
+        <>
+          <h1 className="text-primary-100 text-heading-6 font-bold">
+            Transaksi Favorit
+          </h1>
+          <div className="py-3">
             <Swiper
               modules={[Navigation, Autoplay]}
               loop={true}
@@ -488,7 +508,7 @@ const Home = () => {
                     <h5 className="text-primary-100 xl:text-heading-6 text-body-small font-semibold">
                       {transaction.type === "transfer"
                         ? transaction.account_name
-                        : transaction.ewallet_name}
+                        : transaction.ewallet_user_name}
                     </h5>
                   </div>
                 </SwiperSlide>
@@ -502,24 +522,14 @@ const Home = () => {
                 </button>
               </div>
             </Swiper>
-          ) : (
-            <div className="flex space-x-4 justify-center w-full">
-              {[1, 2, 3].map((_, index) => (
-                <div
-                  key={index}
-                  className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4 w-full max-w-7xl"
-                >
-                  <div className="animate-pulse flex flex-col space-y-3 w-full">
-                    <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-primary-100 rounded-3xl text-white text-caption-large"></div>
-                    <div className="bg-gray-400 h-5 rounded w-3/4"></div>
-                    <div className="bg-gray-400 h-5 rounded w-1/2"></div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+          </div>
+        </>
+      ) : (
+        <p className="text-primary-100 text-body-large font-semibold">
+       
+        </p>
+      )}
+    </div>
 
       <div className="">
         <h1 className="text-primary-100 text-heading-6 font-bold py-3">

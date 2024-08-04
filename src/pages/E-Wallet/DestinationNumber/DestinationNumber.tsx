@@ -56,8 +56,9 @@ export default function DestinationNumberPage() {
   const { user } = useAuth();
   
   const fetchSavedEwallet = async () => {
+
     try {
-      const response = await axios.get(`https://setara-api-service-production.up.railway.app/api/v1/saved-ewallet-users/${slug}` , {
+      const response = await axios.get(`https://setara-api-service-production.up.railway.app/api/v1/saved-ewallet-users?ewalletName=${slug}' ` , {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${user?.token}`,

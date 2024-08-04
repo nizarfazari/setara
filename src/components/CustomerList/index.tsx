@@ -3,15 +3,17 @@ import CustomerItem from "../CustomerItem";
 import { Card, Flex } from "antd";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
+import { EwalletUser } from "../../types/E-Wallet";
 
 type TContactList = {
   pathUrl: string;
   header: string;
-  contacts: { name: string; type: string; number: string; isFavorite?: boolean; avatar: string }[];
+  contacts: EwalletUser[];
 };
 
 export default function CustomerList({ pathUrl, header, contacts }: TContactList) {
   const navigate = useNavigate();
+  console.log(contacts)
 
   return (
     <div className="text-primary-100 w-full">

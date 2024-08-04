@@ -17,17 +17,17 @@ type TWallets = {
     id: string;
     name: string;
     image_path: string;
-}   
+}
 
 const TransferWallet: React.FC = () => {
-    const { user } = useAuth();
+    const { user, setIdWallet } = useAuth();
     const [loading, setLoading] = useState<boolean>(false);
     const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
     const [wallets, setWallets] = useState<TWallets[] | null>(null);
-    
+
     const handleWalletClick = (id: string) => {
         setSelectedWallet(id);
-        localStorage.setItem('e-wallet', id)
+        setIdWallet(id)
     };
 
     const fetchAllVendorEwallet = async () => {
@@ -42,7 +42,7 @@ const TransferWallet: React.FC = () => {
             const data = await response.data.data;
             setWallets(data);
 
-           
+
         } catch (error) {
             console.log(error);
         } finally {
@@ -74,10 +74,10 @@ const TransferWallet: React.FC = () => {
                         </Link>
                     ))}
                     {loading && (
-                        [1,2,3,4,5].map((item) => (
+                        [1, 2, 3, 4, 5].map((item) => (
                             <div key={item} className='flex flex-col gap-4 self-center'>
-                                <Skeleton.Image active className='m-auto'/>
-                                <Skeleton.Input active size='small'/>
+                                <Skeleton.Image active className='m-auto' />
+                                <Skeleton.Input active size='small' />
                             </div>
                         ))
                     )}

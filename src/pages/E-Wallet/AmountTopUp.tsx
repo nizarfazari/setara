@@ -3,16 +3,22 @@ import { Card, Flex } from "antd";
 import CustomerItem from "../../components/CustomerItem";
 import FormTopUp from "../../components/FormTopUp";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
-const USER = {
-  name: "Felin Agustina",
-  type: "OVO",
-  number: "088812194203",
-  avatar: "https://ui-avatars.com/api/?name=Felin+Agustina&background=EFEFEF&color=115DA9&rounded=true",
-};
+
 
 export default function AmountTopUpPage() {
   const { slug } = useParams<{ slug: string }>();
+  const { transWallet } = useAuth();
+
+
+  const USER = {
+    ewallet_user_name: transWallet.recipients.nama,
+    ewallet_name: transWallet.recipients.wallet,
+    ewallet_user_phone_number: transWallet.recipients.numberDestination,
+    ewallet_user_image_path: transWallet.recipients.imageUrl,
+  };
+  console.log(transWallet)
 
   const toTitleCase = (str: string) => {
     return str.toLowerCase().split(' ').map((word: string) => {
@@ -32,7 +38,7 @@ export default function AmountTopUpPage() {
               <h5 className="text-primary-100 mb-2 text-body-small md:text-heading-5">Penerima</h5>
               <CustomerItem {...USER} />
             </div>
-            <FormTopUp pathUrl={`/e-wallet/${slug}`}/>
+            <FormTopUp pathUrl={`/e-wallet/${slug}`} />
           </Flex>
         </Card>
       </div>

@@ -14,7 +14,7 @@ import { ResponseEWallet } from "../../../types/E-Wallet";
 
 export default function DestinationNumberPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { user } = useAuth();
+  const { user, setRecipients } = useAuth();
 
   const { data, isLoading, isError } = useFetchData<ResponseEWallet>(`/saved-ewallet-users?ewalletName=${capitalFirstLetter(slug)}`, user?.token);
   console.log(isError)
@@ -59,8 +59,7 @@ export default function DestinationNumberPage() {
       </div>
       <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">
         {data ? (
-          <DestinationNumber pathUrl={`/e-wallet/${slug}`} wallet={data}  />
-
+          <DestinationNumber pathUrl={`/e-wallet/${slug}`} wallet={data ?? []} />
         ) :
           <>
           </>
@@ -68,13 +67,13 @@ export default function DestinationNumberPage() {
         <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
           {data ? (
             <Flex vertical gap={30} align="start">
-              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Favorit" contacts={data.favorites} />
-              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Tersimpan" contacts={data.saved} />
+              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients} />
+              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Tersimpan" contacts={data.saved} setRecipients={setRecipients}/>
             </Flex>
           ) : <></>}
 
         </Card>
       </div>
-    </div>
+    </div >
   );
 }

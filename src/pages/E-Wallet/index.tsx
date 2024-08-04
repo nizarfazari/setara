@@ -27,6 +27,7 @@ const TransferWallet: React.FC = () => {
     
     const handleWalletClick = (id: string) => {
         setSelectedWallet(id);
+        localStorage.setItem('e-wallet', id)
     };
 
     const fetchAllVendorEwallet = async () => {
@@ -40,6 +41,8 @@ const TransferWallet: React.FC = () => {
             })
             const data = await response.data.data;
             setWallets(data);
+
+           
         } catch (error) {
             console.log(error);
         } finally {

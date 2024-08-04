@@ -13,7 +13,7 @@ type TContactList = {
 
 export default function CustomerList({ pathUrl, header, contacts }: TContactList) {
   const navigate = useNavigate();
-  console.log(contacts)
+
 
   return (
     <div className="text-primary-100 w-full">

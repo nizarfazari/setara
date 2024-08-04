@@ -36,6 +36,8 @@ export const AuthProvider = ({ children }: AuthProps) => {
 
     const [user, setUser]
         = useLocalStorage("user", null);
+    const [transWallet, setTransWallet]
+        = useLocalStorage("transactionWallet", null);
     const navigate = useNavigate();
 
     const login = async (data: object) => {
@@ -45,9 +47,12 @@ export const AuthProvider = ({ children }: AuthProps) => {
 
     const logout = () => {
         setUser(null);
+        localStorage.clear()
         openNotificationWithIcon('success', 'Success', "Berhasil Logout")
         navigate("/login", { replace: true });
     };
+
+    
 
     const value = useMemo(() => ({
         user,

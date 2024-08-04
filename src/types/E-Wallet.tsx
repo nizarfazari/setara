@@ -1,5 +1,5 @@
 // Tipe data untuk item favorit dan tersimpan
-export interface EwalletUser {
+export type EwalletUser =  {
     id: string;
     owner_id: string;
     ewallet_user_id: string;
@@ -11,9 +11,15 @@ export interface EwalletUser {
 }
 
 // Tipe data untuk respons API
-export interface ResponseEWallet {
+export type ResponseEWallet = {
     total_favorites: number;
     total_saved: number;
     favorites: EwalletUser[];
     saved: EwalletUser[];
+}
+
+
+export type SearchEWalletReq = {
+    noEwallet: string
+    ewalletId: string
 }

@@ -1,4 +1,4 @@
-import React from "react";
+
 import CustomerItem from "../CustomerItem";
 import { Card, Flex } from "antd";
 import "./style.css";

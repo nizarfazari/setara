@@ -6,7 +6,7 @@ import { EwalletUser } from "../../types/E-Wallet";
 
 
 export default function CustomerItem({ ewallet_user_image_path,ewallet_name,ewallet_user_name,ewallet_user_phone_number,favorite }:EwalletUser ) {
- console.log(favorite)
+ 
   return (
     <Flex justify="space-between" className="text-primary-100 font-bold cursor-pointer" align="center">
       <Flex gap="1rem">

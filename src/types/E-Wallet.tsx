@@ -1,5 +1,5 @@
 // Tipe data untuk item favorit dan tersimpan
-export type EwalletUser =  {
+export type EwalletUser = {
     id?: string;
     owner_id?: string;
     ewallet_user_id?: string;
@@ -23,3 +23,43 @@ export type SearchEWalletReq = {
     noEwallet: string
     ewalletId: string
 }
+
+
+
+export type TransactionEWalletReq = {
+    idEwallet: string
+    destinationPhoneNumber: string
+    amount: number
+    mpin: string
+    note: string | undefined
+    savedAccount: true
+}
+
+interface User {
+    accountNumber: string;
+    name: string;
+    imagePath: string;
+    bankName: string;
+}
+
+interface Ewallet {
+    name: string;
+}
+
+interface UserEwallet {
+    name: string;
+    phoneNumber: string;
+    imagePath: string;
+    ewallet: Ewallet;
+}
+
+export type TransactionEWalletRes = {
+    user: User;
+    userEwallet: UserEwallet;
+    amount: number;
+    adminFee: number;
+    totalAmount: number;
+}
+
+
+

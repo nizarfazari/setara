@@ -33,8 +33,8 @@ const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl }) => {
   return (
     <Form layout="vertical" onFinish={onFinish} onFinishFailed={onFinishFailed}
       initialValues={{
-        amount: transWallet.transaction.nominal || 0,
-        notes: transWallet.transaction.notes || '',
+        amount: transWallet?.transaction?.nominal || null,
+        notes: transWallet?.transaction?.notes || null,
       }}
     >
       <Form.Item

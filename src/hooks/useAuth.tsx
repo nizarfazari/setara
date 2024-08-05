@@ -49,6 +49,7 @@ interface AuthContextType {
     setIdWallet: (idWallet: string) => void
     setTransaction: (transaction: transactionData) => void
     transWallet: transWallet
+    clearTransaction: () => void
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -99,6 +100,14 @@ export const AuthProvider = ({ children }: AuthProps) => {
         })
     }
 
+    const clearTransaction = () => {
+        setTransWallet({
+            recipients: null,
+            transaction: null,
+            idWallet: null
+        });
+    }
+
 
 
     const value = useMemo(() => ({
@@ -108,7 +117,8 @@ export const AuthProvider = ({ children }: AuthProps) => {
         setRecipients,
         setIdWallet,
         transWallet,
-        setTransaction
+        setTransaction,
+        clearTransaction
     }), [user, transWallet]);
 
     return (

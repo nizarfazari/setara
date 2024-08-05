@@ -65,7 +65,7 @@ const Konfirmasi = () => {
               <p>{FormatCurrency(+transWallet.transaction.nominal + admin)}</p>
             </div>
           </Card>
-          <Button onClick={() => navigate(`/bca/${slug}/konfirmasi`)} type="primary" className="bg-primary-100 h-10 w-full mt-5 lg:mt-10 rounded-lg">Lanjutkan</Button>
+          <Button onClick={() => navigate(`/e-wallet/${slug}/konfirmasi`)} type="primary" className="bg-primary-100 h-10 w-full mt-5 lg:mt-10 rounded-lg">Lanjutkan</Button>
         </div>
       </div>
     </div>

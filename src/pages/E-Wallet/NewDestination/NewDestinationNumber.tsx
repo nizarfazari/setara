@@ -1,27 +1,50 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Breadcrumb from "../../../components/Breadcumb";
 import { useNavigate, useParams } from "react-router-dom";
-import { capitalFirstLetter } from "../../../utils";
-import { Button, Card, Checkbox, Flex, Form, FormProps, Input, InputNumber, Select } from "antd";
+import { capitalFirstLetter, FormatCurrency } from "../../../utils";
+import { Button, Card, Checkbox, Flex, Form, FormProps, Input, InputNumber, Select, Spin } from "antd";
 const { Option } = Select;
 import "./style.css";
 import { CheckCircle } from "@phosphor-icons/react";
 import axios from "axios";
 import { useAuth } from "../../../hooks/useAuth";
+import { useFetchData } from "../../../hooks/useFetchData";
+import { postData } from "../../../utils/GetData";
+import { EWallets, SearchEWalletReq, SearchEWalletRes } from "../../../types/E-Wallet";
 
 type FieldType = {
   destinationNumber: number;
+  amount: number;
+  notes: string;
+  name: string;
+  savedList: boolean;
 };
+
+type UserBalance = {
+  balance: number;
+  check_time: string;
+}
 
 export default function NewDestinationNumberPage() {
   const [form] = Form.useForm();
-  const { user } = useAuth();
-  const { slug } = useParams<{ slug: string }>();
+  const { user, setTransaction, setRecipients } = useAuth();
+  const { slug } = useParams<{ slug: string | undefined }>();
   const navigate = useNavigate();
   const [isVerified, setIsVerified] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const { data: userBalance } = useFetchData<UserBalance>(`/user/getBalance`, user?.token);
+  const { data: ewallets} = useFetchData<EWallets[]>(`/vendor/ewallets`, user?.token);
+
+  // get specific ewallet id based on slug
+  const ewalletId = ewallets?.filter((item: { name: string }) => item.name.toLowerCase() == slug?.toLowerCase())[0].id;
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
-    console.log("Success:", values);
+    setTransaction({
+      nominal: values.amount.toString(),
+      notes: values.notes,
+      isSavedAccount: values.savedList
+    })
     navigate(`/e-wallet/${slug}/tinjau`);
   };
 
@@ -29,37 +52,47 @@ export default function NewDestinationNumberPage() {
     console.log("Failed:", errorInfo);
   };
 
-  const handleDestinationNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value == "") {
-      setIsVerified(false);
-      form.resetFields();
-    }
+  const handleDestinationNumberChange = () => {
+    setIsVerified(false);
+    form.resetFields(["name", "number", "notes", "amount", "source"]);
+
   };
 
   const handleVerifiedNumber = async () => {
     if (form.getFieldValue("destinationNumber")) {
+      setIsLoading(true);
       try {
-        const response = await axios.get(
-          `https://setara-api-service-production.up.railway.app/api/v1/user/search-no-ewallet/${form.getFieldValue("destinationNumber")}`,
+        const response = await postData<SearchEWalletReq, SearchEWalletRes>(
+          '/user/search-no-ewallet',
           {
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${user?.token}`,
-            },
-          }
+            noEwallet: form.getFieldValue("destinationNumber"),
+            ewalletId: ewalletId!,
+          },
+          user?.token
         );
-        const data = await response.data;
-        console.log(data);
-      } catch (error) {
-        console.log(error);
-      }
 
-      const verified = true;
-      if (verified) {
-        setIsVerified(!isVerified);
-        form.setFields([{ name: "name", value: "JOHN DOE" }]);
-      } else {
-        form.setFields([{ name: "destinationNumber", errors: ["NOMOR TIDAK TERDAFTAR"] }]);
+        if (response.status) {
+          setIsVerified(true);
+          setRecipients({
+            nama: response.data.name,
+            wallet: response.data.bank,
+            numberDestination: response.data.no,
+            imageUrl : response.data.image_path,
+          })
+          form.setFields([{ name: "name", value: response.data.name }]);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.data?.code == 404) {
+            setIsVerified(false);
+            form.setFields([{ name: "destinationNumber", errors: ["NOMOR TIDAK TERDAFTAR"] }]);
+          }
+        } else {
+          console.log("Error", error);
+        }
+      } finally {
+        setIsLoading(false);
       }
     } else {
       form.setFields([{ name: "destinationNumber", errors: ["Nomor Tidak Boleh Kosong"] }]);
@@ -97,7 +130,7 @@ export default function NewDestinationNumberPage() {
                   onClick={handleVerifiedNumber}
                   className="flex-[20%] bg-primary-100 text-white w-full py-[10px] rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
                 >
-                  Cari Nomor
+                  {isLoading ? <Spin /> : "Cari Nomor"}
                 </Button>
               </div>
               {isVerified && (
@@ -114,16 +147,14 @@ export default function NewDestinationNumberPage() {
           </Form.Item>
 
           <Form.Item name="name" label="Nama Nomor E-Wallet">
-            <Input type="text" placeholder="Masukkan Nama" disabled={isVerified ? false : true} />
+            <Input type="text" placeholder="Masukkan Nama" disabled={isVerified ? false : true} readOnly/>
           </Form.Item>
 
           <Form.Item name="source" label="Sumber Rekening" required>
             <Select disabled={isVerified ? false : true} className="h-20" placeholder="Pilih Sumber Rekening">
-              <Option value="Rp1.111.111">
-                TAHAP BCA 289137645 <br /> <span className="font-bold">Rp1.111.111</span>
-              </Option>
-              <Option value="Rp2.222.222">
-                TAHAP BCA 289137646 <br /> <span className="font-bold">Rp2.222.222</span>
+              <Option value={user?.user.account_number}>
+                {`${user?.user.bank_name} ${user?.user.account_number}`} <br />{" "}
+                <span className="font-bold">{userBalance && FormatCurrency(userBalance?.balance)}</span>
               </Option>
             </Select>
           </Form.Item>
@@ -134,13 +165,14 @@ export default function NewDestinationNumberPage() {
             rules={[
               { required: true, message: "Nominal Tidak Boleh Kosong" },
               { type: "number", min: 10000, message: "Minimum transfer adalah 10.000, mohon isikan kembali" },
+              { type: "number", max: userBalance?.balance, message: "Saldo Tidak Cukup, mohon isikan kembali" },
             ]}
             required
           >
             <InputNumber<number>
-              type="number"
+              type="text"
               prefix="Rp."
-              formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+              formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
               parser={(value) => value?.replace(/\.\s?|(,*)/g, "") as unknown as number}
               className="w-full px-[15px] py-3 md:px-6 md:py-4"
               placeholder="Masukkan Nominal"

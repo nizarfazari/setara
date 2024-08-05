@@ -18,13 +18,28 @@ export type ResponseEWallet = {
     saved: EwalletUser[];
 }
 
+export type EWallets = {
+    id: string;
+    name: string;
+    image_path: string;
+  }
 
 export type SearchEWalletReq = {
-    noEwallet: string
-    ewalletId: string
+    noEwallet: string;
+    ewalletId: string;
 }
 
-
+export type SearchEWalletRes = {
+    code: number;
+    message: string;
+    status: boolean;
+    data: {
+      no: string;
+      name: string;
+      bank: string;
+      image_path: string;
+    }
+}
 
 export type TransactionEWalletReq = {
     idEwallet: string
@@ -32,7 +47,7 @@ export type TransactionEWalletReq = {
     amount: number
     mpin: string
     note: string | undefined
-    savedAccount: true
+    savedAccount: boolean
 }
 
 interface User {
@@ -59,6 +74,7 @@ export type TransactionEWalletRes = {
     amount: number;
     adminFee: number;
     totalAmount: number;
+    code: number;
 }
 
 

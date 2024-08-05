@@ -20,7 +20,8 @@ const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl }) => {
     console.log("Success:", values);
     setTransaction({
       nominal: values.amount.toString(),
-      notes: values.notes
+      notes: values.notes,
+      isSavedAccount: true,
     })
     console.log(values)
     navigate(`${pathUrl}/tinjau`)
@@ -33,7 +34,7 @@ const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl }) => {
   return (
     <Form layout="vertical" onFinish={onFinish} onFinishFailed={onFinishFailed}
       initialValues={{
-        amount: transWallet?.transaction?.nominal || null,
+        amount: +transWallet?.transaction?.nominal || null,
         notes: transWallet?.transaction?.notes || null,
       }}
     >
@@ -44,11 +45,12 @@ const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl }) => {
         required
       >
         <InputNumber<number>
-          type="number"
+          type="text"
           prefix="Rp."
+          formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+          parser={(value) => value?.replace(/\.\s?|(,*)/g, "") as unknown as number}
           className="w-full px-[15px] py-3 md:px-6 md:py-4"
-          placeholder="Masukkan Nominal Top Up"
-
+          placeholder="Masukkan Nominal"
         />
       </Form.Item>
 

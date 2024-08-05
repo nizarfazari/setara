@@ -32,7 +32,8 @@ export type recipientsData = {
 
 export type transactionData = {
     nominal: string;
-    notes: string | undefined
+    notes: string | undefined;
+    isSavedAccount: boolean;
 }
 
 type transWallet = {

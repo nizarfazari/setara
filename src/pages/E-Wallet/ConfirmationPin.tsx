@@ -7,6 +7,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { TransactionEWalletReq, TransactionEWalletRes } from '../../types/E-Wallet';
 import { postData } from '../../utils/GetData';
 import { useNotification } from '../../hooks/useNotification';
+import axios from 'axios';
 
 interface IConfirmationPINProps {}
 
@@ -19,10 +20,17 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
   const { user, transWallet } = useAuth();
   const { openNotificationWithIcon } = useNotification();
   const navigate = useNavigate();
+  const [pin, setPin] = React.useState<string>("")
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const onFinish: FormProps<LoginType>['onFinish'] = async (values) => {
+  const handlePinChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value.length <= 6) {
+      setPin(e.target.value);
+    }
+  };
+
+  const onFinish: FormProps<LoginType>['onFinish'] = async () => {
     setIsSubmitting(true);
 
     try {
@@ -32,9 +40,9 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
           idEwallet: transWallet.idWallet,
           destinationPhoneNumber: transWallet.recipients.numberDestination,
           amount: +transWallet.transaction.nominal,
-          mpin: values.pin.toString(),
+          mpin: pin,
           note: transWallet.transaction.notes,
-          savedAccount: true,
+          savedAccount: transWallet.transaction.isSavedAccount,
         },
         user?.token
       );
@@ -46,13 +54,15 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         navigate('/transaksi-berhasil');
       }
     } catch (error) {
-      openNotificationWithIcon('error', 'Error', 'Transasksi gagal');
-      form.setFields([
-        {
-          name: 'pin',
-          errors: [error.response.data.message],
-        },
-      ]);
+      if(axios.isAxiosError(error)) {
+        openNotificationWithIcon('error', 'Error', 'Transasksi gagal');
+        form.setFields([
+          {
+            name: 'pin',
+            errors: [error?.response?.data.message],
+          },
+        ]);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -74,7 +84,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
                 <label htmlFor="" className="text-body-large text-neutral-400 font-bold required">
                   PIN Anda
                 </label>
-                <Input className="input-label mt-3" type="number" placeholder="Masukan Username ID Anda" maxLength={6}  />
+                <Input className="input-label mt-3" type="number" placeholder="Masukan Username ID Anda" maxLength={6} value={pin} onChange={handlePinChange} />
               </div>
             </Form.Item>
 

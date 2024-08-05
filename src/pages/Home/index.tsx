@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import profilpict from "/images/homepage/Ellipse 15.png";
 import iconInfo from "/images/homepage/icon-info.png";
 import iconTransfer from "/images/homepage/icon-transfer.png";
 import iconEwallet from "/images/homepage/icon-ewallet.png";
@@ -195,6 +194,8 @@ const Home = () => {
     }
   };
 
+  console.log(error)
+
   useEffect(() => {
     fetchBalance();
   }, []);
@@ -215,14 +216,14 @@ const Home = () => {
     }
   }, [selectedMonth]);
   
-  const getTransactionsForMonth = () => {
-    const transactions = data.transactionsPerMonth.find(
-      (transaction) => transaction.month === selectedMonth
-    );
-    return transactions;
-  };
+  // const getTransactionsForMonth = () => {
+  //   const transactions = data.transactionsPerMonth.find(
+  //     (transaction) => transaction.month === selectedMonth
+  //   );
+  //   return transactions;
+  // };
 
-  const monthlyTransactions = getTransactionsForMonth();
+  // const monthlyTransactions = getTransactionsForMonth();
 
   const formatNorek = (norek: string | number | undefined) => {
     if (typeof norek === "undefined") {

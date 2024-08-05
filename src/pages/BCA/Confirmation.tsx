@@ -1,10 +1,22 @@
 import { Button, Card } from "antd"
 import Breadcrumb from "../../components/Breadcumb"
-import { useNavigate, useParams } from "react-router-dom"
+import { useNavigate, useParams, useLocation } from "react-router-dom"
 
 const Konfirmasi = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const { slug } = useParams()
+
+  const { body } = location.state || {};
+  const getUser = localStorage.getItem('user');
+  const user_name = JSON.parse(getUser!).user.name;
+  const bank_name = JSON.parse(getUser!).user.bank_name;
+  const account_number = JSON.parse(getUser!).user.account_number;
+  const onFinish = () => {
+    navigate(`/bca/${slug}/konfirmasi`, { 
+      state: { body }
+    })
+  }
   
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
@@ -16,11 +28,11 @@ const Konfirmasi = () => {
             <div className="flex items-center mt-2">
               <img className="w-[70px] mr-4" src="/images/avatar.svg" alt="" />
               <div className="text-[12px] md:text-[14px]">
-                <p className="font-bold">{'ANDHIKA PUTRA'}</p>
+                <p className="font-bold">{user_name}</p>
                 <div className="flex items-center">
-                  <p>{'TAHAPAN BCA'}</p>
+                  <p>{bank_name}</p>
                   <img className="w-[6px] h-[6px] mx-2" src="/images/icons/dot.png"></img>
-                  <p>{'289137645'}</p>
+                  <p>{account_number}</p>
                 </div>
               </div>
             </div>
@@ -30,11 +42,11 @@ const Konfirmasi = () => {
             <div className="flex items-center">
               <img className="w-[70px] mr-4" src="/images/avatar.svg" alt="" />
               <div className="text-[12px] md:text-[14px]">
-                <p className="font-bold">{'ANDHIKA PUTRA'}</p>
+                <p className="font-bold">{body.account_name}</p>
                 <div className="flex items-center">
-                  <p>{'TAHAPAN BCA'}</p>
+                  <p>{bank_name}</p>
                   <img className="w-[6px] h-[6px] mx-2" src="/images/icons/dot.png"></img>
-                  <p>{'289137645'}</p>
+                  <p>{body.destinationAccountNumber}</p>
                 </div>
               </div>
             </div>
@@ -50,18 +62,18 @@ const Konfirmasi = () => {
                 <p>Catatan</p>
               </div>
               <div>
-                <p>Rp {'111.111'}</p>
+                <p>Rp {body.amount}</p>
                 <p>Rp {'1.000'}</p>
-                <p>{'-'}</p>
+                <p>{body.note}</p>
               </div>
             </div>
             <hr className='border-neutral-300 my-2' />
             <div className='flex justify-between font-bold'>
               <p>Total</p>
-              <p>Rp {'111.211'}</p>
+              <p>Rp {body.amount + 1000}</p>
             </div>
           </Card>
-          <Button onClick={() => navigate(`/bca/${slug}/konfirmasi`)} type="primary" className="bg-primary-100 h-10 w-full mt-5 lg:mt-10 rounded-lg">Lanjutkan</Button>
+          <Button onClick={() => onFinish() } type="primary" className="bg-primary-100 h-10 w-full mt-5 lg:mt-10 rounded-lg">Lanjutkan</Button>
         </div>
       </div>
     </div>

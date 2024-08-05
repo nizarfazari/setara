@@ -28,7 +28,7 @@ import AmountTopUpPage from "./pages/E-Wallet/AmountTopUp";
 import ConfirmationPIN from "./pages/E-Wallet/ConfirmationPin";
 import Konfirmasi from './pages/E-Wallet/Confirmation';
 import NewDestinationNumberPage from "./pages/E-Wallet/NewDestination/NewDestinationNumber";
-import Login from './pages/login';
+import Login from './pages/Login';
 import { AuthProvider } from './hooks/useAuth';
 import ProtectedUser from './middleware/ProtectedUser';
 import { NotificationProvider } from './hooks/useNotification';

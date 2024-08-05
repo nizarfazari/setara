@@ -1,21 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Breadcrumb from "../../../components/Breadcumb";
 import { useNavigate, useParams } from "react-router-dom";
 import { capitalFirstLetter } from "../../../utils";
 import { Button, Card, Checkbox, Flex, Form, Input, InputNumber, Select } from "antd";
 const { Option } = Select;
+const BASE_URL = 'https://setara-api-service-production.up.railway.app/api/v1'
 import "./style.css";
 import { CheckCircle } from "@phosphor-icons/react";
+import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
+import axios from "axios";
 
 export default function NewDestinationNumberPage() {
   const [form] = Form.useForm();
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
+  const [destinationNumber, setDestinationNumber] = useState<string | undefined>();
+  const [isLoading, setIsLoading] = useState(false);
   const [isVerified, setIsVerified] = useState(false);
-
+  const [balance, setBalance] = useState<number | null>(null);
+  
   const onFinish = (values: unknown) => {
     console.log("Success:", values);
-    navigate(`/bca/${slug}/tinjau`);
+    navigate(`/bca/${slug}/tinjau`, {
+      state: {
+        body: {
+          "account_name": form.getFieldValue('name'),
+          "destinationAccountNumber": destinationNumber,
+          "amount": form.getFieldValue('amount'),
+          "note": form.getFieldValue('notes'),
+          "savedAccount": form.getFieldValue('savedList')
+        }
+      }
+    });
+    console.log(
+      `DATA INI ${
+        JSON.stringify({
+          "destinationAccountNumber": destinationNumber,
+          "amount": form.getFieldValue('amount'),
+          "note": form.getFieldValue('notes'),
+          "savedAccount": form.getFieldValue('savedList')
+        })
+      }`
+    )
   };
 
   const onFinishFailed = (errorInfo: unknown) => {
@@ -23,23 +50,62 @@ export default function NewDestinationNumberPage() {
   };
 
   const handleDestinationNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(e.target.value == ""){
+    setDestinationNumber(e.target.value);
+    if (e.target.value === "") {
       setIsVerified(false);
       form.resetFields();
     }
-  }
+  };
 
-  const handleVerifiedNumber = () => {
-    const verified = true;
-    if (verified) {
-      setIsVerified(!isVerified);
-      form.setFields([
-        { name: "name", value: "JOHN DOE" },
-      ]);
-    } else {
-      form.setFields([{ name: "destinationNumber", errors: ["NOMOR TIDAK TERDAFTAR"] }]);
+  const getUser = localStorage.getItem('user');
+  const token = JSON.parse(getUser!).token;
+  const bank_name = JSON.parse(getUser!).user.bank_name;
+  const account_number = JSON.parse(getUser!).user.account_number;
+
+  const handleVerifiedNumber = async (norek: string) => {
+    setIsLoading(true);
+    try {
+      const response = await axios.get(`${BASE_URL}/user/search-no-rek/${norek}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (response.data.code === 200) {
+        setIsVerified(true);
+        form.setFields([{ name: "name", value: response.data.data.name }]);
+      } else {
+        setIsVerified(false);
+        form.setFields([{ name: "destinationNumber", errors: ["Nomor tidak terdaftar"] }]);
+      }
+    } catch (error) {
+      console.log(error);
+      setIsVerified(false);
+      form.setFields([{ name: "destinationNumber", errors: ["Nomor tidak terdaftar"] }]);
+    } finally {
+      setIsLoading(false);
     }
   };
+
+  const fetchBalance = async () => {
+    try {
+      const response = await axios.get(
+        `https://setara-api-service-production.up.railway.app/api/v1/user/getBalance`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      setBalance(response.data.data.balance);
+    } catch (error) {
+      alert(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchBalance();
+  }, []);
 
   return (
     <div className="container">
@@ -62,19 +128,27 @@ export default function NewDestinationNumberPage() {
           >
             <div>
               <div className="flex items-center gap-2 flex-col md:flex-row md:gap-4">
-                <Input type="number" placeholder="Masukkan Nomor" className="flex-[80%]" onChange={handleDestinationNumberChange}/>
+                <Input type="number" placeholder="Masukkan Nomor" className="flex-[80%]" onChange={handleDestinationNumberChange} />
                 <Button
-                  onClick={handleVerifiedNumber}
+                  onClick={() => handleVerifiedNumber(destinationNumber!)}
                   className="flex-[20%] bg-primary-100 text-white w-full py-[10px] rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
                 >
                   Cari Nomor
                 </Button>
               </div>
-              {isVerified && (
+              {isLoading ? (
                 <Flex gap={6} align="center" className="mt-6">
-                  <CheckCircle size={18} weight="fill" color="#12D79C" />
-                  <p className="text-[#12D79C] font-bold text-caption-small">VERIFIED</p>
+                  <Spin indicator={<LoadingOutlined spin />} size="large" />
                 </Flex>
+              ) : (
+                isVerified !== null && (
+                  <Flex gap={6} align="center" className="mt-6">
+                    <CheckCircle size={18} weight="fill" color={isVerified ? "#12D79C" : "#FF4D4F"} />
+                    <p className={`font-bold text-caption-small ${isVerified ? "text-[#12D79C]" : "text-secondary-100"}`}>
+                      {isVerified ? "VERIFIED" : "UNVERIFIED"}
+                    </p>
+                  </Flex>
+                )
               )}
             </div>
           </Form.Item>
@@ -84,16 +158,13 @@ export default function NewDestinationNumberPage() {
           </Form.Item>
 
           <Form.Item name="name" label="Nama Transfer">
-            <Input type="text" placeholder="Masukkan Nama" disabled={isVerified ? false : true} readOnly />
+            <Input type="text" placeholder="Masukkan Nama" disabled={!isVerified} readOnly />
           </Form.Item>
 
           <Form.Item name="source" label="Sumber Rekening" required>
-            <Select disabled={isVerified ? false : true} className="h-20" placeholder="Pilih Sumber Rekening">
-              <Option value="Rp1.111.111">
-                TAHAP BCA 289137645 <br /> <span className="font-bold">Rp1.111.111</span>
-              </Option>
-              <Option value="Rp2.222.222">
-                TAHAP BCA 289137646 <br /> <span className="font-bold">Rp2.222.222</span>
+            <Select disabled={!isVerified} className="h-20" placeholder="Pilih Sumber Rekening">
+              <Option value={balance}>
+                {bank_name} {account_number} <br /> <span className="font-bold">{balance}</span>
               </Option>
             </Select>
           </Form.Item>
@@ -114,18 +185,18 @@ export default function NewDestinationNumberPage() {
               parser={(value) => value?.replace(/\.\s?|(,*)/g, "") as unknown as number}
               className="w-full px-[15px] py-3 md:px-6 md:py-4"
               placeholder="Masukkan Nominal"
-              disabled={isVerified ? false : true}
+              disabled={!isVerified}
             />
           </Form.Item>
 
           <Form.Item label="Catatan" name="notes">
-            <Input type="text" placeholder="Masukkan Catatan (Opsional)" disabled={isVerified ? false : true} />
+            <Input type="text" placeholder="Masukkan Catatan (Opsional)" disabled={!isVerified} />
           </Form.Item>
 
           <Button
             className="bg-primary-100 text-white w-full h-10 rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
             htmlType="submit"
-            disabled={isVerified ? false : true}
+            disabled={!isVerified}
           >
             Lanjutkan
           </Button>

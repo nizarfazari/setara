@@ -13,7 +13,7 @@ interface User {
     name: string;
     account_number: string;
     signature: string;
-    avatar_path: string;
+    image_path: string;
     bank_name: string;
 }
 

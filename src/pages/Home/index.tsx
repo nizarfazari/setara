@@ -54,6 +54,19 @@ interface MonthlyReport {
   total: number;
 }
 
+const data = {
+  transactionsPerMonth: [
+    { month: 'Januari 2024', monthNumber: 1 },
+    { month: 'Februari 2024', monthNumber: 2 },
+    { month: 'Maret 2024', monthNumber: 3 },
+    { month: 'April 2024', monthNumber: 4 },
+    { month: 'Mei 2024', monthNumber: 5 },
+    { month: 'Juni 2024', monthNumber: 6 },
+    { month: 'Juli 2024', monthNumber: 7 },
+    { month: 'Agustus 2024', monthNumber: 8 },
+  ],
+};
+
 const Home = () => {
   const navigate = useNavigate();
   const swiperRef = useRef<SwiperClass | null>(null);
@@ -81,7 +94,7 @@ const Home = () => {
 
   const fetchFavorites = async () => {
     try {
-      setLoading(true); // Start loading
+      setLoading(true); 
       const [response1, response2] = await Promise.all([
         axios.get<{
           data: { favorites: CombinedItem[] };
@@ -91,7 +104,7 @@ const Home = () => {
             headers: {
               Authorization: `Bearer ${user?.token}`,
             },
-            timeout: 5000, // 5-second timeout
+            timeout: 5000, // Duration in 5 seconds
           }
         ),
         axios.get<{
@@ -102,7 +115,7 @@ const Home = () => {
             headers: {
               Authorization: `Bearer ${user?.token}`,
             },
-            timeout: 5000, // 5-second timeout
+            timeout: 5000, // Duration in 5 seconds
           }
         ),
       ]);
@@ -176,6 +189,7 @@ const Home = () => {
         }
       );
       setMonthlyReport(response.data.data);
+      console.log(response.data.data);
     } catch (error) {
       setError(error as AxiosError);
     }
@@ -184,52 +198,23 @@ const Home = () => {
   useEffect(() => {
     fetchBalance();
   }, []);
-
-  const data = {
-    transactionsPerMonth: [
-      {
-        month: "Januari 2024",
-      },
-      {
-        month: "Februari 2024",
-      },
-      {
-        month: "Maret 2024",
-      },
-      {
-        month: "April 2024",
-      },
-      {
-        month: "Mei 2024",
-      },
-      {
-        month: "Juni 2024",
-      },
-      {
-        month: "Juli 2024",
-      },
-      {
-        month: "Agustus 2024",
-      },
-    ],
-  };
-
+  
   const handleMonthChange = (key: number) => {
     const month = data.transactionsPerMonth[key].month;
+    const monthNumber = data.transactionsPerMonth[key].monthNumber;
     setSelectedMonth(month);
-    const [monthName, year] = month.split(" ");
-    const monthIndex =
-      new Date(Date.parse(monthName + " 1, 2024")).getMonth() + 1;
-    fetchMonthlyReport(monthIndex, year);
+    fetchMonthlyReport(monthNumber, '2024');
   };
-
+  
   useEffect(() => {
-    const [monthName, year] = selectedMonth.split(" ");
-    const monthIndex =
-      new Date(Date.parse(monthName + " 1, 2024")).getMonth() + 1;
-    fetchMonthlyReport(monthIndex, year);
+    const transactions = data.transactionsPerMonth.find(
+      (transaction) => transaction.month === selectedMonth
+    );
+    if (transactions) {
+      fetchMonthlyReport(transactions.monthNumber, '2024');
+    }
   }, [selectedMonth]);
-
+  
   const getTransactionsForMonth = () => {
     const transactions = data.transactionsPerMonth.find(
       (transaction) => transaction.month === selectedMonth
@@ -292,7 +277,7 @@ const Home = () => {
             Informasi Saldo Rekening
           </h5>
           <div className="flex gap-7 ">
-            <img src={user?.user.avatar_path} className="w-16 h-16" />
+            <img src={user?.user.image_path} className="w-16 h-16" />
             <div>
               <div className="items-center">
                 <h5 className="text-neutral-50">Total Saldo</h5>

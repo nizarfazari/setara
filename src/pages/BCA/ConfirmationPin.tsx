@@ -42,7 +42,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         }
       );
 
-      console.log('Success:', JSON.stringify(response.data));
+      console.log('Success:', JSON.stringify(response.data.data.source_user.image_path));
       navigate('/transaksi-berhasil', {
         state: {
           body: {
@@ -50,7 +50,9 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
             destinationAccountNumber: body.destinationAccountNumber,
             amount: body.amount,
             note: body.note,
-            savedAccount: body.savedAccount
+            savedAccount: body.savedAccount,
+            sourceUserImage: response.data.data.source_user.image_path,
+            destinationUserImage: response.data.data.destination_user.image_path,
           }
         }
       });

@@ -19,7 +19,7 @@ const TransaksiBerhasil = () => {
           <div>
             <p className="font-bold">Pengirim</p>
             <div className="flex items-center mt-2">
-              <img className="w-[70px] mr-4" src="/images/avatar.svg" alt="" />
+              <img className="w-[70px] mr-4" src={body.sourceUserImage} alt="" />
               <div>
                 <p className="font-bold">{user_name}</p>
                 <div className="flex items-center">
@@ -33,7 +33,7 @@ const TransaksiBerhasil = () => {
           <div className="my-2 mb-5">
             <p className="font-bold mb-2">Penerima</p>
             <div className="flex items-center">
-              <img className="w-[70px] mr-4" src="/images/avatar.svg" alt="" />
+              <img className="w-[70px] mr-4" src={body.destinationUserImage} alt="" />
               <div>
                 <p className="font-bold">{body.account_name}</p>
                 <div className="flex items-center">

@@ -4,6 +4,11 @@ import Breadcrumb from '../../components/Breadcumb';
 import type { FormProps } from 'antd';
 import { Button, Form, Input } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../hooks/useAuth';
+import { TransactionEWalletReq, TransactionEWalletRes } from '../../types/E-Wallet';
+import { postData } from '../../utils/GetData';
+import { useNotification } from '../../hooks/useNotification';
+
 
 
 interface IConfirmationPINProps {
@@ -19,26 +24,47 @@ const onFinishFailed: FormProps<LoginType>['onFinishFailed'] = (errorInfo) => {
 };
 
 
+
+
 const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
     const [form] = Form.useForm();
+    const { user, transWallet } = useAuth();
+    const { openNotificationWithIcon } = useNotification();
     const navigate = useNavigate()
 
-    const onFinish: FormProps<LoginType>['onFinish'] = (values) => {
-        const correctPIN = "1234";
-        if (values.pin === correctPIN) {
-            console.log('Success:', values);
-            // Perform the successful login action here
+
+    const onFinish: FormProps<LoginType>['onFinish'] = async (values) => {
+
+
+        try {
+            const data = await postData<TransactionEWalletReq, TransactionEWalletRes>('/transactions/topup', {
+                idEwallet: transWallet.idWallet,
+                destinationPhoneNumber: transWallet.recipients.numberDestination,
+                amount: +transWallet.transaction.nominal,
+                mpin: values.pin.toString(),
+                note: transWallet.transaction.notes,
+                savedAccount: true,
+            }, user?.token);
+
+            if (data.code !== 200) {
+                navigate('/transaksi-gagal')
+            }
+
+            openNotificationWithIcon('success', 'Success', 'Transaksi Berhasil')
             navigate('/transaksi-berhasil')
-        } else {
-            console.log('Incorrect PIN');
+            console.log(data)
+        } catch (error) {
+            openNotificationWithIcon('error', 'Error', 'Transasksi gagal')
             form.setFields([
                 {
                     name: 'pin',
-                    errors: ['PIN yang Anda masukkan salah'],
+                    errors: [error.response.data.message],
                 },
             ]);
         }
+
     };
+
 
 
     return (

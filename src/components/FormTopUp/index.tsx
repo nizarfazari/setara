@@ -1,5 +1,6 @@
 import { Button, Form, FormProps, Input, InputNumber } from "antd";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 type TFormTopUp = {
   amount: number;
@@ -10,11 +11,18 @@ type PropsFormTopup = {
   pathUrl: string;
 }
 
-const FormTopUp: React.FC<PropsFormTopup> = ({pathUrl}) => {
+const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl }) => {
+  const { setTransaction, transWallet } = useAuth()
   const navigate = useNavigate();
+
 
   const onFinish: FormProps<TFormTopUp>["onFinish"] = (values) => {
     console.log("Success:", values);
+    setTransaction({
+      nominal: values.amount.toString(),
+      notes: values.notes
+    })
+    console.log(values)
     navigate(`${pathUrl}/tinjau`)
   };
 
@@ -23,7 +31,12 @@ const FormTopUp: React.FC<PropsFormTopup> = ({pathUrl}) => {
   };
 
   return (
-    <Form layout="vertical" onFinish={onFinish} onFinishFailed={onFinishFailed}>
+    <Form layout="vertical" onFinish={onFinish} onFinishFailed={onFinishFailed}
+      initialValues={{
+        amount: transWallet?.transaction?.nominal || null,
+        notes: transWallet?.transaction?.notes || null,
+      }}
+    >
       <Form.Item
         name="amount"
         label="Nominal Top Up"
@@ -33,10 +46,9 @@ const FormTopUp: React.FC<PropsFormTopup> = ({pathUrl}) => {
         <InputNumber<number>
           type="number"
           prefix="Rp."
-          formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
-          parser={(value) => value?.replace(/\.\s?|(,*)/g, "") as unknown as number}
           className="w-full px-[15px] py-3 md:px-6 md:py-4"
           placeholder="Masukkan Nominal Top Up"
+
         />
       </Form.Item>
 

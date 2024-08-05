@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import type { FormProps } from 'antd';
 import { Button, Form, Input } from 'antd';
 import './login.css';

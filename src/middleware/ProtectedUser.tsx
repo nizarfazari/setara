@@ -3,9 +3,6 @@ import { Navigate, Outlet } from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth'
 import axios from 'axios';
 
-
-
-
 export default function ProtectedUser() {
     const { user, logout } = useAuth();
 

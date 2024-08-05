@@ -32,6 +32,7 @@ import Login from './pages/login';
 import { AuthProvider } from './hooks/useAuth';
 import ProtectedUser from './middleware/ProtectedUser';
 import { NotificationProvider } from './hooks/useNotification';
+import NotFound from './pages/404';
 
 function App() {
   return (
@@ -67,6 +68,7 @@ function App() {
                 </Route>
               </Route>
               <Route path="/login" element={<Login />} />
+              <Route path="*" element={<NotFound />} />
             </Routes>
           </AuthProvider>
         </NotificationProvider>

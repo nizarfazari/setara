@@ -3,15 +3,29 @@ import CustomerItem from "../CustomerItem";
 import { Card, Flex } from "antd";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
+import { EwalletUser } from "../../types/E-Wallet";
+import { recipientsData } from "../../hooks/useAuth";
 
 type TContactList = {
   pathUrl: string;
   header: string;
-  contacts: { name: string; type: string; number: string; isFavorite?: boolean; avatar: string }[];
+  contacts: EwalletUser[];
+  setRecipients: (recipients: recipientsData) => void
 };
 
-export default function CustomerList({ pathUrl, header, contacts }: TContactList) {
+export default function CustomerList({ pathUrl, header, contacts, setRecipients }: TContactList) {
   const navigate = useNavigate();
+
+  const onClickCard = (contact: EwalletUser) => {
+    console.log(contact)
+    setRecipients({
+      nama: contact.ewallet_user_name,
+      wallet: contact.ewallet_name,
+      numberDestination: contact.ewallet_user_phone_number,
+      imageUrl : contact.ewallet_user_image_path
+    })
+    navigate(`${pathUrl}/nominal-topup`)
+  }
 
   return (
     <div className="text-primary-100 w-full">
@@ -23,7 +37,7 @@ export default function CustomerList({ pathUrl, header, contacts }: TContactList
         >
           <Flex vertical gap={12}>
             {contacts.map((contact, index) => (
-              <Card className="border-white lg:border-primary-300" id="contact-item" key={index} onClick={ () => navigate(`${pathUrl}/nominal-topup`)}>
+              <Card className="border-white lg:border-primary-300" id="contact-item" key={index} onClick={() => onClickCard(contact)}>
                 <CustomerItem  {...contact} />
               </Card>
             ))}

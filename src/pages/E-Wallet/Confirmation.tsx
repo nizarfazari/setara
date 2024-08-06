@@ -1,10 +1,14 @@
 import { Button, Card } from "antd"
 import Breadcrumb from "../../components/Breadcumb"
 import { useNavigate, useParams } from "react-router-dom"
+import { useAuth } from "../../hooks/useAuth"
+import { FormatCurrency } from "../../utils"
 
 const Konfirmasi = () => {
   const navigate = useNavigate()
   const { slug } = useParams()
+  const { transWallet, user } = useAuth();
+  const admin = 1000
   
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
@@ -14,13 +18,13 @@ const Konfirmasi = () => {
           <div>
             <p className="font-bold">Pengirim</p>
             <div className="flex items-center mt-2">
-              <img className="w-[70px] mr-4" src="/images/avatar.svg" alt="" />
+              <img className="w-[70px] mr-4" src={user?.user.avatar_path} alt="" />
               <div className="text-[12px] md:text-[14px]">
-                <p className="font-bold">{'ANDHIKA PUTRA'}</p>
+                <p className="font-bold">{user?.user.name}</p>
                 <div className="flex items-center">
-                  <p>{'TAHAPAN BCA'}</p>
+                  <p>{user?.user.bank_name}</p>
                   <img className="w-[6px] h-[6px] mx-2" src="/images/icons/dot.png"></img>
-                  <p>{'289137645'}</p>
+                  <p>{user?.user.account_number}</p>
                 </div>
               </div>
             </div>
@@ -28,13 +32,13 @@ const Konfirmasi = () => {
           <div className="my-5 mb-5">
             <p className="font-bold mb-2">Penerima</p>
             <div className="flex items-center">
-              <img className="w-[70px] mr-4" src="/images/avatar.svg" alt="" />
+              <img className="w-[70px] mr-4" src={transWallet.recipients.imageUrl} alt="" />
               <div className="text-[12px] md:text-[14px]">
-                <p className="font-bold">{'ANDHIKA PUTRA'}</p>
+                <p className="font-bold">{transWallet.recipients.nama}</p>
                 <div className="flex items-center">
-                  <p>{'TAHAPAN BCA'}</p>
+                  <p>{transWallet.recipients.wallet}</p>
                   <img className="w-[6px] h-[6px] mx-2" src="/images/icons/dot.png"></img>
-                  <p>{'289137645'}</p>
+                  <p>{transWallet.recipients.numberDestination}</p>
                 </div>
               </div>
             </div>
@@ -50,18 +54,18 @@ const Konfirmasi = () => {
                 <p>Catatan</p>
               </div>
               <div>
-                <p>Rp {'111.111'}</p>
-                <p>Rp {'1.000'}</p>
-                <p>{'-'}</p>
+                <p>{FormatCurrency(transWallet.transaction.nominal)}</p>
+                <p>{FormatCurrency(admin)}</p>
+                <p>{transWallet.transaction.notes ? transWallet.transaction.notes : "-" }</p>
               </div>
             </div>
             <hr className='border-neutral-300 my-2' />
             <div className='flex justify-between font-bold'>
               <p>Total</p>
-              <p>Rp {'111.211'}</p>
+              <p>{FormatCurrency(+transWallet.transaction.nominal + admin)}</p>
             </div>
           </Card>
-          <Button onClick={() => navigate(`/bca/${slug}/konfirmasi`)} type="primary" className="bg-primary-100 h-10 w-full mt-5 lg:mt-10 rounded-lg">Lanjutkan</Button>
+          <Button onClick={() => navigate(`/e-wallet/${slug}/konfirmasi`)} type="primary" className="bg-primary-100 h-10 w-full mt-5 lg:mt-10 rounded-lg">Lanjutkan</Button>
         </div>
       </div>
     </div>

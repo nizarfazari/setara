@@ -54,6 +54,7 @@ interface UserEwallet {
 }
 
 export type TransactionEWalletRes = {
+    code: number;
     user: User;
     userEwallet: UserEwallet;
     amount: number;

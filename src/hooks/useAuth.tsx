@@ -3,11 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useLocalStorage } from "./useLocalStorage";
 import { useNotification } from "./useNotification";
 
-
 interface AuthProps {
     children: React.ReactElement;
 }
-
 
 interface User {
     name: string;
@@ -22,23 +20,30 @@ interface AuthData {
     token: string;
 }
 
-
 export type recipientsData = {
     nama: string;
-    wallet: string
-    numberDestination: string
-    imageUrl: string
+    wallet: string;
+    bank: string;
+    account_number:string;
+    numberDestination: string;
+    imageUrl: string;
 }
 
 export type transactionData = {
     nominal: string;
-    notes: string | undefined
+    notes: string | undefined;
 }
 
 type transWallet = {
-    recipients: recipientsData,
-    idWallet: string
-    transaction: transactionData
+    recipients: recipientsData;
+    idWallet: string;
+    transaction: transactionData;
+}
+
+type transBank = {
+    recipients: recipientsData;
+    account_number: string;
+    transaction: transactionData;
 }
 
 interface AuthContextType {
@@ -46,25 +51,31 @@ interface AuthContextType {
     login: (data: object) => void;
     logout: () => void;
     setRecipients: (recipients: recipientsData) => void;
-    setIdWallet: (idWallet: string) => void
-    setTransaction: (transaction: transactionData) => void
-    transWallet: transWallet
-    clearTransaction: () => void
+    setIdWallet: (idWallet: string) => void;
+    setAccount_number: (account_number: string) => void;
+    setTransaction: (transaction: transactionData) => void;
+    transWallet: transWallet;
+    transBank: transBank;
+    clearTransaction: () => void;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
 export const AuthProvider = ({ children }: AuthProps) => {
-    const { openNotificationWithIcon } = useNotification()
+    const { openNotificationWithIcon } = useNotification();
 
-    const [user, setUser]
-        = useLocalStorage("user", null);
-    const [transWallet, setTransWallet]
-        = useLocalStorage("transactionWallet", {
-            recipients: null,
-            transaction: null,
-            idWallet: null
-        });
+    const [user, setUser] = useLocalStorage("user", null);
+    const [transWallet, setTransWallet] = useLocalStorage("transactionWallet", {
+        recipients: null,
+        transaction: null,
+        idWallet: null,
+    });
+
+    const [transBank, setTransBank] = useLocalStorage("transactionBank", {
+        recipients: null,
+        transaction: null,
+        account_number: null,
+    });
 
     const navigate = useNavigate();
 
@@ -75,40 +86,60 @@ export const AuthProvider = ({ children }: AuthProps) => {
 
     const logout = () => {
         setUser(null);
-        localStorage.clear()
-        openNotificationWithIcon('success', 'Success', "Berhasil Logout")
+        localStorage.clear();
+        openNotificationWithIcon('success', 'Success', "Berhasil Logout");
         navigate("/login", { replace: true });
     };
+    
 
     const setRecipients = (recipients: recipientsData) => {
         setTransWallet({
             ...transWallet,
-            recipients: recipients
-        })
+            recipients: recipients,
+        });
+        setTransBank({
+            ...transBank,
+            recipients: recipients,
+        });
     }
+
     const setIdWallet = (wallet: string) => {
         setTransWallet({
             ...transWallet,
-            idWallet: wallet
-        })
+            idWallet: wallet,
+        });
+    }
+
+    const setAccount_number = (account_number: string) => {
+        setTransBank({
+            ...transBank,
+            account_number: account_number,
+        });
     }
 
     const setTransaction = (transaction: transactionData) => {
         setTransWallet({
             ...transWallet,
-            transaction: transaction
-        })
+            transaction: transaction,
+        });
+        setTransBank({
+            ...transBank,
+            transaction: transaction,
+        });
     }
 
     const clearTransaction = () => {
         setTransWallet({
             recipients: null,
             transaction: null,
-            idWallet: null
+            idWallet: null,
+        });
+        setTransBank({
+            recipients: null,
+            transaction: null,
+            account_number: null,
         });
     }
-
-
 
     const value = useMemo(() => ({
         user,
@@ -117,19 +148,19 @@ export const AuthProvider = ({ children }: AuthProps) => {
         setRecipients,
         setIdWallet,
         transWallet,
+        setAccount_number, 
+        transBank,
         setTransaction,
-        clearTransaction
-    }), [user, transWallet]);
+        clearTransaction,
+    }), [user, transWallet, transBank]);
 
     return (
-        <AuthContext.Provider
-            value={value}>
+        <AuthContext.Provider value={value}>
             {children}
         </AuthContext.Provider>
     );
 };
 
-export const useAuth
-    = (): AuthContextType => {
-        return useContext(AuthContext)!;
-    };
+export const useAuth = (): AuthContextType => {
+    return useContext(AuthContext)!;
+};

@@ -5,7 +5,7 @@ import { FormatCurrency } from "../../utils";
 
 const TransaksiBerhasil = () => {
   const navigate = useNavigate()
-  const { user, transWallet, clearTransaction } = useAuth()
+  const { user, transWallet, transBank, clearTransaction } = useAuth()
   const admin = 1000
 
   const onBackToHome = () => {
@@ -36,13 +36,13 @@ const TransaksiBerhasil = () => {
           <div className="my-2 mb-5">
             <p className="font-bold mb-2">Penerima</p>
             <div className="flex items-center">
-              <img className="w-[70px] mr-4" src={transWallet.recipients.imageUrl} alt="" />
+              <img className="w-[70px] mr-4" src={transWallet.recipients.imageUrl || transBank.recipients.imageUrl} alt="" />
               <div>
-                <p className="font-bold">{transWallet.recipients.nama}</p>
+                <p className="font-bold">{transWallet.recipients.nama || transBank.recipients.nama }</p>
                 <div className="flex items-center">
-                  <p>{transWallet.recipients.wallet}</p>
+                  <p>{transWallet.recipients.wallet || transBank.recipients.bank}</p>
                   <img className="w-[6px] h-[6px] mx-2" src="/images/icons/dot.png"></img>
-                  <p>{transWallet.recipients.numberDestination}</p>
+                  <p>{transWallet.recipients.numberDestination || transBank.recipients.numberDestination}</p>
                 </div>
               </div>
             </div>
@@ -55,9 +55,9 @@ const TransaksiBerhasil = () => {
               <p>Catatan</p>
             </div>
             <div>
-              <p>{FormatCurrency(transWallet.transaction.nominal)}</p>
+              <p>{FormatCurrency(transWallet.transaction.nominal || transBank.transaction.nominal)}</p>
               <p>{FormatCurrency(admin)}</p>
-              <p>{transWallet.transaction.notes ? transWallet.transaction.notes : "-"}</p>
+              <p>{transWallet.transaction.notes || transBank.transaction.notes? transWallet.transaction.notes || transBank.transaction.notes: "-"}</p>
             </div>
           </div>
           <hr className='border-neutral-300 my-2' />

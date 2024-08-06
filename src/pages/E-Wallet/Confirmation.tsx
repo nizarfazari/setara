@@ -18,7 +18,7 @@ const Konfirmasi = () => {
           <div>
             <p className="font-bold">Pengirim</p>
             <div className="flex items-center mt-2">
-              <img className="w-[70px] mr-4" src={user?.user.avatar_path} alt="" />
+              <img className="w-[70px] mr-4" src={user?.user.image_path} alt="" />
               <div className="text-[12px] md:text-[14px]">
                 <p className="font-bold">{user?.user.name}</p>
                 <div className="flex items-center">

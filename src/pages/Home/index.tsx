@@ -30,6 +30,7 @@ import {
 } from "@phosphor-icons/react";
 import { useAuth } from "../../hooks/useAuth";
 import axios, { AxiosError } from "axios";
+import { FormatCurrency } from "../../utils";
 
 interface CombinedItem {
   id: string;
@@ -554,7 +555,7 @@ const Home = () => {
                     <p>Pemasukan</p>
                   </div>
                   <h5 className="text-primary-100 font-bold text-heading-6 py-3">
-                    Rp{monthlyReport?.income}
+                    {FormatCurrency(monthlyReport?.income)}
                   </h5>
                 </div>
               </div>
@@ -564,7 +565,7 @@ const Home = () => {
                   <p>Pengeluaran</p>
                 </div>
                 <h5 className="text-primary-100 font-bold text-heading-6 py-3">
-                  Rp{monthlyReport?.expense}
+                  {FormatCurrency(monthlyReport?.expense)}
                 </h5>
               </div>
             </div>
@@ -577,7 +578,7 @@ const Home = () => {
                     : "text-green-500"
                 } text-heading-6 font-bold`}
               >
-                Rp{monthlyReport?.total}
+                {FormatCurrency(monthlyReport?.total)}
               </h5>
             </div>
           </div>

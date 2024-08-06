@@ -11,7 +11,11 @@ export function capitalFirstLetter(val: string | undefined) {
 
 
 
-export function FormatCurrency(value: number | string) {
+export function FormatCurrency(value: number | string | undefined) {
+    if (typeof value === 'undefined') {
+        return 0
+    }
+
     if (!value) {
         return 0
     }

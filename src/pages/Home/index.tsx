@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from "react";
-import profilpict from "/images/homepage/Ellipse 15.png";
 import iconInfo from "/images/homepage/icon-info.png";
 import iconTransfer from "/images/homepage/icon-transfer.png";
 import iconEwallet from "/images/homepage/icon-ewallet.png";
@@ -56,14 +55,14 @@ interface MonthlyReport {
 
 const data = {
   transactionsPerMonth: [
-    { month: 'Januari 2024', monthNumber: 1 },
-    { month: 'Februari 2024', monthNumber: 2 },
-    { month: 'Maret 2024', monthNumber: 3 },
-    { month: 'April 2024', monthNumber: 4 },
-    { month: 'Mei 2024', monthNumber: 5 },
-    { month: 'Juni 2024', monthNumber: 6 },
-    { month: 'Juli 2024', monthNumber: 7 },
-    { month: 'Agustus 2024', monthNumber: 8 },
+    { month: "Januari 2024", monthNumber: 1 },
+    { month: "Februari 2024", monthNumber: 2 },
+    { month: "Maret 2024", monthNumber: 3 },
+    { month: "April 2024", monthNumber: 4 },
+    { month: "Mei 2024", monthNumber: 5 },
+    { month: "Juni 2024", monthNumber: 6 },
+    { month: "Juli 2024", monthNumber: 7 },
+    { month: "Agustus 2024", monthNumber: 8 },
   ],
 };
 
@@ -94,7 +93,7 @@ const Home = () => {
 
   const fetchFavorites = async () => {
     try {
-      setLoading(true); 
+      setLoading(true);
       const [response1, response2] = await Promise.all([
         axios.get<{
           data: { favorites: CombinedItem[] };
@@ -120,10 +119,12 @@ const Home = () => {
         ),
       ]);
 
-      const favoritesWithType = response1.data.data.favorites.map((account) => ({
-        ...account,
-        type: "transfer" as const,
-      }));
+      const favoritesWithType = response1.data.data.favorites.map(
+        (account) => ({
+          ...account,
+          type: "transfer" as const,
+        })
+      );
 
       const savedEwalletUsersWithType = response2.data.data.favorites.map(
         (ewalletUser) => ({
@@ -149,7 +150,7 @@ const Home = () => {
         setErrorMessage("Terjadi kesalahan yang tidak terduga.");
       }
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -198,23 +199,23 @@ const Home = () => {
   useEffect(() => {
     fetchBalance();
   }, []);
-  
+
   const handleMonthChange = (key: number) => {
     const month = data.transactionsPerMonth[key].month;
     const monthNumber = data.transactionsPerMonth[key].monthNumber;
     setSelectedMonth(month);
-    fetchMonthlyReport(monthNumber, '2024');
+    fetchMonthlyReport(monthNumber, "2024");
   };
-  
+
   useEffect(() => {
     const transactions = data.transactionsPerMonth.find(
       (transaction) => transaction.month === selectedMonth
     );
     if (transactions) {
-      fetchMonthlyReport(transactions.monthNumber, '2024');
+      fetchMonthlyReport(transactions.monthNumber, "2024");
     }
   }, [selectedMonth]);
-  
+
   const getTransactionsForMonth = () => {
     const transactions = data.transactionsPerMonth.find(
       (transaction) => transaction.month === selectedMonth
@@ -265,28 +266,53 @@ const Home = () => {
     setIsBalanceHidden(!isBalanceHidden);
   };
 
+  const currentDate = new Date();
+  const formattedDate = currentDate.toLocaleDateString("id-ID", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   return (
     <div className="mx-auto container mt-5 mb-20">
-      <h1 className="text-heading-5 font-bold text-primary-100">
-        Halo, {user?.user.name}
+      <h1
+        aria-label={`Halo, ${user?.user.name}`}
+        className="text-heading-5 font-bold text-primary-100"
+      >
+        <span>Halo, {user?.user.name}</span>
       </h1>
-      <button onClick={() => logout()}>Log out</button>
+      <button onClick={() => logout()} aria-label="Log out">
+        Log out
+      </button>
       <div className="my-3">
-        <div className=" bg-primary-100 rounded-lg md:w-1/3 px-7 py-5">
-          <h5 className="text-white font-bold text-heading-6 mb-7">
+        <div
+          className="bg-primary-100 rounded-lg md:w-1/3 px-7 py-5"
+          aria-live="polite"
+        >
+          <h5
+            className="text-white font-bold text-heading-6 mb-7"
+            aria-label="Informasi Saldo Rekening"
+          >
             Informasi Saldo Rekening
           </h5>
-          <div className="flex gap-7 ">
-            <img src={user?.user.image_path} className="w-16 h-16" />
+          <div className="flex gap-7">
+            <img
+              src={user?.user.image_path}
+              alt="Foto profil pengguna"
+              className="w-16 h-16"
+            />
             <div>
               <div className="items-center">
                 <h5 className="text-neutral-50">Total Saldo</h5>
                 <div className="flex gap-2">
                   <h5 className="text-heading-6 font-semibold text-neutral-50">
                     {isBalanceHidden ? (
-                      <span className="text-neutral-50 flex gap-0">
+                      <span
+                        className="text-neutral-50 flex gap-0"
+                        aria-label="Saldo tersembunyi"
+                      >
                         {dots.map((_, index) => (
-                          <GoDotFill key={index} />
+                          <GoDotFill key={index} aria-hidden="true" />
                         ))}
                       </span>
                     ) : balance !== null ? (
@@ -297,23 +323,35 @@ const Home = () => {
                           active
                           className="w-full h-7 col-span-full"
                           size="large"
+                          aria-label="Memuat saldo"
                         />
                         <Skeleton.Button
                           active
                           className="w-full h-7 col-span-full"
                           size="large"
+                          aria-label="Memuat saldo"
                         />
                       </>
                     )}
                   </h5>
-                  <button onClick={toggleBalanceVisibility} className="">
+                  <button
+                    onClick={toggleBalanceVisibility}
+                    aria-label={
+                      isBalanceHidden
+                        ? "Saldo ditampilkan"
+                        : "Saldo disembunyikan"
+                    }
+                  >
                     {isBalanceHidden ? (
                       <span className="text-neutral-100">
-                        <Eye weight="fill" />
+                        <Eye weight="fill" aria-label="Tampilkan saldo" />
                       </span>
                     ) : (
                       <span className="text-neutral-50">
-                        <EyeSlash weight="fill" />
+                        <EyeSlash
+                          weight="fill"
+                          aria-label="Sembunyikan Saldo"
+                        />
                       </span>
                     )}
                   </button>
@@ -324,8 +362,18 @@ const Home = () => {
                 <span className="font-bold text-caption-large">
                   {formatNorek(user?.user.account_number)}
                 </span>
-                <button onClick={copyToClipboard} className=" items-center ">
-                  <CopySimple size={16} weight="fill" />
+                <button
+                  onClick={copyToClipboard}
+                  aria-label={`Salin nomor rekening ${formatNorek(
+                    user?.user.account_number
+                  )}`}
+                  className="items-center"
+                >
+                  <CopySimple
+                    size={16}
+                    weight="fill"
+                    aria-label="salin nomer rekening"
+                  />
                 </button>
               </p>
             </div>
@@ -335,7 +383,7 @@ const Home = () => {
       <div className="my-10">
         <h1 className="text-primary-100 font-bold text-heading-6 py-3">Menu</h1>
         <div className="grid grid-cols-3 md:grid-cols-6 py-4 gap-y-4 rounded-lg border border-primary-300 ">
-          <div className=" text-center">
+          <div className=" text-center" aria-modal="true" aria-live="polite">
             <img
               src={iconInfo}
               onClick={showModal}
@@ -348,6 +396,7 @@ const Home = () => {
                 <Button
                   onClick={handleCancel}
                   className="w-full bg-primary-100 text-neutral-100 font-semibold"
+                  aria-label="Kembali ke beranda"
                 >
                   Kembali ke Beranda
                 </Button>
@@ -360,11 +409,25 @@ const Home = () => {
               </h1>
 
               <div className="border rounded-xl p-5 my-7 shadow-sm">
-                <p className="text-primary-100">12/07/2024</p>
-                <p className="text-primary-100 font-semibold py-2">
+                <p
+                  className="text-primary-100"
+                  aria-label={`Tanggal saat ini: ${formattedDate}`}
+                >
+                  {formattedDate}
+                </p>
+                <p
+                  className="text-primary-100 font-semibold py-2"
+                  aria-label={`Nomor Rekening: ${String(
+                    formatNorek(user?.user.account_number)
+                  )}`}
+                >
                   {formatNorek(user?.user.account_number)}
                 </p>
-                <p className="text-body-large font-semibold">
+
+                <p
+                  className="text-body-large font-semibold"
+                  aria-label={`${balance?.toLocaleString("id-ID")} Rupiah`}
+                >
                   Rp {balance?.toLocaleString("id-ID")}
                 </p>
               </div>
@@ -374,39 +437,44 @@ const Home = () => {
           <div className=" text-center" onClick={() => navigate("/bca")}>
             <img
               src={iconTransfer}
-              alt="info"
+              alt="Transfer"
+              aria-label="Transfer"
               className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer "
             />
             <p className="pt-2">Transfer</p>
           </div>
-          <div className=" text-center" onClick={() => navigate("/e-wallet")}>
+          <div
+            className="text-center"
+            aria-label="E-wallet"
+            onClick={() => navigate("/e-wallet")}
+          >
             <img
               src={iconEwallet}
-              alt="info"
+              alt="E-Wallet"
               className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
             />
             <p className="pt-2">E-Wallet</p>
           </div>
-          <div className=" text-center">
+          <div className=" text-center" aria-label="Pembelian">
             <img
               src={iconBuy}
-              alt="info"
+              alt="pebelian"
               className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
             />
             <p className="pt-2">Pembelian</p>
           </div>
-          <div className=" text-center">
+          <div className=" text-center" aria-label="Investasi">
             <img
               src={iconInvest}
-              alt="info"
+              alt="invest"
               className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
             />
             <p className="pt-2">Investasi</p>
           </div>
-          <div className=" text-center">
+          <div className=" text-center" aria-label="Cardless">
             <img
               src={iconCardless}
-              alt="info"
+              alt="cardless"
               className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
             />
             <p className="pt-2">Cardless</p>
@@ -414,114 +482,159 @@ const Home = () => {
         </div>
       </div>
       <div className="pt-0 pb-3">
-      {loading ? ( 
-        <div className="flex space-x-4 justify-center w-full">
-          {[1, 2, 3].map((_, index) => (
-            <div
-              key={index}
-              className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4 w-full max-w-7xl"
-            >
-              <div className="animate-pulse flex flex-col space-y-3 w-full">
-                <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-primary-100 rounded-3xl text-white text-caption-large"></div>
-                <div className="bg-gray-400 h-5 rounded w-3/4"></div>
-                <div className="bg-gray-400 h-5 rounded w-1/2"></div>
+        {loading ? (
+          <div
+            className="flex space-x-4 justify-center w-full"
+            role="status"
+            aria-live="polite"
+            aria-busy="true"
+          >
+            {[1, 2, 3].map((_, index) => (
+              <div
+                key={index}
+                className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4 w-full max-w-7xl"
+                aria-label="Memuat konten"
+              >
+                <div
+                  className="animate-pulse flex flex-col space-y-3 w-full"
+                  aria-hidden="true"
+                >
+                  <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-primary-100 rounded-3xl text-white text-caption-large"></div>
+                  <div className="bg-gray-400 h-5 rounded w-3/4"></div>
+                  <div className="bg-gray-400 h-5 rounded w-1/2"></div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      ) : errorMessage ? ( // Show error message if there's an error
-        <p className="text-primary-100 text-body-large font-semibold">
-          {errorMessage}
-        </p>
-      ) : favorites.length > 0 ? (
-        <>
-          <h1 className="text-primary-100 text-heading-6 font-bold">
-            Transaksi Favorit
-          </h1>
-          <div className="py-3">
-            <Swiper
-              modules={[Navigation, Autoplay]}
-              loop={true}
-              autoplay={{
-                delay: 4000,
-                disableOnInteraction: false,
-              }}
-              onBeforeInit={(swiper) => {
-                swiperRef.current = swiper;
-              }}
-              spaceBetween={15}
-              slidesPerView={1.5}
-              breakpoints={{
-                768: {
-                  slidesPerView: 2,
-                },
-                1024: {
-                  slidesPerView: 3,
-                },
-              }}
-            >
-              {favorites.map((transaction) => (
-                <SwiperSlide key={transaction.id}>
-                  <div className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4">
-                    <div
-                      className={`flex gap-2 items-center py-1 px-2 w-20 bg-primary-100 rounded-3xl text-white text-caption-large`}
-                    >
-                      <img
-                        src={
-                          transaction.type === "transfer"
-                            ? iconTransFav
-                            : iconTopupFav
-                        }
-                        alt={
-                          transaction.type === "transfer"
-                            ? "transfav"
-                            : "topupfav"
-                        }
-                        className="w-[10px] items-center h-[10px]"
-                      />
-                      <p className="text-caption-small">
-                        {transaction.type === "transfer"
-                          ? "Transfer"
-                          : "Top Up"}
-                      </p>
-                    </div>
-                    <h5 className="xl:text-body-large text-body-small pt-3 capitalize">
-                      {transaction.type === "transfer"
-                        ? "Transfer Antar BCA"
-                        : `Top Up ${transaction.ewallet_name}`}
-                    </h5>
-                    <h5 className="text-primary-100 xl:text-heading-6 text-body-small font-semibold">
-                      {transaction.type === "transfer"
-                        ? transaction.account_name
-                        : transaction.ewallet_user_name}
-                    </h5>
-                  </div>
-                </SwiperSlide>
-              ))}
-              <div className="md:flex justify-center gap-3 pt-4 hidden">
-                <button onClick={() => swiperRef.current?.slidePrev()}>
-                  <ArrowCircleLeft size={25} color="gray" />
-                </button>
-                <button onClick={() => swiperRef.current?.slideNext()}>
-                  <ArrowCircleRight size={25} color="gray" />
-                </button>
-              </div>
-            </Swiper>
+            ))}
           </div>
-        </>
-      ) : (
-        <p className="text-primary-100 text-body-large font-semibold">
-       
-        </p>
-      )}
-    </div>
+        ) : errorMessage ? (
+          <p className="text-primary-100 text-body-large font-semibold">
+            {errorMessage}
+          </p>
+        ) : favorites.length > 0 ? (
+          <>
+            <h1
+              className="text-primary-100 text-heading-6 font-bold"
+              aria-label="Transaksi Favorit"
+            >
+              Transaksi Favorit
+            </h1>
+            <div className="py-3">
+              <Swiper
+                modules={[Navigation, Autoplay]}
+                loop={true}
+                autoplay={{
+                  delay: 4000,
+                  disableOnInteraction: false,
+                }}
+                onBeforeInit={(swiper) => {
+                  swiperRef.current = swiper;
+                }}
+                spaceBetween={15}
+                slidesPerView={1.5}
+                breakpoints={{
+                  768: {
+                    slidesPerView: 2,
+                  },
+                  1024: {
+                    slidesPerView: 3,
+                  },
+                }}
+              >
+                {favorites.map((transaction) => (
+                  <SwiperSlide key={transaction.id}>
+                    <div
+                      className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4"
+                      role="group"
+                      aria-label={`Transaksi favorit: ${
+                        transaction.type === "transfer" ? "Transfer" : "Top Up"
+                      }`}
+                    >
+                      <div
+                        className={`flex gap-2 items-center py-1 px-2 w-20 bg-primary-100 rounded-3xl text-white text-caption-large`}
+                      >
+                        <img
+                          src={
+                            transaction.type === "transfer"
+                              ? iconTransFav
+                              : iconTopupFav
+                          }
+                          alt={
+                            transaction.type === "transfer"
+                              ? "Ikon transfer favorit"
+                              : "Ikon topup favorit"
+                          }
+                          className="w-[10px] items-center h-[10px]"
+                        />
+                        <p className="text-caption-small">
+                          {transaction.type === "transfer"
+                            ? "Transfer"
+                            : "Top Up"}
+                        </p>
+                      </div>
+                      <h5 className="xl:text-body-large text-body-small pt-3 capitalize">
+                        {transaction.type === "transfer"
+                          ? "Transfer Antar BCA"
+                          : `Top Up ${transaction.ewallet_name}`}
+                      </h5>
+                      <h5 className="text-primary-100 xl:text-heading-6 text-body-small font-semibold">
+                        {transaction.type === "transfer"
+                          ? transaction.account_name
+                          : transaction.ewallet_user_name}
+                      </h5>
+                    </div>
+                  </SwiperSlide>
+                ))}
+                <div className="md:flex justify-center gap-3 pt-4 hidden">
+                  <button
+                    onClick={() => swiperRef.current?.slidePrev()}
+                    aria-label="Slide sebelumnya"
+                    aria-controls="swiper-container"
+                    role="button"
+                  >
+                    <ArrowCircleLeft
+                      size={25}
+                      color="gray"
+                      aria-hidden="true"
+                    />
+                  </button>
+                  <button
+                    onClick={() => swiperRef.current?.slideNext()}
+                    aria-label="Slide berikutnya"
+                    aria-controls="swiper-container"
+                    role="button"
+                  >
+                    <ArrowCircleRight
+                      size={25}
+                      color="gray"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </div>
+              </Swiper>
+            </div>
+          </>
+        ) : (
+          <p className="text-primary-100 text-body-large font-semibold"></p>
+        )}
+      </div>
 
-      <div className="">
-        <h1 className="text-primary-100 text-heading-6 font-bold py-3">
+      <div>
+        <h1
+          className="text-primary-100 text-heading-6 font-bold py-3"
+          aria-label="Catatan Keuangan"
+        >
           Catatan Keuangan
         </h1>
-        <div className="shadow-md p-5 border border-primary-300 rounded-xl">
-          <div className="border rounded-lg max-w-[440px]">
+        <div
+          className="shadow-md p-5 border border-primary-300 rounded-xl"
+          role="region"
+          aria-labelledby="financial-records-title"
+        >
+          <div
+            className="border rounded-lg max-w-[440px]"
+            role="combobox"
+            aria-expanded="false"
+          >
             <Dropdown
               menu={{
                 items: data.transactionsPerMonth.map((transaction, index) => ({
@@ -533,48 +646,74 @@ const Home = () => {
               trigger={["click"]}
             >
               <a onClick={(e) => e.preventDefault()}>
-                <Space className="flex justify-between p-3">
+                <Space
+                  className="flex justify-between p-3"
+                  aria-label={`Pilih bulan: ${selectedMonth}`}
+                >
                   <p>{selectedMonth}</p>
-                  <DownOutlined />
+                  <DownOutlined aria-hidden="true" />
                 </Space>
               </a>
             </Dropdown>
           </div>
           <div>
-            <div className="rounded-lg my-6 flex justify-between justify-items-center gap-2">
-              <div className="border px-5 py-3 w-full rounded-lg">
-                <div className="">
-                  <div className="flex gap-1">
-                    <ArrowUp
-                      weight="fill"
-                      size={20}
-                      className="text-green-500"
-                    />
-                    <p>Pemasukan</p>
-                  </div>
-                  <h5 className="text-primary-100 font-bold text-heading-6 py-3">
-                    Rp{monthlyReport?.income}
-                  </h5>
-                </div>
-              </div>
-              <div className="border px-5 py-3 w-full rounded-lg">
+            <div
+              className="rounded-lg my-6 flex justify-between justify-items-center gap-2"
+              role="region"
+              aria-labelledby="financial-summary-title"
+            >
+              <div
+                className="border px-5 py-3 w-full rounded-lg"
+                role="group"
+                aria-labelledby="income-label"
+              >
                 <div className="flex gap-1">
-                  <ArrowDown weight="fill" size={20} className="text-red-500" />
-                  <p>Pengeluaran</p>
+                  <ArrowUp
+                    weight="fill"
+                    size={20}
+                    className="text-green-500"
+                    aria-hidden="true"
+                  />
+                  <p id="income-label">Pemasukan</p>
                 </div>
-                <h5 className="text-primary-100 font-bold text-heading-6 py-3">
+                <h5
+                  className="text-primary-100 font-bold text-heading-6 py-3"
+                  aria-label={`Total pemasukan bulan ini: Rp${monthlyReport?.income}`}
+                >
+                  Rp{monthlyReport?.income}
+                </h5>
+              </div>
+              <div
+                className="border px-5 py-3 w-full rounded-lg"
+                role="group"
+                aria-labelledby="expense-label"
+              >
+                <div className="flex gap-1">
+                  <ArrowDown
+                    weight="fill"
+                    size={20}
+                    className="text-red-500"
+                    aria-hidden="true"
+                  />
+                  <p id="expense-label">Pengeluaran</p>
+                </div>
+                <h5
+                  className="text-primary-100 font-bold text-heading-6 py-3"
+                  aria-label={`Total pengeluaran bulan ini: Rp${monthlyReport?.expense}`}
+                >
                   Rp{monthlyReport?.expense}
                 </h5>
               </div>
             </div>
             <div className="">
-              <h5>Selisih</h5>
+              <h5 id="balance-label">Selisih</h5>
               <h5
                 className={`${
                   (monthlyReport?.total ?? 0) < 0
                     ? "text-red-500"
                     : "text-green-500"
                 } text-heading-6 font-bold`}
+                aria-label={`Selisih bulan ini: Rp${monthlyReport?.total}`}
               >
                 Rp{monthlyReport?.total}
               </h5>

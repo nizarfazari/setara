@@ -76,7 +76,11 @@ export const AuthProvider = ({ children }: AuthProps) => {
 
     const logout = () => {
         setUser(null);
-        localStorage.clear()
+        setTransWallet({
+            recipients: null,
+            transaction: null,
+            idWallet: null
+        });
         openNotificationWithIcon('success', 'Success', "Berhasil Logout")
         navigate("/login", { replace: true });
     };

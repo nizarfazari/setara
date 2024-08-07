@@ -14,7 +14,7 @@ export async function GetData<T>(url: string, token: string | null | undefined):
         throw error; // Re-throw the error so it can be handled by the caller
     }
 }
-
+ 
 
 export async function postData<TRequest, TResponse>(
     url: string,

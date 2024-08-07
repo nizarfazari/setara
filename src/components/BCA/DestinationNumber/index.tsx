@@ -1,9 +1,10 @@
 import React, { useState } from "react";
 import { Button, Card, Form, Input } from "antd";
 import "./style.css";
-import { useNavigate } from "react-router-dom";
+import { FormProps, useNavigate } from "react-router-dom";
 import CustomerItem from "../CustomerItem";
 import { BankUser, ResponseBank } from "../../../types/Bank";
+import { Plus } from "@phosphor-icons/react";
 
 type TDestinationNumber = {
   destinationNumber: number;
@@ -41,6 +42,7 @@ const DestinationNumber: React.FC<PropsDestinationNumber> = ({
         className="bg-primary-100 text-white w-full h-10 rounded-xl mb-3 font-semibold text-body-small md:mb-6 md:text-heading-6 md:h-[60px]"
         onClick={() => navigate(`${pathUrl}/nomor-tujuan-baru`)}
       >
+        <Plus size={24} />
         Transfer ke Tujuan Baru
       </Button>
       <Form layout="vertical" onFinish={onFinish}>

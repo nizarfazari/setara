@@ -139,7 +139,7 @@ export const AuthProvider = ({ children }: AuthProps) => {
             transaction: null,
             account_number: null,
         });
-    }
+    } 
 
     const value = useMemo(() => ({
         user,

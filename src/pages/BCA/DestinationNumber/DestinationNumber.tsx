@@ -84,18 +84,18 @@ export default function DestinationNumberPage() {
         <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">
         <div className="basis-1/2">
           {data && (
-            <DestinationNumber pathUrl={`bca/${slug}`} bank={data} onSearch={handleSearch} />
+            <DestinationNumber pathUrl={`bca/${slug}`} bank={data ?? []} onSearch={handleSearch} />
           )}
             <div className="mt-6">
-              <CustomerList header="Hasil Pencarian" contacts={filteredResults} setRecipients={setRecipients} />
+              <CustomerList header="Hasil Pencarian" contacts={filteredResults} setRecipients={setRecipients} pathUrl={""} />
             </div>
         </div>
         <div className="basis-1/2">
           <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
             {data && (
               <Flex vertical gap={30} align="start">
-                <CustomerList pathUrl={`bca/${slug}`} header="Daftar Favorit" contacts={favorites} setRecipients={setRecipients} />
-                <CustomerList pathUrl={`bca/${slug}`} header="Daftar Tersimpan" contacts={saved} setRecipients={setRecipients} />
+                <CustomerList pathUrl={`bca/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients} />
+                <CustomerList pathUrl={`bca/${slug}`} header="Daftar Tersimpan" contacts={data.saved} setRecipients={setRecipients} />
               </Flex>
             )}
           </Card>

@@ -20,7 +20,7 @@ export type ResponseBank = {
 
 
 export type SearchBankReq = {
-    no: string
+    account_number: string
 }
 
 

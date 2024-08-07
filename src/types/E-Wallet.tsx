@@ -13,7 +13,7 @@ export type EwalletUser = {
 // Tipe data untuk respons API
 export type ResponseEWallet = {
     total_favorites: number;
-    total_saved: number;
+    total_saved: number; 
     favorites: EwalletUser[];
     saved: EwalletUser[];
 }

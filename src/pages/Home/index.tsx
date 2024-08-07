@@ -1,24 +1,24 @@
-import { useEffect, useRef, useState } from "react";
-import iconInfo from "/images/homepage/icon-info.png";
-import iconTransfer from "/images/homepage/icon-transfer.png";
-import iconEwallet from "/images/homepage/icon-ewallet.png";
-import iconBuy from "/images/homepage/icon-buy.png";
-import iconInvest from "/images/homepage/icon-invest.png";
-import iconCardless from "/images/homepage/info-cardless.png";
-import iconTransFav from "/images/homepage/icon-trans-fav.png";
-import iconTopupFav from "/images/homepage/icon-ewallet-fav2.png";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { GoDotFill } from "react-icons/go";
-import { Swiper as SwiperClass } from "swiper";
-import { Autoplay, Navigation } from "swiper/modules";
-import { Button, Modal, Skeleton } from "antd";
-import { DownOutlined } from "@ant-design/icons";
-import { Dropdown, Space, notification } from "antd";
-import "swiper/css";
-import "swiper/css/navigation";
-import "swiper/css/free-mode";
-import "swiper/css";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from 'react';
+import iconInfo from '/images/homepage/icon-info.png';
+import iconTransfer from '/images/homepage/icon-transfer.png';
+import iconEwallet from '/images/homepage/icon-ewallet.png';
+import iconBuy from '/images/homepage/icon-buy.png';
+import iconInvest from '/images/homepage/icon-invest.png';
+import iconCardless from '/images/homepage/info-cardless.png';
+import iconTransFav from '/images/homepage/icon-trans-fav.png';
+import iconTopupFav from '/images/homepage/icon-ewallet-fav2.png';
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { GoDotFill } from 'react-icons/go';
+import { Swiper as SwiperClass } from 'swiper';
+import { Autoplay, Navigation } from 'swiper/modules';
+import { Button, Modal, Skeleton } from 'antd';
+import { DownOutlined } from '@ant-design/icons';
+import { Dropdown, Space, notification } from 'antd';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/free-mode';
+import 'swiper/css';
+import { useNavigate } from 'react-router-dom';
 import {
   ArrowCircleLeft,
   ArrowCircleRight,
@@ -27,10 +27,10 @@ import {
   CopySimple,
   Eye,
   EyeSlash,
-} from "@phosphor-icons/react";
-import { useAuth } from "../../hooks/useAuth";
-import axios, { AxiosError } from "axios";
-import { FormatCurrency } from "../../utils";
+} from '@phosphor-icons/react';
+import { useAuth } from '../../hooks/useAuth';
+import axios, { AxiosError } from 'axios';
+import { FormatCurrency } from '../../utils';
 
 interface CombinedItem {
   id: string;
@@ -38,7 +38,7 @@ interface CombinedItem {
   favorite: boolean;
   name: string;
   image_path: string;
-  type: "transfer" | "topup";
+  type: 'transfer' | 'topup';
   account_number?: string;
   bank_name?: string;
   account_name?: string;
@@ -80,7 +80,7 @@ const Home = () => {
     null
   );
   const [favorites, setFavorites] = useState<CombinedItem[]>([]);
-  const [selectedMonth, setSelectedMonth] = useState("Januari 2024");
+  const [selectedMonth, setSelectedMonth] = useState('Januari 2024');
 
   const dots = new Array(7).fill(null);
   const { logout, user } = useAuth();
@@ -94,12 +94,12 @@ const Home = () => {
 
   const fetchFavorites = async () => {
     try {
-      setLoading(true); 
+      setLoading(true);
       const [response1, response2] = await Promise.all([
         axios.get<{
           data: { favorites: CombinedItem[] };
         }>(
-          "https://setara-api-service-production.up.railway.app/api/v1/saved-accounts",
+          'https://setara-api-service-production.up.railway.app/api/v1/saved-accounts',
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,
@@ -110,7 +110,7 @@ const Home = () => {
         axios.get<{
           data: { favorites: CombinedItem[] };
         }>(
-          "https://setara-api-service-production.up.railway.app/api/v1/saved-ewallet-users",
+          'https://setara-api-service-production.up.railway.app/api/v1/saved-ewallet-users',
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,
@@ -120,15 +120,17 @@ const Home = () => {
         ),
       ]);
 
-      const favoritesWithType = response1.data.data.favorites.map((account) => ({
-        ...account,
-        type: "transfer" as const,
-      }));
+      const favoritesWithType = response1.data.data.favorites.map(
+        (account) => ({
+          ...account,
+          type: 'transfer' as const,
+        })
+      );
 
       const savedEwalletUsersWithType = response2.data.data.favorites.map(
         (ewalletUser) => ({
           ...ewalletUser,
-          type: "topup" as const,
+          type: 'topup' as const,
         })
       );
 
@@ -140,16 +142,16 @@ const Home = () => {
       setFavorites(combinedData);
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        if (error.code === "ECONNABORTED") {
-          setErrorMessage("Belum ada transaksi akun favorit.");
+        if (error.code === 'ECONNABORTED') {
+          setErrorMessage('Belum ada transaksi akun favorit.');
         } else {
-          setErrorMessage("Terjadi kesalahan saat mengambil data.");
+          setErrorMessage('Terjadi kesalahan saat mengambil data.');
         }
       } else {
-        setErrorMessage("Terjadi kesalahan yang tidak terduga.");
+        setErrorMessage('Terjadi kesalahan yang tidak terduga.');
       }
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -163,7 +165,7 @@ const Home = () => {
     const token = user?.token;
     try {
       const response = await axios.get(
-        `https://setara-api-service-production.up.railway.app/api/v1/user/getBalance`,
+        `${process.env.API_URL}api/v1/user/getBalance`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -195,19 +197,19 @@ const Home = () => {
     }
   };
 
-  console.log(error)
+  console.log(error);
 
   useEffect(() => {
     fetchBalance();
   }, []);
-  
+
   const handleMonthChange = (key: number) => {
     const month = data.transactionsPerMonth[key].month;
     const monthNumber = data.transactionsPerMonth[key].monthNumber;
     setSelectedMonth(month);
     fetchMonthlyReport(monthNumber, '2024');
   };
-  
+
   useEffect(() => {
     const transactions = data.transactionsPerMonth.find(
       (transaction) => transaction.month === selectedMonth
@@ -216,7 +218,7 @@ const Home = () => {
       fetchMonthlyReport(transactions.monthNumber, '2024');
     }
   }, [selectedMonth]);
-  
+
   // const getTransactionsForMonth = () => {
   //   const transactions = data.transactionsPerMonth.find(
   //     (transaction) => transaction.month === selectedMonth
@@ -227,7 +229,7 @@ const Home = () => {
   // const monthlyTransactions = getTransactionsForMonth();
 
   const formatNorek = (norek: string | number | undefined) => {
-    if (typeof norek === "undefined") {
+    if (typeof norek === 'undefined') {
       return 0;
     }
     const str = norek.toString();
@@ -235,7 +237,7 @@ const Home = () => {
     if (str.length % 4 === 0) {
       return str;
     }
-    return str.replace(/(.{4})/g, "$1-");
+    return str.replace(/(.{4})/g, '$1-');
   };
 
   const copyToClipboard = () => {
@@ -246,19 +248,19 @@ const Home = () => {
         .writeText(accountNumber.toString())
         .then(() => {
           notification.success({
-            message: "Success",
-            description: "No. Rekening berhasil disalin",
-            duration: 2, // Duration in seconds
+            message: 'Success',
+            description: 'No. Rekening berhasil disalin',
+            duration: 2,
           });
         })
         .catch((err) => {
-          console.error("Could not copy text: ", err);
+          console.error('Could not copy text: ', err);
         });
     } else {
       notification.error({
-        message: "Error",
-        description: "No. Rekening tidak tersedia",
-        duration: 2, // Duration in seconds
+        message: 'Error',
+        description: 'No. Rekening tidak tersedia',
+        duration: 2,
       });
     }
   };
@@ -292,7 +294,7 @@ const Home = () => {
                         ))}
                       </span>
                     ) : balance !== null ? (
-                      <span>Rp {balance.toLocaleString("id-ID")}</span>
+                      <span>Rp {balance.toLocaleString('id-ID')}</span>
                     ) : (
                       <>
                         <Skeleton.Button
@@ -367,13 +369,13 @@ const Home = () => {
                   {formatNorek(user?.user.account_number)}
                 </p>
                 <p className="text-body-large font-semibold">
-                  Rp {balance?.toLocaleString("id-ID")}
+                  Rp {balance?.toLocaleString('id-ID')}
                 </p>
               </div>
             </Modal>
             <p className="pt-2">Info</p>
           </div>
-          <div className=" text-center" onClick={() => navigate("/bca")}>
+          <div className=" text-center" onClick={() => navigate('/bca')}>
             <img
               src={iconTransfer}
               alt="info"
@@ -381,7 +383,7 @@ const Home = () => {
             />
             <p className="pt-2">Transfer</p>
           </div>
-          <div className=" text-center" onClick={() => navigate("/e-wallet")}>
+          <div className=" text-center" onClick={() => navigate('/e-wallet')}>
             <img
               src={iconEwallet}
               alt="info"
@@ -389,134 +391,138 @@ const Home = () => {
             />
             <p className="pt-2">E-Wallet</p>
           </div>
-          <div className=" text-center">
+          <div className="text-center">
             <img
               src={iconBuy}
               alt="info"
-              className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
+              className="mx-auto w-16 p-3 shadow-md rounded-xl border border-primary-300 opacity-50 grayscale pointer-events-none"
             />
-            <p className="pt-2">Pembelian</p>
+            <p className="pt-2 text-gray-500">Pembelian</p>
           </div>
-          <div className=" text-center">
+          <div className="text-center">
             <img
               src={iconInvest}
               alt="info"
-              className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
+              className="mx-auto w-16 p-3 shadow-md rounded-xl border border-primary-300 opacity-50 grayscale pointer-events-none"
             />
-            <p className="pt-2">Investasi</p>
+            <p className="pt-2 text-gray-500">Investasi</p>
           </div>
-          <div className=" text-center">
+          <div className="text-center">
             <img
               src={iconCardless}
               alt="info"
-              className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
+              className="mx-auto w-16 p-3 shadow-md rounded-xl border border-primary-300 opacity-50 grayscale pointer-events-none"
             />
-            <p className="pt-2">Cardless</p>
+            <p className="pt-2 text-gray-500">Cardless</p>
           </div>
         </div>
       </div>
       <div className="pt-0 pb-3">
-      {loading ? ( 
-        <div className="flex space-x-4 justify-center w-full">
-          {[1, 2, 3].map((_, index) => (
-            <div
-              key={index}
-              className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4 w-full max-w-7xl"
-            >
-              <div className="animate-pulse flex flex-col space-y-3 w-full">
-                <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-primary-100 rounded-3xl text-white text-caption-large"></div>
-                <div className="bg-gray-400 h-5 rounded w-3/4"></div>
-                <div className="bg-gray-400 h-5 rounded w-1/2"></div>
+        {loading ? (
+          <div className="flex space-x-4 justify-center w-full">
+            {[1, 2, 3].map((_, index) => (
+              <div
+                key={index}
+                className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4 w-full max-w-7xl"
+              >
+                <div className="animate-pulse flex flex-col space-y-3 w-full">
+                  <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-primary-100 rounded-3xl text-white text-caption-large"></div>
+                  <div className="bg-gray-400 h-5 rounded w-3/4"></div>
+                  <div className="bg-gray-400 h-5 rounded w-1/2"></div>
+                </div>
               </div>
-            </div>
-          ))}
-        </div>
-      ) : errorMessage ? ( // Show error message if there's an error
-        <p className="text-primary-100 text-body-large font-semibold">
-          {errorMessage}
-        </p>
-      ) : favorites.length > 0 ? (
-        <>
-          <h1 className="text-primary-100 text-heading-6 font-bold">
-            Transaksi Favorit
-          </h1>
-          <div className="py-3">
-            <Swiper
-              modules={[Navigation, Autoplay]}
-              loop={true}
-              autoplay={{
-                delay: 4000,
-                disableOnInteraction: false,
-              }}
-              onBeforeInit={(swiper) => {
-                swiperRef.current = swiper;
-              }}
-              spaceBetween={15}
-              slidesPerView={1.5}
-              breakpoints={{
-                768: {
-                  slidesPerView: 2,
-                },
-                1024: {
-                  slidesPerView: 3,
-                },
-              }}
-            >
-              {favorites.map((transaction) => (
-                <SwiperSlide key={transaction.id}>
-                  <div className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4">
-                    <div
-                      className={`flex gap-2 items-center py-1 px-2 w-20 bg-primary-100 rounded-3xl text-white text-caption-large`}
-                    >
-                      <img
-                        src={
-                          transaction.type === "transfer"
-                            ? iconTransFav
-                            : iconTopupFav
-                        }
-                        alt={
-                          transaction.type === "transfer"
-                            ? "transfav"
-                            : "topupfav"
-                        }
-                        className="w-[10px] items-center h-[10px]"
-                      />
-                      <p className="text-caption-small">
-                        {transaction.type === "transfer"
-                          ? "Transfer"
-                          : "Top Up"}
-                      </p>
-                    </div>
-                    <h5 className="xl:text-body-large text-body-small pt-3 capitalize">
-                      {transaction.type === "transfer"
-                        ? "Transfer Antar BCA"
-                        : `Top Up ${transaction.ewallet_name}`}
-                    </h5>
-                    <h5 className="text-primary-100 xl:text-heading-6 text-body-small font-semibold">
-                      {transaction.type === "transfer"
-                        ? transaction.account_name
-                        : transaction.ewallet_user_name}
-                    </h5>
-                  </div>
-                </SwiperSlide>
-              ))}
-              <div className="md:flex justify-center gap-3 pt-4 hidden">
-                <button onClick={() => swiperRef.current?.slidePrev()}>
-                  <ArrowCircleLeft size={25} color="gray" />
-                </button>
-                <button onClick={() => swiperRef.current?.slideNext()}>
-                  <ArrowCircleRight size={25} color="gray" />
-                </button>
-              </div>
-            </Swiper>
+            ))}
           </div>
-        </>
-      ) : (
-        <p className="text-primary-100 text-body-large font-semibold">
-       
-        </p>
-      )}
-    </div>
+        ) : errorMessage ? (
+          <p className="text-primary-100 text-body-large font-semibold">
+            {errorMessage}
+          </p>
+        ) : favorites.length > 0 ? (
+          <>
+            <h1 className="text-primary-100 text-heading-6 font-bold">
+              Transaksi Favorit
+            </h1>
+            <div className="py-3">
+              <Swiper
+                modules={[Navigation, Autoplay]}
+                loop={true}
+                autoplay={{
+                  delay: 4000,
+                  disableOnInteraction: false,
+                }}
+                onBeforeInit={(swiper) => {
+                  swiperRef.current = swiper;
+                }}
+                spaceBetween={15}
+                slidesPerView={1.5}
+                breakpoints={{
+                  768: {
+                    slidesPerView: 2,
+                  },
+                  1024: {
+                    slidesPerView: 3,
+                  },
+                }}
+              >
+                {favorites.map((transaction) => (
+                  <SwiperSlide key={transaction.id}>
+                    <div className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4">
+                      <div
+                        className={`flex gap-2 items-center py-1 px-2 w-20 bg-primary-100 rounded-3xl text-white text-caption-large`}
+                      >
+                        <img
+                          src={
+                            transaction.type === 'transfer'
+                              ? iconTransFav
+                              : iconTopupFav
+                          }
+                          alt={
+                            transaction.type === 'transfer'
+                              ? 'transfav'
+                              : 'topupfav'
+                          }
+                          className="w-[10px] items-center h-[10px]"
+                        />
+                        <p className="text-caption-small">
+                          {transaction.type === 'transfer'
+                            ? 'Transfer'
+                            : 'Top Up'}
+                        </p>
+                      </div>
+                      <h5 className="xl:text-body-large text-body-small pt-3 capitalize">
+                        {transaction.type === 'transfer'
+                          ? 'Transfer Antar BCA'
+                          : `Top Up ${transaction.ewallet_name}`}
+                      </h5>
+                      <h5 className="text-primary-100 xl:text-heading-6 text-body-small font-semibold">
+                        {transaction.type === 'transfer'
+                          ? transaction.account_name
+                          : transaction.ewallet_user_name}
+                      </h5>
+                    </div>
+                  </SwiperSlide>
+                ))}
+                <div className="md:flex justify-center gap-3 pt-4 hidden">
+                  <button
+                    onClick={() => swiperRef.current?.slidePrev()}
+                    className="text-gray-500 hover:text-primary-100 focus:text-primary-100 transition-colors duration-300"
+                  >
+                    <ArrowCircleLeft size={35} />
+                  </button>
+                  <button
+                    onClick={() => swiperRef.current?.slideNext()}
+                    className="text-gray-500 hover:text-primary-100 focus:text-primary-100 transition-colors duration-300"
+                  >
+                    <ArrowCircleRight size={35} />
+                  </button>
+                </div>
+              </Swiper>
+            </div>
+          </>
+        ) : (
+          <p className="text-primary-100 text-body-large font-semibold"></p>
+        )}
+      </div>
 
       <div className="">
         <h1 className="text-primary-100 text-heading-6 font-bold py-3">
@@ -532,7 +538,7 @@ const Home = () => {
                 })),
                 onClick: (e) => handleMonthChange(+e.key),
               }}
-              trigger={["click"]}
+              trigger={['click']}
             >
               <a onClick={(e) => e.preventDefault()}>
                 <Space className="flex justify-between p-3">
@@ -547,7 +553,7 @@ const Home = () => {
               <div className="border px-5 py-3 w-full rounded-lg">
                 <div className="">
                   <div className="flex gap-1">
-                    <ArrowUp
+                    <ArrowDown
                       weight="fill"
                       size={20}
                       className="text-green-500"
@@ -561,7 +567,7 @@ const Home = () => {
               </div>
               <div className="border px-5 py-3 w-full rounded-lg">
                 <div className="flex gap-1">
-                  <ArrowDown weight="fill" size={20} className="text-red-500" />
+                  <ArrowUp weight="fill" size={20} className="text-red-500" />
                   <p>Pengeluaran</p>
                 </div>
                 <h5 className="text-primary-100 font-bold text-heading-6 py-3">
@@ -570,12 +576,12 @@ const Home = () => {
               </div>
             </div>
             <div className="">
-              <h5>Selisih</h5>
+              <h5 className="font-bold">Selisih</h5>
               <h5
                 className={`${
                   (monthlyReport?.total ?? 0) < 0
-                    ? "text-red-500"
-                    : "text-green-500"
+                    ? 'text-red-500'
+                    : 'text-green-500'
                 } text-heading-6 font-bold`}
               >
                 {FormatCurrency(monthlyReport?.total)}

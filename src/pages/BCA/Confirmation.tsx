@@ -1,22 +1,14 @@
 import { Button, Card } from "antd"
 import Breadcrumb from "../../components/Breadcumb"
-import { useNavigate, useParams, useLocation } from "react-router-dom"
+import { useNavigate, useParams } from "react-router-dom"
+import { useAuth } from "../../hooks/useAuth"
+import { FormatCurrency } from "../../utils"
 
 const Konfirmasi = () => {
   const navigate = useNavigate()
-  const location = useLocation()
   const { slug } = useParams()
-
-  const { body } = location.state || {};
-  const getUser = localStorage.getItem('user');
-  const user_name = JSON.parse(getUser!).user.name;
-  const bank_name = JSON.parse(getUser!).user.bank_name;
-  const account_number = JSON.parse(getUser!).user.account_number;
-  const onFinish = () => {
-    navigate(`/bca/${slug}/konfirmasi`, { 
-      state: { body }
-    })
-  }
+  const { transBank, user } = useAuth();
+  const admin = 1000
   
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
@@ -26,13 +18,13 @@ const Konfirmasi = () => {
           <div>
             <p className="font-bold">Pengirim</p>
             <div className="flex items-center mt-2">
-              <img className="w-[70px] mr-4" src="/images/avatar.svg" alt="" />
+              <img className="w-[70px] mr-4" src={user?.user.avatar_path} alt="" />
               <div className="text-[12px] md:text-[14px]">
-                <p className="font-bold">{user_name}</p>
+                <p className="font-bold">{user?.user.name}</p>
                 <div className="flex items-center">
-                  <p>{bank_name}</p>
+                  <p>{user?.user.bank_name}</p>
                   <img className="w-[6px] h-[6px] mx-2" src="/images/icons/dot.png"></img>
-                  <p>{account_number}</p>
+                  <p>{user?.user.account_number}</p>
                 </div>
               </div>
             </div>
@@ -40,13 +32,13 @@ const Konfirmasi = () => {
           <div className="my-5 mb-5">
             <p className="font-bold mb-2">Penerima</p>
             <div className="flex items-center">
-              <img className="w-[70px] mr-4" src="/images/avatar.svg" alt="" />
+              <img className="w-[70px] mr-4" src={transBank.recipients.imageUrl} alt="" />
               <div className="text-[12px] md:text-[14px]">
-                <p className="font-bold">{body.account_name}</p>
+                <p className="font-bold">{transBank.recipients.nama}</p>
                 <div className="flex items-center">
-                  <p>{bank_name}</p>
+                  <p>{transBank.recipients.bank}</p>
                   <img className="w-[6px] h-[6px] mx-2" src="/images/icons/dot.png"></img>
-                  <p>{body.destinationAccountNumber}</p>
+                  <p>{transBank.recipients.numberDestination}</p>
                 </div>
               </div>
             </div>
@@ -62,18 +54,18 @@ const Konfirmasi = () => {
                 <p>Catatan</p>
               </div>
               <div>
-                <p>Rp {body.amount}</p>
-                <p>Rp {'1.000'}</p>
-                <p>{body.note}</p>
+                <p>{FormatCurrency(transBank.transaction.nominal)}</p>
+                <p>{FormatCurrency(admin)}</p>
+                <p>{transBank.transaction.notes ? transBank.transaction.notes : "-" }</p>
               </div>
             </div>
             <hr className='border-neutral-300 my-2' />
             <div className='flex justify-between font-bold'>
               <p>Total</p>
-              <p>Rp {body.amount + 1000}</p>
+              <p>{FormatCurrency(+transBank.transaction.nominal + admin)}</p>
             </div>
           </Card>
-          <Button onClick={() => onFinish() } type="primary" className="bg-primary-100 h-10 w-full mt-5 lg:mt-10 rounded-lg">Lanjutkan</Button>
+          <Button onClick={() => navigate(`/bca/${slug}/konfirmasi`)} type="primary" className="bg-primary-100 h-10 w-full mt-5 lg:mt-10 rounded-lg">Lanjutkan</Button>
         </div>
       </div>
     </div>

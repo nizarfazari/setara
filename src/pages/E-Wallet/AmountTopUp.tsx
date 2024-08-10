@@ -10,25 +10,14 @@ import { useAuth } from "../../hooks/useAuth";
 
 export default function AmountTopUpPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { transWallet } = useAuth();
-  // const { openNotificationWithIcon } = useNotification();
-  // const navigate = useNavigate()
-
-  // const entries = Object.values(transWallet.recipients);
-  // for (const value of entries) {
-  //   if (value === null || value === undefined) {
-  //     console.log('asda')
-  //     openNotificationWithIcon('error', "Error", "Pilih Penerima terlebih dahulu")
-  //     navigate(`/e-wallet/${slug}/`)
-  //   }
-  // }
+  const { transactions } = useAuth();
 
 
   const USER = {
-    ewallet_user_name: transWallet.recipients.nama,
-    ewallet_name: transWallet.recipients.wallet,
-    ewallet_user_phone_number: transWallet.recipients.numberDestination,
-    ewallet_user_image_path: transWallet.recipients.imageUrl,
+    ewallet_user_name: transactions.recipients.nama,
+    ewallet_name: transactions.recipients.wallet,
+    ewallet_user_phone_number: transactions.recipients.numberDestination,
+    ewallet_user_image_path: transactions.recipients.imageUrl,
   };
 
 

@@ -11,18 +11,6 @@ import { useAuth } from "../../hooks/useAuth";
 export default function AmountTopUpPage() {
   const { slug } = useParams<{ slug: string }>();
   const { transBank } = useAuth();
-  // const { openNotificationWithIcon } = useNotification();
-  // const navigate = useNavigate()
-
-  // const entries = Object.values(transBank.recipients);
-  // for (const value of entries) {
-  //   if (value === null || value === undefined) {
-  //     console.log('asda')
-  //     openNotificationWithIcon('error', "Error", "Pilih Penerima terlebih dahulu")
-  //     navigate(`/e-wallet/${slug}/`)
-  //   }
-  // }
-
 
   const USER = {
     account_name: transBank.recipients.nama,

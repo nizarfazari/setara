@@ -1,57 +1,27 @@
 import { useEffect, useRef, useState } from "react";
-import iconInfo from "/images/homepage/icon-info.png";
-import iconTransfer from "/images/homepage/icon-transfer.png";
-import iconEwallet from "/images/homepage/icon-ewallet.png";
-import iconBuy from "/images/homepage/icon-buy.png";
-import iconInvest from "/images/homepage/icon-invest.png";
-import iconCardless from "/images/homepage/info-cardless.png";
 import iconTransFav from "/images/homepage/icon-trans-fav.png";
 import iconTopupFav from "/images/homepage/icon-ewallet-fav2.png";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { GoDotFill } from "react-icons/go";
 import { Swiper as SwiperClass } from "swiper";
 import { Autoplay, Navigation } from "swiper/modules";
-import { Button, Modal, Skeleton } from "antd";
 import { DownOutlined } from "@ant-design/icons";
-import { Dropdown, Space, notification } from "antd";
+import { Dropdown, Space } from "antd";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/free-mode";
 import "swiper/css";
-import { useNavigate } from "react-router-dom";
 import {
   ArrowCircleLeft,
   ArrowCircleRight,
   ArrowDown,
   ArrowUp,
-  CopySimple,
-  Eye,
-  EyeSlash,
 } from "@phosphor-icons/react";
 import { useAuth } from "../../hooks/useAuth";
 import axios, { AxiosError } from "axios";
+import InfoSaldo from "../../components/InfoSaldo";
+import FavoriteLoading from "../../components/FavoriteLoading";
+import { CombinedItem, MonthlyReport } from "../../types";
 
-interface CombinedItem {
-  id: string;
-  owner_id: string;
-  favorite: boolean;
-  name: string;
-  image_path: string;
-  type: "transfer" | "topup";
-  account_number?: string;
-  bank_name?: string;
-  account_name?: string;
-  ewallet_user_id?: string;
-  ewallet_user_phone_number?: string;
-  ewallet_name?: string;
-  ewallet_user_name?: string;
-}
-
-interface MonthlyReport {
-  income: number;
-  expense: number;
-  total: number;
-}
 
 const data = {
   transactionsPerMonth: [
@@ -67,11 +37,7 @@ const data = {
 };
 
 const Home = () => {
-  const navigate = useNavigate();
   const swiperRef = useRef<SwiperClass | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isBalanceHidden, setIsBalanceHidden] = useState(false);
-  const [balance, setBalance] = useState<number | null>(null);
   const [error, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
@@ -80,16 +46,7 @@ const Home = () => {
   );
   const [favorites, setFavorites] = useState<CombinedItem[]>([]);
   const [selectedMonth, setSelectedMonth] = useState("Januari 2024");
-
-  const dots = new Array(7).fill(null);
   const { logout, user } = useAuth();
-  const showModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const handleCancel = () => {
-    setIsModalOpen(false);
-  };
 
   const fetchFavorites = async () => {
     try {
@@ -160,23 +117,6 @@ const Home = () => {
     }
   }, [user]);
 
-  const fetchBalance = async () => {
-    const token = user?.token;
-    try {
-      const response = await axios.get(
-        `https://setara-api-service-production.up.railway.app/api/v1/user/getBalance`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      setBalance(response.data.data.balance);
-    } catch (error) {
-      setError(error as AxiosError);
-    }
-  };
-
   const fetchMonthlyReport = async (month: any, year: any) => {
     const token = user?.token;
     try {
@@ -196,10 +136,6 @@ const Home = () => {
     }
   };
 
-  useEffect(() => {
-    fetchBalance();
-  }, []);
-
   const handleMonthChange = (key: number) => {
     const month = data.transactionsPerMonth[key].month;
     const monthNumber = data.transactionsPerMonth[key].monthNumber;
@@ -216,63 +152,6 @@ const Home = () => {
     }
   }, [selectedMonth]);
 
-  const getTransactionsForMonth = () => {
-    const transactions = data.transactionsPerMonth.find(
-      (transaction) => transaction.month === selectedMonth
-    );
-    return transactions;
-  };
-
-  const monthlyTransactions = getTransactionsForMonth();
-
-  const formatNorek = (norek: string | number | undefined) => {
-    if (typeof norek === "undefined") {
-      return 0;
-    }
-    const str = norek.toString();
-
-    if (str.length % 4 === 0) {
-      return str;
-    }
-    return str.replace(/(.{4})/g, "$1-");
-  };
-
-  const copyToClipboard = () => {
-    const accountNumber = user?.user?.account_number;
-
-    if (accountNumber) {
-      navigator.clipboard
-        .writeText(accountNumber.toString())
-        .then(() => {
-          notification.success({
-            message: "Success",
-            description: "No. Rekening berhasil disalin",
-            duration: 2, // Duration in seconds
-          });
-        })
-        .catch((err) => {
-          console.error("Could not copy text: ", err);
-        });
-    } else {
-      notification.error({
-        message: "Error",
-        description: "No. Rekening tidak tersedia",
-        duration: 2, // Duration in seconds
-      });
-    }
-  };
-
-  const toggleBalanceVisibility = () => {
-    setIsBalanceHidden(!isBalanceHidden);
-  };
-
-  const currentDate = new Date();
-  const formattedDate = currentDate.toLocaleDateString("id-ID", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-
   return (
     <div className="mx-auto container mt-5 mb-20">
       <h1
@@ -284,228 +163,12 @@ const Home = () => {
       <button onClick={() => logout()} aria-label="Log out">
         Log out
       </button>
-      <div className="my-3">
-        <div
-          className="bg-primary-100 rounded-lg md:w-1/3 px-7 py-5"
-          aria-live="polite"
-        >
-          <h5
-            className="text-white font-bold text-heading-6 mb-7"
-            aria-label="Informasi Saldo Rekening"
-          >
-            Informasi Saldo Rekening
-          </h5>
-          <div className="flex gap-7">
-            <img
-              src={user?.user.image_path}
-              alt="Foto profil pengguna"
-              className="w-16 h-16"
-            />
-            <div>
-              <div className="items-center">
-                <h5 className="text-neutral-50">Total Saldo</h5>
-                <div className="flex gap-2">
-                  <h5 className="text-heading-6 font-semibold text-neutral-50">
-                    {isBalanceHidden ? (
-                      <span
-                        className="text-neutral-50 flex gap-0"
-                        aria-label="Saldo tersembunyi"
-                      >
-                        {dots.map((_, index) => (
-                          <GoDotFill key={index} aria-hidden="true" />
-                        ))}
-                      </span>
-                    ) : balance !== null ? (
-                      <span>Rp {balance.toLocaleString("id-ID")}</span>
-                    ) : (
-                      <>
-                        <Skeleton.Button
-                          active
-                          className="w-full h-7 col-span-full"
-                          size="large"
-                          aria-label="Memuat saldo"
-                        />
-                        <Skeleton.Button
-                          active
-                          className="w-full h-7 col-span-full"
-                          size="large"
-                          aria-label="Memuat saldo"
-                        />
-                      </>
-                    )}
-                  </h5>
-                  <button
-                    onClick={toggleBalanceVisibility}
-                    aria-label={
-                      isBalanceHidden
-                        ? "Saldo ditampilkan"
-                        : "Saldo disembunyikan"
-                    }
-                  >
-                    {isBalanceHidden ? (
-                      <span className="text-neutral-100">
-                        <Eye weight="fill" aria-label="Tampilkan saldo" />
-                      </span>
-                    ) : (
-                      <span className="text-neutral-50">
-                        <EyeSlash
-                          weight="fill"
-                          aria-label="Sembunyikan Saldo"
-                        />
-                      </span>
-                    )}
-                  </button>
-                </div>
-              </div>
-              <p className="text-neutral-100 text-caption-small mt-3 flex gap-2 items-center">
-                No. Rekening:
-                <span className="font-bold text-caption-large">
-                  {formatNorek(user?.user.account_number)}
-                </span>
-                <button
-                  onClick={copyToClipboard}
-                  aria-label={`Salin nomor rekening ${formatNorek(
-                    user?.user.account_number
-                  )}`}
-                  className="items-center"
-                >
-                  <CopySimple
-                    size={16}
-                    weight="fill"
-                    aria-label="salin nomer rekening"
-                  />
-                </button>
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="my-10">
-        <h1 className="text-primary-100 font-bold text-heading-6 py-3">Menu</h1>
-        <div className="grid grid-cols-3 md:grid-cols-6 py-4 gap-y-4 rounded-lg border border-primary-300 ">
-          <div className=" text-center" aria-modal="true" aria-live="polite">
-            <img
-              src={iconInfo}
-              onClick={showModal}
-              alt="info"
-              className="mx-auto w-16 p-3 shadow-md rounded-xl border border-primary-300 cursor-pointer"
-            />
-            <Modal
-              open={isModalOpen}
-              footer={
-                <Button
-                  onClick={handleCancel}
-                  className="w-full bg-primary-100 text-neutral-100 font-semibold"
-                  aria-label="Kembali ke beranda"
-                >
-                  Kembali ke Beranda
-                </Button>
-              }
-              onCancel={handleCancel}
-              closable={false}
-            >
-              <h1 className="text-body-large text-primary-100 font-semibold text-center">
-                Info Saldo
-              </h1>
-
-              <div className="border rounded-xl p-5 my-7 shadow-sm">
-                <p
-                  className="text-primary-100"
-                  aria-label={`Tanggal saat ini: ${formattedDate}`}
-                >
-                  {formattedDate}
-                </p>
-                <p
-                  className="text-primary-100 font-semibold py-2"
-                  aria-label={`Nomor Rekening: ${String(
-                    formatNorek(user?.user.account_number)
-                  )}`}
-                >
-                  {formatNorek(user?.user.account_number)}
-                </p>
-
-                <p
-                  className="text-body-large font-semibold"
-                  aria-label={`${balance?.toLocaleString("id-ID")} Rupiah`}
-                >
-                  Rp {balance?.toLocaleString("id-ID")}
-                </p>
-              </div>
-            </Modal>
-            <p className="pt-2">Info</p>
-          </div>
-          <div className=" text-center" onClick={() => navigate("/bca")}>
-            <img
-              src={iconTransfer}
-              alt="Transfer"
-              aria-label="Transfer"
-              className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer "
-            />
-            <p className="pt-2">Transfer</p>
-          </div>
-          <div
-            className="text-center"
-            aria-label="E-wallet"
-            onClick={() => navigate("/e-wallet")}
-          >
-            <img
-              src={iconEwallet}
-              alt="E-Wallet"
-              className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
-            />
-            <p className="pt-2">E-Wallet</p>
-          </div>
-          <div className=" text-center" aria-label="Pembelian">
-            <img
-              src={iconBuy}
-              alt="pebelian"
-              className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
-            />
-            <p className="pt-2">Pembelian</p>
-          </div>
-          <div className=" text-center" aria-label="Investasi">
-            <img
-              src={iconInvest}
-              alt="invest"
-              className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
-            />
-            <p className="pt-2">Investasi</p>
-          </div>
-          <div className=" text-center" aria-label="Cardless">
-            <img
-              src={iconCardless}
-              alt="cardless"
-              className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
-            />
-            <p className="pt-2">Cardless</p>
-          </div>
-        </div>
+      <div>
+        <InfoSaldo />
       </div>
       <div className="pt-0 pb-3">
         {loading ? (
-          <div
-            className="flex space-x-4 justify-center w-full"
-            role="status"
-            aria-live="polite"
-            aria-busy="true"
-          >
-            {[1, 2, 3].map((_, index) => (
-              <div
-                key={index}
-                className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4 w-full max-w-7xl"
-                aria-label="Memuat konten"
-              >
-                <div
-                  className="animate-pulse flex flex-col space-y-3 w-full"
-                  aria-hidden="true"
-                >
-                  <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-primary-100 rounded-3xl text-white text-caption-large"></div>
-                  <div className="bg-gray-400 h-5 rounded w-3/4"></div>
-                  <div className="bg-gray-400 h-5 rounded w-1/2"></div>
-                </div>
-              </div>
-            ))}
-          </div>
+         <FavoriteLoading />
         ) : errorMessage ? (
           <p className="text-primary-100 text-body-large font-semibold">
             {errorMessage}
@@ -668,19 +331,22 @@ const Home = () => {
                 aria-labelledby="income-label"
               >
                 <div className="flex gap-1">
-                  <ArrowUp
+                  <ArrowDown
                     weight="fill"
                     size={20}
-                    className="text-green-500"
+                    className="text-green-600"
                     aria-hidden="true"
                   />
+
                   <p id="income-label">Pemasukan</p>
                 </div>
                 <h5
                   className="text-primary-100 font-bold text-heading-6 py-3"
-                  aria-label={`Total pemasukan bulan ini: Rp${monthlyReport?.income}`}
+                  aria-label={`Total pemasukan bulan ini: Rp${monthlyReport?.income.toLocaleString(
+                    "id-ID"
+                  )}`}
                 >
-                  Rp{monthlyReport?.income}
+                  Rp{monthlyReport?.income.toLocaleString("id-ID")}
                 </h5>
               </div>
               <div
@@ -689,19 +355,21 @@ const Home = () => {
                 aria-labelledby="expense-label"
               >
                 <div className="flex gap-1">
-                  <ArrowDown
+                  <ArrowUp
                     weight="fill"
                     size={20}
-                    className="text-red-500"
+                    className="text-red-600"
                     aria-hidden="true"
                   />
                   <p id="expense-label">Pengeluaran</p>
                 </div>
                 <h5
                   className="text-primary-100 font-bold text-heading-6 py-3"
-                  aria-label={`Total pengeluaran bulan ini: Rp${monthlyReport?.expense}`}
+                  aria-label={`Total pengeluaran bulan ini: Rp${monthlyReport?.expense.toLocaleString(
+                    "id-ID"
+                  )}`}
                 >
-                  Rp{monthlyReport?.expense}
+                  Rp{monthlyReport?.expense.toLocaleString("id-ID")}
                 </h5>
               </div>
             </div>
@@ -711,11 +379,13 @@ const Home = () => {
                 className={`${
                   (monthlyReport?.total ?? 0) < 0
                     ? "text-red-500"
-                    : "text-green-500"
+                    : "text-green-600"
                 } text-heading-6 font-bold`}
-                aria-label={`Selisih bulan ini: Rp${monthlyReport?.total}`}
+                aria-label={`Selisih bulan ini: Rp${monthlyReport?.total.toLocaleString(
+                  "id-ID"
+                )}`}
               >
-                Rp{monthlyReport?.total}
+                Rp{monthlyReport?.total.toLocaleString("id-ID")}
               </h5>
             </div>
           </div>

@@ -10,13 +10,13 @@ import { useAuth } from "../../hooks/useAuth";
 
 export default function AmountTopUpPage() {
   const { slug } = useParams<{ slug: string }>();
-  const { transBank } = useAuth();
+  const { transactions } = useAuth();
 
   const USER = {
-    account_name: transBank.recipients.nama,
-    bank_name: transBank.recipients.bank,
-    account_number: transBank.recipients.numberDestination,
-    user_image_path: transBank.recipients.imageUrl,
+    account_name: transactions.recipients.nama,
+    bank_name: transactions.recipients.bank,
+    account_number: transactions.recipients.numberDestination,
+    user_image_path: transactions.recipients.imageUrl,
   };
 
 

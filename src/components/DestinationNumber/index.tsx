@@ -22,7 +22,7 @@ const DestinationNumber: React.FC<PropsDestinationNumber> = ({ pathUrl, wallet }
 
   const onFinish: FormProps<TDestinationNumber>["onFinish"] = (values) => {
     const dataWallet: EwalletUser[] = [...wallet.favorites, ...wallet.saved]
-    console.log(dataWallet)
+    
 
     const data = dataWallet.filter((val) => (val.ewallet_user_phone_number.includes(values.destinationNumber.toString())))
 

@@ -7,12 +7,12 @@ import { useFetchData } from '../../hooks/useFetchData';
 import { EWallets } from '../../types/E-Wallet';
 
 const TransferWallet: React.FC = () => {
-    const { user, setIdWallet } = useAuth();
+    const { user, setTransactionId } = useAuth();
     const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
 
     const handleWalletClick = (id: string) => {
         setSelectedWallet(id);
-        setIdWallet(id)
+        setTransactionId(id)
     };
 
     const { data, isLoading, isError } = useFetchData<EWallets[]>(`/vendor/ewallets`, user?.token);

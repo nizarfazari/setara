@@ -7,8 +7,9 @@ import { useAuth } from '../../hooks/useAuth';
 import { TransactionBankReq, TransactionBankRes } from '../../types/Bank';
 import { postData } from '../../utils/GetData';
 import { useNotification } from '../../hooks/useNotification';
+import axios from 'axios';
 
-interface IConfirmationPINProps {}
+interface IConfirmationPINProps { }
 
 type LoginType = {
   pin: string;
@@ -16,7 +17,7 @@ type LoginType = {
 
 const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
   const [form] = Form.useForm();
-  const { user, transBank } = useAuth();
+  const { user, transactions } = useAuth();
   const { openNotificationWithIcon } = useNotification();
   const navigate = useNavigate();
 
@@ -29,16 +30,16 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
       const data = await postData<TransactionBankReq, TransactionBankRes>(
         '/transactions/bca-transfer',
         {
-          account_number: transBank.account_number,
-          destinationAccountNumber: transBank.recipients.numberDestination,
-          amount: +transBank.transaction.nominal,
+          account_number: transactions.transactionId,
+          destinationAccountNumber: transactions.recipients.numberDestination,
+          amount: +transactions.transaction.nominal,
           mpin: values.pin.toString(),
-          note: transBank.transaction.notes,
+          note: transactions.transaction.notes,
           savedAccount: true,
         },
         user?.token
       );
-
+    
       if (data.code !== 200) {
         navigate('/transaksi-gagal');
       } else {
@@ -46,13 +47,15 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         navigate('/transaksi-berhasil');
       }
     } catch (error) {
-      openNotificationWithIcon('error', 'Error', 'Transasksi gagal');
-      form.setFields([
-        {
-          name: 'pin',
-          errors: [error.response.data.message],
-        },
-      ]);
+      if (axios.isAxiosError(error)) {
+        openNotificationWithIcon('error', 'Error', 'Transasksi gagal');
+        form.setFields([
+          {
+            name: 'pin',
+            errors: [error?.response?.data.message],
+          },
+        ]);
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -74,7 +77,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
                 <label htmlFor="" className="text-body-large text-neutral-400 font-bold required">
                   PIN Anda
                 </label>
-                <Input className="input-label mt-3" type="number" placeholder="Masukan Username ID Anda" maxLength={6}  />
+                <Input className="input-label mt-3" type="number" placeholder="Masukan Username ID Anda" maxLength={6} />
               </div>
             </Form.Item>
 

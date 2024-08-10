@@ -17,8 +17,10 @@ export default function DestinationNumberPage() {
   const [saved, setSaved] = useState<BankUser[]>([]);
   const [filteredResults, setFilteredResults] = useState<BankUser[]>([]);
   const [search, setSearch] = useState("");
+  console.log(search)
 
   const { data, isLoading, isError } = useFetchData<ResponseBank>("/saved-accounts", user?.token);
+  console.log(isError)
 
   React.useEffect(() => {
     if (data) {

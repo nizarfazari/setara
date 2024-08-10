@@ -12,18 +12,17 @@ type PropsFormTopup = {
 }
 
 const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl }) => {
-  const { setTransaction, transWallet } = useAuth()
+  const { setProcessTransaction, transactions } = useAuth()
   const navigate = useNavigate();
 
 
   const onFinish: FormProps<TFormTopUp>["onFinish"] = (values) => {
-    console.log("Success:", values);
-    setTransaction({
+    setProcessTransaction({
       nominal: values.amount.toString(),
       notes: values.notes,
       isSavedAccount: true,
     })
-    console.log(values)
+    
     navigate(`${pathUrl}/tinjau`)
   };
 
@@ -34,8 +33,8 @@ const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl }) => {
   return (
     <Form layout="vertical" onFinish={onFinish} onFinishFailed={onFinishFailed}
       initialValues={{
-        amount: +transWallet?.transaction?.nominal || null,
-        notes: transWallet?.transaction?.notes || null,
+        amount: +transactions?.transaction?.nominal || null,
+        notes: transactions?.transaction?.notes || null,
       }}
     >
       <Form.Item

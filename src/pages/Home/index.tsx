@@ -165,7 +165,7 @@ const Home = () => {
     const token = user?.token;
     try {
       const response = await axios.get(
-        `${process.env.API_URL}api/v1/user/getBalance`,
+        `https://setara-api-service-production.up.railway.app/api/v1/user/getBalance`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

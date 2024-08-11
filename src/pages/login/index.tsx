@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import {  useState } from 'react';
 import type { FormProps } from 'antd';
 import { Button, Form, Input } from 'antd';
 import './login.css';
@@ -15,6 +15,11 @@ type LoginType = {
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth()
+
+
+  const username = localStorage.getItem('username');
+  console.log(username)
+
   const { openNotificationWithIcon } = useNotification();
   const onFinish: FormProps<LoginType>['onFinish'] = async (values) => {
     setLoading(true);
@@ -35,6 +40,7 @@ const Login = () => {
       openNotificationWithIcon('success', 'Success', data.message)
       console.log('Sign in successful:', data);
       login(data.data)
+      localStorage.setItem('username', values.username);
 
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : 'An unexpected error occurred.';
@@ -49,6 +55,7 @@ const Login = () => {
     console.log('Failed:', errorInfo);
   };
 
+
   return (
     <div className='container mx-auto flex justify-center items-center h-screen'>
       <div className="w-[563px] mx-auto">
@@ -57,30 +64,30 @@ const Login = () => {
           <p className="text-heading-6 text-black-600 mb-5">Selamat Datang Kembali</p>
         </div>
         <Form
-          name="basic"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item<LoginType>
-            name="username"
-            rules={[{ required: true, message: 'Mohon Masukan Username!' }]}
-          >
-            <div className='input-group'>
-              <Input className='input-label' placeholder='Masukan Username ID Anda' />
-              <label htmlFor="" className='required'>Username ID</label>
-            </div>
-          </Form.Item>
 
-          <Form.Item<LoginType>
-            name="password"
-            rules={[{ required: true, message: 'Mohon Masukan Password!' }]}
-          >
-            <div className='input-group'>
+          initialValues={{ username: username || null }}
+        >
+          <div className='input-group'>
+            <label htmlFor="username" className='required'>Username ID</label>
+            <Form.Item<LoginType>
+              name="username"
+              rules={[{ required: true, message: 'Mohon Masukan Username!' }]}
+            >
+              <Input className={`input-label ${username ? 'bg-black-500' : 'bg-white'}`} placeholder='Masukan Username ID Anda' disabled={!!username} id='username' />
+            </Form.Item>
+          </div>
+
+          <div className='input-group'>
+            <Form.Item<LoginType>
+              name="password"
+              rules={[{ required: true, message: 'Mohon Masukan Password!' }]}
+            >
               <Input.Password className='input-label' placeholder='Masukan Password Anda' />
-              <label htmlFor="" className='required'>Katasandi</label>
-            </div>
-          </Form.Item>
+            </Form.Item>
+            <label htmlFor="" className='required'>Katasandi</label>
+          </div>
 
           <Form.Item>
             <Button

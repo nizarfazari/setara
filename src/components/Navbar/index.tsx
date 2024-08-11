@@ -1,14 +1,29 @@
 import { useEffect, useState } from 'react';
-import { List, X, House, Receipt, User, Bell } from "@phosphor-icons/react";
+import { List, X, House, Receipt, User, Bell, SignOut } from "@phosphor-icons/react";
 import { useNavigate } from 'react-router-dom';
+import Popup from '../popup';
+
 
 const Navbar = () => {
     const [nav, setNav] = useState(false);
+    const [isPopupOpen, setPopupOpen] = useState(false);
     const navigate = useNavigate()
 
     const handleNav = () => {
         setNav(!nav);
     };
+
+    const togglePopup = () => {
+        setPopupOpen(!isPopupOpen);
+      };
+
+    const handleLogout = () =>{
+         // Clear user session or token here
+        localStorage.clear()
+
+        // Redirect to the login page or home page
+        navigate("/login");
+    }
 
     useEffect(() => {
         const handleResize = () => {
@@ -27,7 +42,8 @@ const Navbar = () => {
     }, []);
 
     return (
-        <header className="bg-primary-100 py-4" >
+        <>
+        <header className="bg-primary-100 py-4">
             <div className="container flex justify-between items-center max-w-[1240px] mx-auto">
                 <img onClick={() => navigate('/')} src="/images/logo.png" alt="Logo" className="h-8" />
                 <ul className='hidden md:flex gap-6 text-white'>
@@ -46,6 +62,10 @@ const Navbar = () => {
                     <a onClick={() => navigate('/')} className="cursor-pointer gap-[6px] flex items-center">
                         <User size={20} color='#fff' weight="fill" />
                         <p>Profile</p>
+                    </a>
+                    <a onClick={togglePopup} className="cursor-pointer gap-[6px] flex items-center">
+                        <SignOut size={20} color='#fff' weight="fill" />
+                        <p>Logout</p>
                     </a>
                 </ul>
                 <div onClick={handleNav} className='block md:hidden z-10 text-white'>
@@ -73,9 +93,15 @@ const Navbar = () => {
                     <User size={20} color='#115DA9' weight="fill" />
                     <p>Profile</p>
                 </a>
+                <a onClick={togglePopup} className="cursor-pointer p-4 flex gap-2 items-center">
+                    <SignOut size={20} color='#115DA9' weight="fill" />
+                    <p>Logout</p>
+                </a>
             </ul>
 
         </header>
+            <Popup  loGout ={handleLogout} isOpen={isPopupOpen} onClose={togglePopup}/>
+        </>
     );
 };
 

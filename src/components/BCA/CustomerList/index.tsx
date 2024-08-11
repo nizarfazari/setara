@@ -1,31 +1,31 @@
-
+import React from "react";
 import CustomerItem from "../CustomerItem";
 import { Card, Flex } from "antd";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
-import { EwalletUser } from "../../types/E-Wallet";
-import { recipientsData } from "../../hooks/useAuth";
+import { BankUser } from "../../../types/Bank";
+import { recipientsData } from "../../../hooks/useAuth";
 
 type TContactList = {
   pathUrl: string;
   header: string;
-  contacts: EwalletUser[];
-  setRecipients: (recipients: recipientsData) => void
+  contacts: BankUser[];
+  setRecipients: (recipients: recipientsData) => void;
 };
 
 export default function CustomerList({ pathUrl, header, contacts, setRecipients }: TContactList) {
   const navigate = useNavigate();
 
-  const onClickCard = (contact: EwalletUser) => {
-    console.log(contact)
+  const onClickCard = (contact: BankUser) => {
     setRecipients({
-      nama: contact.ewallet_user_name,
-      wallet: contact.ewallet_name,
-      numberDestination: contact.ewallet_user_phone_number,
-      imageUrl : contact.ewallet_user_image_path
-    })
-    navigate(`${pathUrl}/nominal-topup`)
-  }
+      nama: contact.account_name,
+      bank: contact.bank_name,
+      numberDestination: contact.account_number,
+      imageUrl: contact.user_image_path,
+      wallet: "",
+    });
+    navigate(`/bca/transfer-antar-bca/nominal-topup/`);
+  };
 
   return (
     <div className="text-primary-100 w-full">
@@ -38,7 +38,7 @@ export default function CustomerList({ pathUrl, header, contacts, setRecipients 
           <Flex vertical gap={12}>
             {contacts.map((contact, index) => (
               <Card className="border-white lg:border-primary-300" id="contact-item" key={index} onClick={() => onClickCard(contact)}>
-                <CustomerItem  {...contact} />
+                <CustomerItem {...contact} />
               </Card>
             ))}
           </Flex>

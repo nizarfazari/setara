@@ -1,5 +1,5 @@
 export function capitalFirstLetter(val: string | undefined) {
-    if(typeof val === 'undefined'){
+    if (typeof val === 'undefined') {
         return ''
     }
     return val
@@ -26,3 +26,16 @@ export const formatNorek = (norek: string | number | undefined): string | number
     month: "long",
     day: "numeric",
   });
+
+export function FormatCurrency(value: number | string | undefined) {
+    if (typeof value === 'undefined') {
+        return 0
+    }
+
+    if (!value) {
+        return 0
+    }
+    const rupiah = value.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
+    return `Rp. ${rupiah}`;
+
+}

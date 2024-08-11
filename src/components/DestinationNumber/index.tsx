@@ -3,43 +3,47 @@ import { Button, Card, Flex, Form, FormProps, Input } from "antd";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import CustomerItem from "../CustomerItem";
+import { EwalletUser, ResponseEWallet } from "../../types/E-Wallet";
 
-type TDestinationNumber = number;
-
-type TContact = {
-  name: string;
-  type: string;
-  number: string;
-  isFavorite?: boolean;
-  avatar: string;
+type TDestinationNumber = {
+  destinationNumber: number
 };
 
 interface PropsDestinationNumber {
   pathUrl: string;
-  contacts: { name: string; type: string; number: string; isFavorite?: boolean; avatar: string }[];
+  wallet: ResponseEWallet,
+
 }
 
-const DestinationNumber: React.FC<PropsDestinationNumber> = ({ pathUrl, contacts }) => {
-  const [filteredContact, setFilteredContact] = useState<TContact[] | []>([]);
+const DestinationNumber: React.FC<PropsDestinationNumber> = ({ pathUrl, wallet }) => {
+  const [filteredContact, setFilteredContact] = useState<EwalletUser[] | []>([]);
 
   const navigate = useNavigate();
 
   const onFinish: FormProps<TDestinationNumber>["onFinish"] = (values) => {
-    console.log("Success:", values);
+    const dataWallet: EwalletUser[] = [...wallet.favorites, ...wallet.saved]
+    console.log(dataWallet)
+
+    const data = dataWallet.filter((val) => (val.ewallet_user_phone_number.includes(values.destinationNumber.toString())))
+
+    console.log(data)
+    if (data) {
+      setFilteredContact(data)
+    }
   };
 
   const onFinishFailed: FormProps<TDestinationNumber>["onFinishFailed"] = (errorInfo) => {
     console.log("Failed:", errorInfo);
   };
 
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value == "") {
-      setFilteredContact([]);
-    } else {
-      const filterContact = contacts.filter((contact) => contact.number.includes(e.target.value) || contact.name.toLowerCase().includes(e.target.value.toLowerCase()));
-      setFilteredContact(filterContact);
-    }
-  };
+  // const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   if (e.target.value == "") {
+  //     setFilteredContact([]);
+  //   } else {
+  //     const filterContact = contacts.filter((contact) => contact.number.includes(e.target.value) || contact.name.toLowerCase().includes(e.target.value.toLowerCase()));
+  //     setFilteredContact(filterContact);
+  //   }
+  // };
 
   return (
     <Card className="w-full border-white md:border-primary-300">
@@ -57,16 +61,17 @@ const DestinationNumber: React.FC<PropsDestinationNumber> = ({ pathUrl, contacts
           rules={[{ required: true, message: "Nomor Tidak Boleh Kosong" }]}
           required
         >
-          <Input type="text" placeholder="Cari Nomor Tujuan" onChange={handleSearch} />
+          <Input type="number" placeholder="Cari Nomor Tujuan" />
         </Form.Item>
       </Form>
 
       <Flex className="mt-6" gap={12} vertical>
-        {filteredContact.map((contact, index) => (
+        {filteredContact && filteredContact.map((contact, index) => (
           <Card
             id="contact-item"
             className="border-white lg:border-primary-300"
             onClick={() => navigate(`${pathUrl}/nominal-topup`)}
+            key={index}
           >
             <CustomerItem {...contact} key={index} />
           </Card>

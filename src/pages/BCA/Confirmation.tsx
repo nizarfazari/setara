@@ -8,7 +8,7 @@ const Konfirmasi = () => {
   const navigate = useNavigate()
   const { slug } = useParams()
   const { transactions, user } = useAuth();
-  const admin = 1000
+  const admin = 0
   
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">

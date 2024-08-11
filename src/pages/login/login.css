@@ -1,0 +1,48 @@
+.input-group {
+    position: relative;
+    margin: 10px 0;
+}
+
+
+.input-group label {
+    position: absolute;
+    top: 0px;
+    background: white;
+    z-index: 1;
+    left: 20px;
+    transform: translateY(-50%);
+    font-size: 16px;
+    color: #5C5E61;
+    line-height: 28px;
+    font-weight: 600;
+    padding: 0 5px;
+    pointer-events: none;
+    transition: .5s;
+}
+
+.input-group .input-label {
+ 
+    border-radius: 8px;
+    outline: none;
+    padding: 18px 24px 18px 24px;
+    width: 100%;
+    border: 1px solid #B1B5BA;
+    font-size: 16px;
+    height: 55px;
+}
+
+
+/* .input-label:focus-visible~label,
+.input-label:valid~label {
+    top: 0px;
+    font-size: 16px;
+    background-color: white;
+}
+
+
+.input-label~label,
+.input-label~label{
+    top: 0px;
+    font-size: 16px;
+    background-color: white;
+} */

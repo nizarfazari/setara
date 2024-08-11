@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Button, Card, Form, Input } from "antd";
+import { Button, Card, Form, FormProps, Input } from "antd";
 import "./style.css";
-import { FormProps, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 import CustomerItem from "../CustomerItem";
 import { BankUser, ResponseBank } from "../../../types/Bank";
 import { Plus } from "@phosphor-icons/react";

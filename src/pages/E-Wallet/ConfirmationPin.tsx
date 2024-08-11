@@ -17,7 +17,7 @@ type LoginType = {
 
 const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
   const [form] = Form.useForm();
-  const { user, transWallet } = useAuth();
+  const { user, transactions } = useAuth();
   const { openNotificationWithIcon } = useNotification();
   const navigate = useNavigate();
   const [pin, setPin] = React.useState<string>("")
@@ -37,12 +37,12 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
       const data = await postData<TransactionEWalletReq, TransactionEWalletRes>(
         '/transactions/topup',
         {
-          idEwallet: transWallet.idWallet,
-          destinationPhoneNumber: transWallet.recipients.numberDestination,
-          amount: +transWallet.transaction.nominal,
+          idEwallet: transactions.transactionId,
+          destinationPhoneNumber: transactions.recipients.numberDestination,
+          amount: +transactions.transaction.nominal,
           mpin: pin,
-          note: transWallet.transaction.notes,
-          savedAccount: transWallet.transaction.isSavedAccount,
+          note: transactions.transaction.notes,
+          savedAccount: transactions.transaction.isSavedAccount ?? false ,
         },
         user?.token
       );

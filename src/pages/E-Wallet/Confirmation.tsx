@@ -7,9 +7,9 @@ import { FormatCurrency } from "../../utils"
 const Konfirmasi = () => {
   const navigate = useNavigate()
   const { slug } = useParams()
-  const { transWallet, user } = useAuth();
+  const { transactions, user } = useAuth();
   const admin = 1000
-  
+  console.log(user)
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
       <Breadcrumb title="Konfirmasi" subtitle="Harap periksa kembali sebelum melakukan konfirmasi"></Breadcrumb>
@@ -32,13 +32,13 @@ const Konfirmasi = () => {
           <div className="my-5 mb-5">
             <p className="font-bold mb-2">Penerima</p>
             <div className="flex items-center">
-              <img className="w-[70px] mr-4" src={transWallet.recipients.imageUrl} alt="" />
+              <img className="w-[70px] mr-4" src={transactions.recipients.imageUrl} alt="" />
               <div className="text-[12px] md:text-[14px]">
-                <p className="font-bold">{transWallet.recipients.nama}</p>
+                <p className="font-bold">{transactions.recipients.nama}</p>
                 <div className="flex items-center">
-                  <p>{transWallet.recipients.wallet}</p>
+                  <p>{transactions.recipients.wallet}</p>
                   <img className="w-[6px] h-[6px] mx-2" src="/images/icons/dot.png"></img>
-                  <p>{transWallet.recipients.numberDestination}</p>
+                  <p>{transactions.recipients.numberDestination}</p>
                 </div>
               </div>
             </div>
@@ -54,18 +54,18 @@ const Konfirmasi = () => {
                 <p>Catatan</p>
               </div>
               <div>
-                <p>{FormatCurrency(transWallet.transaction.nominal)}</p>
+                <p>{FormatCurrency(transactions.transaction.nominal)}</p>
                 <p>{FormatCurrency(admin)}</p>
-                <p>{transWallet.transaction.notes ? transWallet.transaction.notes : "-" }</p>
+                <p>{transactions.transaction.notes ? transactions.transaction.notes : "-" }</p>
               </div>
             </div>
             <hr className='border-neutral-300 my-2' />
             <div className='flex justify-between font-bold'>
               <p>Total</p>
-              <p>{FormatCurrency(+transWallet.transaction.nominal + admin)}</p>
+              <p>{FormatCurrency(+transactions.transaction.nominal + admin)}</p>
             </div>
           </Card>
-          <Button onClick={() => navigate(`/e-wallet/${slug}/konfirmasi`)} type="primary" className="bg-primary-100 h-10 w-full mt-5 lg:mt-10 rounded-lg">Lanjutkan</Button>
+          <Button onClick={() => navigate(`/e-wallet/${slug}/konfirmasi`)} type="primary" className="bg-primary-100 h-10 w-full mt-5 lg:mt-10 rounded-lg">Top Up</Button>
         </div>
       </div>
     </div>

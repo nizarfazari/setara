@@ -35,26 +35,28 @@ export type TransactionBankReq = {
 } 
 
 interface User {
-    accountNumber: string;
-    name: string;
-    imagePath: string;
-    bankName: string;
-}
-
-interface destinationUser {
     name: string;
     bank: string;
-    accountNumber: string;
-    imagePath: string;
+    account_number: string;
+    image_path: string;
 }
 
-export type TransactionBankRes = {
-    
-    user: User;
-    destinationUser: destinationUser;
+
+interface TransferData {
+    source_user: User;
+    destination_user: User;
     amount: number;
-    adminFee: number;
-    totalAmount: number;
+    admin_fee: number;
+    total_amount: number;
+    note: string;
+}
+
+export type TransactionBankRes = {    
+    code: number;
+    message: string;
+    status: boolean;
+    data: TransferData;
+
 }
 
 

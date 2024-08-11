@@ -4,7 +4,7 @@ import { Card, Flex } from "antd";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import { EwalletUser } from "../../types/E-Wallet";
-import { recipientsData } from "../../hooks/useAuth";
+import { recipientsData } from "../../types/Transaction";
 
 type TContactList = {
   pathUrl: string;
@@ -18,12 +18,13 @@ export default function CustomerList({ pathUrl, header, contacts, setRecipients,
   const navigate = useNavigate();
 
   const onClickCard = (contact: EwalletUser) => {
-    console.log(contact)
     setRecipients({
       nama: contact.ewallet_user_name,
       wallet: contact.ewallet_name,
       numberDestination: contact.ewallet_user_phone_number,
-      imageUrl : contact.ewallet_user_image_path
+      imageUrl: contact.ewallet_user_image_path,
+      bank : '',
+      account_number : ''
     })
     navigate(`${pathUrl}/nominal-topup`)
   }

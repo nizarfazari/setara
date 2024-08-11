@@ -38,7 +38,6 @@ const Login = () => {
 
       }
       openNotificationWithIcon('success', 'Success', data.message)
-      console.log('Sign in successful:', data);
       login(data.data)
       localStorage.setItem('username', values.username);
 

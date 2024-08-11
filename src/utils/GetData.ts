@@ -33,3 +33,22 @@ export async function postData<TRequest, TResponse>(
         throw error; // Re-throw the error so it can be handled by the caller
     }
 }
+
+
+export async function putData<TRequest, TResponse>(
+    url: string,
+    data: TRequest,
+    token: string | null | undefined
+): Promise<TResponse> {
+    try {
+        const headers = token ? { Authorization: `Bearer ${token}` } : {};
+        const response = await axios.put(`https://setara-api-service-production.up.railway.app/api/v1${url}`, data, {
+            headers: headers,
+        });
+
+        return response.data ?? {};
+    } catch (error) {
+        console.log(error)
+        throw error; // Re-throw the error so it can be handled by the caller
+    }
+}

@@ -22,7 +22,7 @@ export default function CustomerList({  header, contacts, setRecipients }: TCont
       bank: contact.bank_name,
       numberDestination: contact.account_number,
       imageUrl: contact.user_image_path,
-      wallet: "",
+      wallet:  contact.bank_name,
       account_number: ""
     });
     navigate(`/bca/transfer-antar-bca/nominal-topup/`);

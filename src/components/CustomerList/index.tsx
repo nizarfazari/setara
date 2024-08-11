@@ -4,25 +4,27 @@ import { Card, Flex } from "antd";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import { EwalletUser } from "../../types/E-Wallet";
-import { recipientsData } from "../../hooks/useAuth";
+import { recipientsData } from "../../types/Transaction";
 
 type TContactList = {
   pathUrl: string;
   header: string;
   contacts: EwalletUser[];
-  setRecipients: (recipients: recipientsData) => void
+  setRecipients: (recipients: recipientsData) => void;
+  nullMessage?: string;
 };
 
-export default function CustomerList({ pathUrl, header, contacts, setRecipients }: TContactList) {
+export default function CustomerList({ pathUrl, header, contacts, setRecipients, nullMessage }: TContactList) {
   const navigate = useNavigate();
 
   const onClickCard = (contact: EwalletUser) => {
-    console.log(contact)
     setRecipients({
       nama: contact.ewallet_user_name,
       wallet: contact.ewallet_name,
       numberDestination: contact.ewallet_user_phone_number,
-      imageUrl : contact.ewallet_user_image_path
+      imageUrl: contact.ewallet_user_image_path,
+      bank : '',
+      account_number : ''
     })
     navigate(`${pathUrl}/nominal-topup`)
   }
@@ -44,7 +46,7 @@ export default function CustomerList({ pathUrl, header, contacts, setRecipients 
           </Flex>
         </Card>
       ) : (
-        <p className="text-neutral-300 text-center font-bold text-caption-large md:text-body-large">Daftar Kosong</p>
+        <p className="text-neutral-300 text-center font-bold text-caption-large my-9 md:text-body-large">{nullMessage ? nullMessage : "Daftar Kosong"}</p>
       )}
     </div>
   );

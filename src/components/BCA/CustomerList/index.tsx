@@ -1,10 +1,10 @@
-import React from "react";
 import CustomerItem from "../CustomerItem";
 import { Card, Flex } from "antd";
 import "./style.css";
 import { useNavigate } from "react-router-dom";
 import { BankUser } from "../../../types/Bank";
-import { recipientsData } from "../../../hooks/useAuth";
+import { recipientsData } from "../../../types/Transaction";
+
 
 type TContactList = {
   pathUrl: string;
@@ -13,7 +13,7 @@ type TContactList = {
   setRecipients: (recipients: recipientsData) => void;
 };
 
-export default function CustomerList({ pathUrl, header, contacts, setRecipients }: TContactList) {
+export default function CustomerList({  header, contacts, setRecipients }: TContactList) {
   const navigate = useNavigate();
 
   const onClickCard = (contact: BankUser) => {
@@ -23,6 +23,7 @@ export default function CustomerList({ pathUrl, header, contacts, setRecipients 
       numberDestination: contact.account_number,
       imageUrl: contact.user_image_path,
       wallet: "",
+      account_number: ""
     });
     navigate(`/bca/transfer-antar-bca/nominal-topup/`);
   };

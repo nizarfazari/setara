@@ -9,9 +9,6 @@ import { useAuth } from "../../../hooks/useAuth";
 import { useFetchData } from "../../../hooks/useFetchData";
 import { ResponseEWallet } from "../../../types/E-Wallet";
 
-
-
-
 export default function DestinationNumberPage() {
   const { slug } = useParams<{ slug: string }>();
   const { user, setRecipients } = useAuth();
@@ -30,6 +27,8 @@ export default function DestinationNumberPage() {
             <Skeleton.Button active block size="large" />
             <Skeleton active paragraph={{ rows: 0 }} className="mt-10" />
             <Skeleton.Input active block size="large" />
+            <Skeleton active paragraph={{ rows: 0 }} className="mt-10" />
+            <Skeleton active paragraph={{ rows: 0 }} className="my-9"/>
           </Card>
           <Card className="border-white lg:border-[#E4EDFF] w-full">
             <Card className="w-full border-white md:border-primary-300">
@@ -67,7 +66,7 @@ export default function DestinationNumberPage() {
         <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
           {data ? (
             <Flex vertical gap={30} align="start">
-              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients} />
+              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients}/>
               <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Tersimpan" contacts={data.saved} setRecipients={setRecipients}/>
             </Flex>
           ) : <></>}

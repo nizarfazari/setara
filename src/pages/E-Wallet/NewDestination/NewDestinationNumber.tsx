@@ -27,20 +27,20 @@ type UserBalance = {
 
 export default function NewDestinationNumberPage() {
   const [form] = Form.useForm();
-  const { user, setTransaction, setRecipients } = useAuth();
+  const { user, setProcessTransaction, setRecipients } = useAuth();
   const { slug } = useParams<{ slug: string | undefined }>();
   const navigate = useNavigate();
   const [isVerified, setIsVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const { data: userBalance } = useFetchData<UserBalance>(`/user/getBalance`, user?.token);
-  const { data: ewallets} = useFetchData<EWallets[]>(`/vendor/ewallets`, user?.token);
+  const { data: ewallets } = useFetchData<EWallets[]>(`/vendor/ewallets`, user?.token);
 
   // get specific ewallet id based on slug
   const ewalletId = ewallets?.filter((item: { name: string }) => item.name.toLowerCase() == slug?.toLowerCase())[0].id;
 
   const onFinish: FormProps<FieldType>["onFinish"] = async (values) => {
-    setTransaction({
+    setProcessTransaction({
       nominal: values.amount.toString(),
       notes: values.notes,
       isSavedAccount: values.savedList
@@ -71,13 +71,16 @@ export default function NewDestinationNumberPage() {
           user?.token
         );
 
+
         if (response.status) {
           setIsVerified(true);
           setRecipients({
             nama: response.data.name,
             wallet: response.data.bank,
+            bank: '',
+            account_number: '',
             numberDestination: response.data.no,
-            imageUrl : response.data.image_path,
+            imageUrl: response.data.image_path,
           })
           form.setFields([{ name: "name", value: response.data.name }]);
           setIsLoading(false);
@@ -147,7 +150,7 @@ export default function NewDestinationNumberPage() {
           </Form.Item>
 
           <Form.Item name="name" label="Nama Nomor E-Wallet">
-            <Input type="text" placeholder="Masukkan Nama" disabled={isVerified ? false : true} readOnly/>
+            <Input type="text" placeholder="Masukkan Nama" disabled={isVerified ? false : true} readOnly />
           </Form.Item>
 
           <Form.Item name="source" label="Sumber Rekening" required>

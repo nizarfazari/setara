@@ -1,6 +1,6 @@
 // Tipe data untuk item favorit dan tersimpan
 export type EwalletUser = {
-    id?: string;
+    id: string;
     owner_id?: string;
     ewallet_user_id?: string;
     favorite?: boolean | undefined;
@@ -22,7 +22,7 @@ export type EWallets = {
     id: string;
     name: string;
     image_path: string;
-  }
+}
 
 export type SearchEWalletReq = {
     noEwallet: string;
@@ -34,10 +34,10 @@ export type SearchEWalletRes = {
     message: string;
     status: boolean;
     data: {
-      no: string;
-      name: string;
-      bank: string;
-      image_path: string;
+        no: string;
+        name: string;
+        bank: string;
+        image_path: string;
     }
 }
 
@@ -79,3 +79,19 @@ export type TransactionEWalletRes = {
 
 
 
+
+
+interface UpdateFavoriteData {
+    idTersimpan: string;
+    favorite: boolean;
+}
+
+
+export interface UpdateFavoriteResponse {
+    code: number;
+    message: string;
+    status: boolean;
+    data: UpdateFavoriteData;
+}
+
+export type UpdateFavourieRequest = UpdateFavoriteData

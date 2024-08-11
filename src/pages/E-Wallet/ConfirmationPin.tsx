@@ -9,7 +9,7 @@ import { postData } from '../../utils/GetData';
 import { useNotification } from '../../hooks/useNotification';
 import axios from 'axios';
 
-interface IConfirmationPINProps {}
+interface IConfirmationPINProps { }
 
 type LoginType = {
   pin: string;
@@ -24,7 +24,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const handlePinChange = (e : React.ChangeEvent<HTMLInputElement>) => {
+  const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.value.length <= 6) {
       setPin(e.target.value);
     }
@@ -42,7 +42,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
           amount: +transactions.transaction.nominal,
           mpin: pin,
           note: transactions.transaction.notes,
-          savedAccount: transactions.transaction.isSavedAccount ?? false ,
+          savedAccount: transactions.transaction.isSavedAccount ?? false,
         },
         user?.token
       );
@@ -54,12 +54,12 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         navigate('/transaksi-berhasil');
       }
     } catch (error) {
-      if(axios.isAxiosError(error)) {
+      if (axios.isAxiosError(error)) {
         openNotificationWithIcon('error', 'Error', 'Transasksi gagal');
         form.setFields([
           {
             name: 'pin',
-            errors: [error?.response?.data.message],
+            errors: ["PIN Anda Salah"],
           },
         ]);
       }

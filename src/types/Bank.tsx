@@ -1,6 +1,6 @@
 // Tipe data untuk item favorit dan tersimpan
 export type BankUser = {
-    id?: string;
+    id: string;
     owner_id?: string;
     bank_user_id?: string;
     favorite?: boolean | undefined;
@@ -31,7 +31,7 @@ export type TransactionBankReq = {
     amount: number
     mpin: string
     note: string | undefined
-    savedAccount: true
+    savedAccount: boolean
 } 
 
 interface User {

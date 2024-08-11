@@ -35,7 +35,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
           amount: +transactions.transaction.nominal,
           mpin: values.pin.toString(),
           note: transactions.transaction.notes,
-          savedAccount: true,
+          savedAccount: transactions.transaction.isSavedAccount ?? false,
         },
         user?.token
       );
@@ -52,7 +52,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         form.setFields([
           {
             name: 'pin',
-            errors: [error?.response?.data.message],
+            errors: ["PIN Anda Salah"],
           },
         ]);
       }

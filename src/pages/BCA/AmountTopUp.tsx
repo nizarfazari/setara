@@ -39,7 +39,7 @@ export default function AmountTopUpPage() {
               <h5 className="text-primary-100 mb-2 text-body-small md:text-heading-5">Penerima</h5>
               <CustomerItem {...USER} />
             </div>
-            <FormTopUp pathUrl={`/bca/${slug}`} />
+            <FormTopUp pathUrl={`/bca/${slug}`} isTfBa />
           </Flex>
         </Card>
       </div>

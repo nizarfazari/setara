@@ -10,10 +10,11 @@ type TContactList = {
   pathUrl: string;
   header: string;
   contacts: EwalletUser[];
-  setRecipients: (recipients: recipientsData) => void
+  setRecipients: (recipients: recipientsData) => void;
+  nullMessage?: string;
 };
 
-export default function CustomerList({ pathUrl, header, contacts, setRecipients }: TContactList) {
+export default function CustomerList({ pathUrl, header, contacts, setRecipients, nullMessage }: TContactList) {
   const navigate = useNavigate();
 
   const onClickCard = (contact: EwalletUser) => {
@@ -45,7 +46,7 @@ export default function CustomerList({ pathUrl, header, contacts, setRecipients 
           </Flex>
         </Card>
       ) : (
-        <p className="text-neutral-300 text-center font-bold text-caption-large md:text-body-large">Daftar Kosong</p>
+        <p className="text-neutral-300 text-center font-bold text-caption-large my-9 md:text-body-large">{nullMessage ? nullMessage : "Daftar Kosong"}</p>
       )}
     </div>
   );

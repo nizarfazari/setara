@@ -71,6 +71,7 @@ export default function NewDestinationNumberPage() {
           user?.token
         );
 
+
         if (response.status) {
           setIsVerified(true);
           setRecipients({

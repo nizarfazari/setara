@@ -22,7 +22,7 @@ export const FavoriteTransaction: React.FC = () => {
 
   const fetchFavorites = async () => {
     try {
-      setLoading(true);  // Set loading to true before fetching data
+      setLoading(true); 
       const [response1, response2] = await Promise.all([
         axios.get<{
           data: { favorites: CombinedItem[] };
@@ -68,33 +68,30 @@ export const FavoriteTransaction: React.FC = () => {
         ...savedEwalletUsersWithType,
       ];
 
-      setFavorites(combinedData);  // Update favorites state
+      setFavorites(combinedData);  
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.code === "ECONNABORTED") {
-          setErrorMessage("Belum ada transaksi akun favorit.");  // Handle timeout error
+          setErrorMessage("Belum ada transaksi akun favorit.");  
         }
       } else {
-        setErrorMessage("Terjadi kesalahan yang tidak terduga.");  // Handle other errors
+        setErrorMessage("Terjadi kesalahan yang tidak terduga.");  
       }
     } finally {
-      setLoading(false);  // Set loading to false after fetching
+      setLoading(false);  
     }
   };
 
-  // Fetch data when component mounts and when user changes
   useEffect(() => {
     if (user) {
       fetchFavorites();
     }
   }, [user]);
 
-  // Render loading indicator
   if (loading) {
     return <FavoriteLoading />;
   }
 
-  // Render error message if present
   if (errorMessage) {
     return (
       <p className="text-primary-100 text-body-large font-semibold">
@@ -103,7 +100,6 @@ export const FavoriteTransaction: React.FC = () => {
     );
   }
 
-  // Render message if no favorites found
   if (favorites.length === 0) {
     return (
       <p className="text-primary-100 text-body-large font-semibold">
@@ -112,7 +108,6 @@ export const FavoriteTransaction: React.FC = () => {
     );
   }
 
-  // Render favorite transactions
   return (
     <div>
       {" "}

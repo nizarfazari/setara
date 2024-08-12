@@ -80,19 +80,19 @@ export default function DestinationNumberPage() {
 
   return (
     <div className="container">
-        <div className="my-[30px]">
-          <Breadcrumb title={capitalFirstLetter(slug)} subtitle="Masukkan Nomor Tujuan Transfer" />
-        </div>
-        <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">
-        <div className="basis-1/2">
+      <div className="my-[30px]">
+        <Breadcrumb title={capitalFirstLetter(slug)} subtitle="Masukkan Nomor Tujuan Transfer" />
+      </div>
+      <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">
+        <div className="lg:basis-1/2 w-full">
           {data && (
             <DestinationNumber pathUrl={`bca/${slug}`} bank={data ?? []} onSearch={handleSearch} />
           )}
-            <div className="mt-6">
-              <CustomerList header="Hasil Pencarian" contacts={filteredResults} setRecipients={setRecipients} pathUrl={""} />
-            </div>
+          <div className="mt-6">
+            <CustomerList header="Hasil Pencarian" contacts={filteredResults} setRecipients={setRecipients} pathUrl={""} />
+          </div>
         </div>
-        <div className="basis-1/2">
+        <div className="lg:basis-1/2 w-full">
           <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
             {data && (
               <Flex vertical gap={30} align="start">

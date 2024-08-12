@@ -14,6 +14,7 @@ export default function AmountTopUpPage() {
 
 
   const USER = {
+    id : transactions.recipients.nama,
     ewallet_user_name: transactions.recipients.nama,
     ewallet_name: transactions.recipients.wallet,
     ewallet_user_phone_number: transactions.recipients.numberDestination,

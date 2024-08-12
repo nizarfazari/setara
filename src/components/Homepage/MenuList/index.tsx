@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import iconInfo from "/images/homepage/info.svg";
 import iconTransfer from "/images/homepage/tf-kartu.svg";
 import iconEwallet from "/images/homepage/tf-e-wallet.svg";
@@ -18,6 +18,8 @@ export const MenuList = () => {
   const [error, setError] = useState<AxiosError | null>(null);
   const { user } = useAuth();
   const navigate = useNavigate();
+
+  console.log(error)
 
   const showModal = () => {
     setIsModalOpen(true);

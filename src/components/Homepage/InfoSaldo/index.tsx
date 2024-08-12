@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
-import { Avatar, List, notification, Skeleton } from "antd";
+import {  notification, Skeleton } from "antd";
 import { GoDotFill } from "react-icons/go";
 import { CopySimple, Eye, EyeSlash } from "@phosphor-icons/react";
 import { FormatCurrency, formatNorek } from "../../../utils/index";
@@ -12,7 +12,7 @@ const InfoSaldo: React.FC = () => {
   const [balance, setBalance] = useState<number>();
   const [error, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-
+  console.log(error)
   const { user } = useAuth();
   const dots = new Array(7).fill(null);
 

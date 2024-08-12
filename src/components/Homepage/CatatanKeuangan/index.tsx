@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
 import axios, { AxiosError } from "axios";
 import { MonthlyReport } from "../../../types/Home";
@@ -29,10 +29,12 @@ export const CatatanKeuangan = () => {
   const [selectedMonth, setSelectedMonth] = useState("Januari 2024");
   const { user } = useAuth();
 
+  console.log(error)
+
   const fetchMonthlyReport = async (month: number, year: string) => {
     const token = user?.token;
     setLoading(true);
-    setError(null); 
+    setError(null);
 
     try {
       const response = await axios.get(
@@ -51,7 +53,7 @@ export const CatatanKeuangan = () => {
       setError(error as AxiosError);
       console.error("Error fetching monthly report:", error);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   };
 
@@ -192,11 +194,10 @@ export const CatatanKeuangan = () => {
           <div>
             <h5 id="balance-label">Selisih</h5>
             <h5
-              className={`${
-                (monthlyReport?.total ?? 0) < 0
+              className={`${(monthlyReport?.total ?? 0) < 0
                   ? "text-red-500"
                   : "text-green-600"
-              } text-heading-6 font-bold`}
+                } text-heading-6 font-bold`}
               aria-label={`Selisih bulan ini: ${FormatCurrency(
                 monthlyReport?.total
               )}`}

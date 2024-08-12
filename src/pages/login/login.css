@@ -3,7 +3,6 @@
     margin: 10px 0;
 }
 
-
 .input-group label {
     position: absolute;
     top: 0px;
@@ -21,7 +20,6 @@
 }
 
 .input-group .input-label {
- 
     border-radius: 8px;
     outline: none;
     padding: 18px 24px 18px 24px;
@@ -31,14 +29,12 @@
     height: 55px;
 }
 
-
 /* .input-label:focus-visible~label,
 .input-label:valid~label {
     top: 0px;
     font-size: 16px;
     background-color: white;
 }
-
 
 .input-label~label,
 .input-label~label{

@@ -6,7 +6,7 @@ import { FormatCurrency } from "../../utils";
 const TransaksiBerhasil = () => {
   const navigate = useNavigate()
   const { user, transactions, clearTransaction } = useAuth()
-  const admin = 1000
+  const admin = transactions.recipients.wallet == "Tahapan BCA" ? 0 : 1000
 
   const onBackToHome = () => {
     clearTransaction()

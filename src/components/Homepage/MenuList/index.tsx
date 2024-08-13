@@ -6,7 +6,7 @@ import iconBuy from "/images/homepage/Pembelian.svg";
 import iconInvest from "/images/homepage/investasi.svg";
 import iconCardless from "/images/homepage/Cardless.svg";
 import { Button, Modal } from "antd";
-import { FormatCurrency, formatNorek } from "../../../utils";
+import { FormatCurrency, formatNorek, formattedTimeWithColon } from "../../../utils";
 import { formattedDate } from "../../../utils";
 import { useAuth } from "../../../hooks/useAuth";
 import axios, { AxiosError } from "axios";
@@ -98,7 +98,7 @@ export const MenuList = () => {
                   className="text-primary-100"
                   aria-label={`Tanggal saat ini: ${formattedDate}`}
                 >
-                  {formattedDate}
+                  {formattedDate}, {formattedTimeWithColon}
                 </p>
                 <p
                   className="text-primary-100 font-semibold py-2"

@@ -2,34 +2,39 @@ import { Flex } from "antd";
 import dotIcon from "/images/icons/ic_dot.svg";
 import { Heart } from "@phosphor-icons/react";
 import { BankUser } from "../../../types/Bank";
-
-import { UpdateFavoriteResponse, UpdateFavourieRequest } from "../../../types/E-Wallet";
 import { useAuth } from "../../../hooks/useAuth";
 import { putData } from "../../../utils/GetData";
 import { useNotification } from "../../../hooks/useNotification";
+import { UpdateFavoriteResponse, UpdateFavourieRequest } from "../../../types/E-Wallet";
 
-export default function CustomerItem({ id, user_image_path, account_name, account_number, bank_name, favorite }: BankUser) {
+interface CustomerItemProps extends BankUser {
+  refetch?: () => void;
+}
+
+export default function CustomerItem({ id, user_image_path, account_name, account_number, bank_name, favorite, refetch }: CustomerItemProps) {
   const { user } = useAuth();
-  
   const { openNotificationWithIcon } = useNotification();
 
   const onClickFavourite = async (e: React.MouseEvent<HTMLOrSVGElement>) => {
     e.stopPropagation();
     try {
-       await putData< UpdateFavourieRequest,UpdateFavoriteResponse>('/favorite-account', {
+      await putData<UpdateFavourieRequest, UpdateFavoriteResponse>('/favorite-account', {
         idTersimpan: id,
         favorite: !favorite
       }, user?.token);
 
       openNotificationWithIcon('success', 'Success', "Berhasil Mengganti Favorit");
-      window.location.reload()
 
+      // Refetch data after successful update
+      if (refetch) {
+        refetch();
+      }
     } catch (error) {
       openNotificationWithIcon('error', 'Error', "Gagal Mengganti Favorit");
       console.error(error);
     }
   }
-  
+
   return (
     <Flex justify="space-between" className="text-primary-100 font-bold cursor-pointer" align="center">
       <Flex gap="1rem">
@@ -44,7 +49,7 @@ export default function CustomerItem({ id, user_image_path, account_name, accoun
         </Flex>
       </Flex>
       {favorite !== undefined && (
-           <Heart weight={`${favorite ? "fill" : "regular"}`} className="size-[22px] md:size-[32px] " onClick={onClickFavourite} />
+        <Heart weight={`${favorite ? "fill" : "regular"}`} className="size-[22px] md:size-[32px] " onClick={onClickFavourite} />
       )}
     </Flex>
   );

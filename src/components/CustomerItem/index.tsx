@@ -7,7 +7,11 @@ import { useAuth } from "../../hooks/useAuth";
 import { useNotification } from "../../hooks/useNotification";
 
 
-export default function CustomerItem({ id, ewallet_user_image_path, ewallet_name, ewallet_user_name, ewallet_user_phone_number, favorite }: EwalletUser) {
+interface CustomerItemProps extends EwalletUser {
+  refetch?: () => void;
+}
+
+export default function CustomerItem({ id, ewallet_user_image_path, ewallet_name, ewallet_user_name, ewallet_user_phone_number, favorite ,refetch }: CustomerItemProps) {
   const { user } = useAuth();
   
   const { openNotificationWithIcon } = useNotification();
@@ -21,7 +25,9 @@ export default function CustomerItem({ id, ewallet_user_image_path, ewallet_name
       }, user?.token);
 
       openNotificationWithIcon('success', 'Success', "Berhasil Mengganti Favorit");
-      window.location.reload()
+      if(refetch){
+        refetch()
+      }
 
     } catch (error) {
       openNotificationWithIcon('error', 'Error', "Gagal Mengganti Favorit");

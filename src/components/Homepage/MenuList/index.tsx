@@ -5,7 +5,7 @@ import iconEwallet from "/images/homepage/tf-e-wallet.svg";
 import iconBuy from "/images/homepage/Pembelian.svg";
 import iconInvest from "/images/homepage/investasi.svg";
 import iconCardless from "/images/homepage/Cardless.svg";
-import { Button, Modal, Skeleton, Space } from "antd";
+import { Button, Modal } from "antd";
 import { FormatCurrency, formatNorek } from "../../../utils";
 import { formattedDate } from "../../../utils";
 import { useAuth } from "../../../hooks/useAuth";
@@ -16,7 +16,6 @@ export const MenuList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [balance, setBalance] = useState<number>();
   const [error, setError] = useState<AxiosError | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
   const { user } = useAuth();
   const navigate = useNavigate();
 

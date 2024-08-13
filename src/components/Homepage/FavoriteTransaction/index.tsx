@@ -11,7 +11,6 @@ import { Autoplay, Navigation } from "swiper/modules";
 import { ArrowCircleLeft, ArrowCircleRight } from "@phosphor-icons/react";
 import iconTransFav from "/images/homepage/icon-trans-fav.png";
 import iconTopupFav from "/images/homepage/icon-ewallet-fav2.png";
-import { Skeleton } from "antd";
 
 export const FavoriteTransaction: React.FC = () => {
   const { user } = useAuth();

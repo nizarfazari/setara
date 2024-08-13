@@ -21,7 +21,6 @@ const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl, isTfBa = false }) => {
     setProcessTransaction({
       nominal: values.amount.toString(),
       notes: values.notes,
-      isSavedAccount: true,
     })
 
     navigate(`${pathUrl}/tinjau`)

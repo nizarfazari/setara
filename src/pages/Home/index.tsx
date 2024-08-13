@@ -3,7 +3,6 @@ import { FavoriteTransaction } from "../../components/Homepage/FavoriteTransacti
 import InfoSaldo from "../../components/Homepage/InfoSaldo";
 import { MenuList } from "../../components/Homepage/MenuList";
 import { CatatanKeuangan } from "../../components/Homepage/CatatanKeuangan";
-import { Skeleton, Space } from "antd";
 
 const Home = () => {
   const { user } = useAuth();

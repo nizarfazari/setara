@@ -9,7 +9,7 @@ import { postData } from '../../utils/GetData';
 import { useNotification } from '../../hooks/useNotification';
 import axios from 'axios';
 
-interface IConfirmationPINProps {}
+interface IConfirmationPINProps { }
 
 type LoginType = {
   pin: string;
@@ -20,12 +20,12 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
   const { user, transactions } = useAuth();
   const { openNotificationWithIcon } = useNotification();
   const navigate = useNavigate();
-  const [pin, setPin] = React.useState<string>("")
+  const [pin, setPin] = React.useState<string>("");
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-  const handlePinChange = (e : React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value.length <= 6) {
+  const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (/^[0-9]*$/.test(e.target.value) && e.target.value.length <= 6) {
       setPin(e.target.value);
     }
   };
@@ -42,7 +42,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
           amount: +transactions.transaction.nominal,
           mpin: pin,
           note: transactions.transaction.notes,
-          savedAccount: transactions.transaction.isSavedAccount ?? false ,
+          savedAccount: transactions.transaction.isSavedAccount ?? false,
         },
         user?.token
       );
@@ -54,12 +54,12 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         navigate('/transaksi-berhasil');
       }
     } catch (error) {
-      if(axios.isAxiosError(error)) {
+      if (axios.isAxiosError(error)) {
         openNotificationWithIcon('error', 'Error', 'Transasksi gagal');
         form.setFields([
           {
             name: 'pin',
-            errors: [error?.response?.data.message],
+            errors: ["PIN Anda Salah"],
           },
         ]);
       }
@@ -84,7 +84,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
                 <label htmlFor="" className="text-body-large text-neutral-400 font-bold required">
                   PIN Anda
                 </label>
-                <Input className="input-label mt-3" type="number" placeholder="Masukan Username ID Anda" maxLength={6} value={pin} onChange={handlePinChange} />
+                <Input.Password className="input-label mt-3 py-[18px] px-6" value={pin} onChange={handlePinChange} placeholder='Masukkan PIN Anda' />
               </div>
             </Form.Item>
 

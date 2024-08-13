@@ -8,8 +8,24 @@ export function capitalFirstLetter(val: string | undefined) {
         .join(' ');
 }
 
+export const formatNorek = (norek: string | number | undefined): string | number => {
+    if (typeof norek === "undefined") {
+      return 0;
+    }
+    const str = norek.toString();
 
+    if (str.length % 4 === 0) {
+      return str;
+    }
+    return str.replace(/(.{4})/g, "$1-");
+  };
 
+  const currentDate = new Date();
+  export const formattedDate = currentDate.toLocaleDateString("id-ID", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
 export function FormatCurrency(value: number | string | undefined) {
     if (typeof value === 'undefined') {

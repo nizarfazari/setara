@@ -12,7 +12,6 @@ import { ArrowCircleLeft, ArrowCircleRight } from "@phosphor-icons/react";
 import iconTransFav from "/images/homepage/icon-trans-fav.png";
 import iconTopupFav from "/images/homepage/icon-ewallet-fav2.png";
 
-
 export const FavoriteTransaction: React.FC = () => {
   const { user } = useAuth();
   const [favorites, setFavorites] = useState<CombinedItem[]>([]);
@@ -22,32 +21,26 @@ export const FavoriteTransaction: React.FC = () => {
 
   const fetchFavorites = async () => {
     try {
-      setLoading(true); 
+      setLoading(true);
       const [response1, response2] = await Promise.all([
         axios.get<{
           data: { favorites: CombinedItem[] };
-        }>(
-          `${import.meta.env.VITE_API_URL}/saved-accounts`,
-          {
-            headers: {
-              Authorization: `Bearer ${user?.token}`,
-            },
-            timeout: 5000, // 5-second timeout
-          }
-        ),
+        }>(`${import.meta.env.VITE_API_URL}/saved-accounts`, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+          timeout: 5000, // 5-second timeout
+        }),
         axios.get<{
           data: { favorites: CombinedItem[] };
-        }>(`${import.meta.env.VITE_API_URL}/saved-ewallet-users`,
-          {
-            headers: {
-              Authorization: `Bearer ${user?.token}`,
-            },
-            timeout: 5000, // 5-second timeout
-          }
-        ),
+        }>(`${import.meta.env.VITE_API_URL}/saved-ewallet-users`, {
+          headers: {
+            Authorization: `Bearer ${user?.token}`,
+          },
+          timeout: 5000, // 5-second timeout
+        }),
       ]);
 
-      // Append the type to each item for differentiation
       const favoritesWithType = response1.data.data.favorites.map(
         (account) => ({
           ...account,
@@ -62,23 +55,22 @@ export const FavoriteTransaction: React.FC = () => {
         })
       );
 
-      // Combine both lists
       const combinedData: CombinedItem[] = [
         ...favoritesWithType,
         ...savedEwalletUsersWithType,
       ];
 
-      setFavorites(combinedData);  
+      setFavorites(combinedData);
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (error.code === "ECONNABORTED") {
-          setErrorMessage("Belum ada transaksi akun favorit.");  
+          setErrorMessage("Belum ada transaksi akun favorit.");
         }
       } else {
-        setErrorMessage("Terjadi kesalahan yang tidak terduga.");  
+        setErrorMessage("Terjadi kesalahan yang tidak terduga.");
       }
     } finally {
-      setLoading(false);  
+      setLoading(false);
     }
   };
 

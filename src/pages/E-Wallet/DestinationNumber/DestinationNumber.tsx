@@ -13,7 +13,7 @@ export default function DestinationNumberPage() {
   const { slug } = useParams<{ slug: string }>();
   const { user, setRecipients } = useAuth();
 
-  const { data, isLoading, isError } = useFetchData<ResponseEWallet>(`/saved-ewallet-users?ewalletName=${capitalFirstLetter(slug)}`, user?.token);
+  const { data, isLoading, isError, refetch } = useFetchData<ResponseEWallet>(`/saved-ewallet-users?ewalletName=${capitalFirstLetter(slug)}`, user?.token);
   console.log(isError)
 
   if (isLoading) {
@@ -66,8 +66,8 @@ export default function DestinationNumberPage() {
         <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
           {data ? (
             <Flex vertical gap={30} align="start">
-              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients}/>
-              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Tersimpan" contacts={data.saved} setRecipients={setRecipients}/>
+              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients} refetch={refetch}/>
+              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Tersimpan" contacts={data.saved} setRecipients={setRecipients} refetch={refetch}/>
             </Flex>
           ) : <></>}
 

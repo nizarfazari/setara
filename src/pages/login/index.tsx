@@ -21,19 +21,13 @@ const Login = () => {
   const onFinish: FormProps<LoginType>['onFinish'] = async (values) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        'https://setara-api-service-production.up.railway.app/api/v1/auth/sign-in',
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            signature: values.username,
-            password: values.password,
-          }),
-        }
-      );
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/sign-in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ signature: values.username, password: values.password })
+      });
       const data = await response.json();
       if (!response.ok) {
         console.log(data);

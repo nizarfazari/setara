@@ -1,4 +1,3 @@
-
 import { useAuth } from "../../hooks/useAuth";
 import { FavoriteTransaction } from "../../components/Homepage/FavoriteTransaction";
 import InfoSaldo from "../../components/Homepage/InfoSaldo";
@@ -6,9 +5,7 @@ import { MenuList } from "../../components/Homepage/MenuList";
 import { CatatanKeuangan } from "../../components/Homepage/CatatanKeuangan";
 
 const Home = () => {
- 
-  const {  user } = useAuth();
-
+  const { user } = useAuth();
 
   return (
     <div className="mx-auto container mt-5 mb-20">

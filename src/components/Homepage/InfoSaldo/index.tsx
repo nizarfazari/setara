@@ -148,6 +148,7 @@ const InfoSaldo: React.FC = () => {
                       </button>
                     </div>
                   </div>
+                  
                   <p className="text-neutral-100 text-caption-small mt-3 flex gap-2 items-center">
                     No. Rekening:
                     <span className="font-bold text-caption-large">

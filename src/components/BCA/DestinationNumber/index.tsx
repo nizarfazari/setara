@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Button, Card, Form, FormProps, Input } from "antd";
-import "./style.css";
-import {  useNavigate } from "react-router-dom";
-import CustomerItem from "../CustomerItem";
-import { BankUser, ResponseBank } from "../../../types/Bank";
-import { Plus } from "@phosphor-icons/react";
+import React, { useState } from 'react';
+import { Button, Card, Form, FormProps, Input } from 'antd';
+import './style.css';
+import { useNavigate } from 'react-router-dom';
+import CustomerItem from '../CustomerItem';
+import { BankUser, ResponseBank } from '../../../types/Bank';
+import { Plus } from '@phosphor-icons/react';
 
 type TDestinationNumber = {
   destinationNumber: number;
@@ -24,7 +24,7 @@ const DestinationNumber: React.FC<PropsDestinationNumber> = ({
   const [filteredContact, setFilteredContact] = useState<BankUser[]>([]);
   const navigate = useNavigate();
 
-  const onFinish: FormProps<TDestinationNumber>["onFinish"] = (values) => {
+  const onFinish: FormProps<TDestinationNumber>['onFinish'] = (values) => {
     const dataBank: BankUser[] = [...bank.favorites, ...bank.saved];
 
     const data = dataBank.filter((val) =>
@@ -39,6 +39,7 @@ const DestinationNumber: React.FC<PropsDestinationNumber> = ({
   return (
     <Card className="w-full border-white md:border-primary-300">
       <Button
+        type="primary"
         className="bg-primary-100 text-white w-full h-10 rounded-xl mb-3 font-semibold text-body-small md:mb-6 md:text-heading-6 md:h-[60px]"
         onClick={() => navigate(`${pathUrl}/nomor-tujuan-baru`)}
       >
@@ -50,9 +51,13 @@ const DestinationNumber: React.FC<PropsDestinationNumber> = ({
           name="destinationNumber"
           label="Nomor Tujuan"
           className="mb-0"
-          rules={[{ required: true, message: "Nomor Tidak Boleh Kosong" }]}
+          rules={[{ required: true, message: 'Nomor Tidak Boleh Kosong' }]}
         >
-          <Input type="string" placeholder="Cari Nomor Tujuan" onChange={onSearch} />
+          <Input
+            type="string"
+            placeholder="Cari Nomor Tujuan"
+            onChange={onSearch}
+          />
         </Form.Item>
       </Form>
 

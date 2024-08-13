@@ -1,21 +1,33 @@
-import { useEffect, useState } from "react";
-import { useAuth } from "../../../hooks/useAuth";
-import axios, { AxiosError } from "axios";
-import { MonthlyReport } from "../../../types/Home";
-import { Button, DatePicker, DatePickerProps, Dropdown, Skeleton, Space } from "antd";
-import { ArrowDown, ArrowUp, CaretDown } from "@phosphor-icons/react";
-import { FormatCurrency } from "../../../utils";
-import dayjs from "dayjs";
-import { DATA_MONTH } from "../../../utils/constant";
+import { useEffect, useState } from 'react';
+import { useAuth } from '../../../hooks/useAuth';
+import axios, { AxiosError } from 'axios';
+import { MonthlyReport } from '../../../types/Home';
+import {
+  Button,
+  DatePicker,
+  DatePickerProps,
+  Dropdown,
+  Skeleton,
+  Space,
+} from 'antd';
+import { ArrowDown, ArrowUp, CaretDown } from '@phosphor-icons/react';
+import { FormatCurrency } from '../../../utils';
+import dayjs from 'dayjs';
+import { DATA_MONTH } from '../../../utils/constant';
 
 export const CatatanKeuangan = () => {
   const [error, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  const [monthlyReport, setMonthlyReport] = useState<MonthlyReport | null>(null);
-  const [selectedMonth, setSelectedMonth] = useState(
-    DATA_MONTH.find((item) => item.monthNumber == new Date().getMonth() + 1)?.month
+  const [monthlyReport, setMonthlyReport] = useState<MonthlyReport | null>(
+    null
   );
-  const [selectedYear, setSelectedYear] = useState<string>(new Date().getFullYear().toString());
+  const [selectedMonth, setSelectedMonth] = useState(
+    DATA_MONTH.find((item) => item.monthNumber == new Date().getMonth() + 1)
+      ?.month
+  );
+  const [selectedYear, setSelectedYear] = useState<string>(
+    new Date().getFullYear().toString()
+  );
   const { user } = useAuth();
   const today = new Date();
 
@@ -26,17 +38,20 @@ export const CatatanKeuangan = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/transactions/getMonthlyReport`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-        params: { month, year },
-      });
+      const response = await axios.get(
+        `${import.meta.env.VITE_API_URL}/transactions/getMonthlyReport`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          params: { month, year },
+        }
+      );
 
       setMonthlyReport(response.data.data);
     } catch (error) {
       setError(error as AxiosError);
-      console.error("Error fetching monthly report:", error);
+      console.error('Error fetching monthly report:', error);
     } finally {
       setLoading(false);
     }
@@ -47,13 +62,16 @@ export const CatatanKeuangan = () => {
     setSelectedMonth(month);
   };
 
-  const handleYearChange: DatePickerProps["onChange"] = (_, dateString) => {
+  const handleYearChange: DatePickerProps['onChange'] = (_, dateString) => {
     setSelectedYear(dateString.toString());
   };
 
   const handleFilterTransaction = () => {
-    const selectedMonthNumber = DATA_MONTH.find((item) => item.month == selectedMonth)?.monthNumber;
-    selectedMonthNumber && fetchMonthlyReport(selectedMonthNumber, selectedYear);
+    const selectedMonthNumber = DATA_MONTH.find(
+      (item) => item.month == selectedMonth
+    )?.monthNumber;
+    selectedMonthNumber &&
+      fetchMonthlyReport(selectedMonthNumber, selectedYear);
   };
 
   useEffect(() => {
@@ -74,7 +92,11 @@ export const CatatanKeuangan = () => {
         </div>
       ) : (
         <div className="flex gap-4 flex-col sm:flex-row">
-          <div className="border rounded-lg w-full sm:w-[175px]" role="combobox" aria-expanded="false">
+          <div
+            className="border rounded-lg w-full sm:w-[175px]"
+            role="combobox"
+            aria-expanded="false"
+          >
             <Dropdown
               menu={{
                 items: DATA_MONTH.map((item, index) => ({
@@ -83,11 +105,14 @@ export const CatatanKeuangan = () => {
                 })),
                 onClick: (e) => handleMonthChange(+e.key),
               }}
-              trigger={["click"]}
+              trigger={['click']}
               placement="bottom"
             >
               <a onClick={(e) => e.preventDefault()}>
-                <Space className="flex justify-between px-5 py-3" aria-label={`Pilih bulan: ${selectedMonth}`}>
+                <Space
+                  className="flex justify-between px-5 py-3"
+                  aria-label={`Pilih bulan: ${selectedMonth}`}
+                >
                   <p>{selectedMonth}</p>
                   <CaretDown size={16} color="#115DA9" />
                 </Space>
@@ -104,6 +129,7 @@ export const CatatanKeuangan = () => {
             aria-label={`Pilih tahun: ${selectedYear}`}
           />
           <Button
+            type="primary"
             className="bg-primary-100 text-white w-full sm:w-[175px] rounded-xl font-semibold text-body-small md:text-body-large h-[50px]"
             htmlType="submit"
             onClick={handleFilterTransaction}
@@ -120,42 +146,70 @@ export const CatatanKeuangan = () => {
           role="region"
           aria-labelledby="financial-summary-title"
         >
-          <div className="border px-5 py-3 w-full rounded-lg" role="group" aria-labelledby="income-label">
+          <div
+            className="border px-5 py-3 w-full rounded-lg"
+            role="group"
+            aria-labelledby="income-label"
+          >
             {loading ? (
-              <div className="animate-pulse flex flex-col space-y-1 w-full" aria-hidden="true">
+              <div
+                className="animate-pulse flex flex-col space-y-1 w-full"
+                aria-hidden="true"
+              >
                 <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-gray-400 rounded text-white text-caption-large"></div>
                 <div className="bg-gray-400 h-5 rounded w-7"></div>
               </div>
             ) : (
               <>
                 <div className="flex gap-1">
-                  <ArrowDown weight="fill" size={20} className="text-green-600" aria-hidden="true" />
+                  <ArrowDown
+                    weight="fill"
+                    size={20}
+                    className="text-green-600"
+                    aria-hidden="true"
+                  />
                   <p id="income-label">Pemasukan</p>
                 </div>
                 <h5
                   className="text-primary-100 font-bold text-heading-6 py-3"
-                  aria-label={`Total pemasukan bulan ini: ${FormatCurrency(monthlyReport?.income)}`}
+                  aria-label={`Total pemasukan bulan ini: ${FormatCurrency(
+                    monthlyReport?.income
+                  )}`}
                 >
                   {FormatCurrency(monthlyReport?.income)}
                 </h5>
               </>
             )}
           </div>
-          <div className="border px-5 py-3 w-full rounded-lg" role="group" aria-labelledby="expense-label">
+          <div
+            className="border px-5 py-3 w-full rounded-lg"
+            role="group"
+            aria-labelledby="expense-label"
+          >
             {loading ? (
-              <div className="animate-pulse flex flex-col space-y-1 w-full" aria-hidden="true">
+              <div
+                className="animate-pulse flex flex-col space-y-1 w-full"
+                aria-hidden="true"
+              >
                 <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-gray-400 rounded text-white text-caption-large"></div>
                 <div className="bg-gray-400 h-5 rounded w-7"></div>
               </div>
             ) : (
               <>
                 <div className="flex gap-1">
-                  <ArrowUp weight="fill" size={20} className="text-red-600" aria-hidden="true" />
+                  <ArrowUp
+                    weight="fill"
+                    size={20}
+                    className="text-red-600"
+                    aria-hidden="true"
+                  />
                   <p id="expense-label">Pengeluaran</p>
                 </div>
                 <h5
                   className="text-primary-100 font-bold text-heading-6 py-3"
-                  aria-label={`Total pengeluaran bulan ini: ${FormatCurrency(monthlyReport?.expense)}`}
+                  aria-label={`Total pengeluaran bulan ini: ${FormatCurrency(
+                    monthlyReport?.expense
+                  )}`}
                 >
                   {FormatCurrency(monthlyReport?.expense)}
                 </h5>
@@ -164,7 +218,10 @@ export const CatatanKeuangan = () => {
           </div>
         </div>
         {loading ? (
-          <div className="animate-pulse flex flex-col space-y-1 w-full" aria-hidden="true">
+          <div
+            className="animate-pulse flex flex-col space-y-1 w-full"
+            aria-hidden="true"
+          >
             <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-gray-400 rounded text-white text-caption-large"></div>
             <div className="bg-gray-400 h-5 rounded w-7"></div>
           </div>
@@ -173,9 +230,13 @@ export const CatatanKeuangan = () => {
             <h5 id="balance-label">Selisih</h5>
             <h5
               className={`${
-                (monthlyReport?.total ?? 0) < 0 ? "text-red-500" : "text-green-600"
+                (monthlyReport?.total ?? 0) < 0
+                  ? 'text-red-500'
+                  : 'text-green-600'
               } text-heading-6 font-bold`}
-              aria-label={`Selisih bulan ini: ${FormatCurrency(monthlyReport?.total)}`}
+              aria-label={`Selisih bulan ini: ${FormatCurrency(
+                monthlyReport?.total
+              )}`}
             >
               {FormatCurrency(monthlyReport?.total)}
             </h5>

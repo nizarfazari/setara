@@ -1,33 +1,36 @@
 import { useState } from 'react';
-import type { FormProps } from 'antd';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, FormProps, Input, Spin } from 'antd';
 import './login.css';
 import { useAuth } from '../../hooks/useAuth';
-
 import { useNotification } from '../../hooks/useNotification';
 
 type LoginType = {
   username: string;
   password: string;
 };
+
 const Login = () => {
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
-
   const username = localStorage.getItem('username');
-  console.log(username);
-
   const { openNotificationWithIcon } = useNotification();
+
   const onFinish: FormProps<LoginType>['onFinish'] = async (values) => {
     setLoading(true);
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/auth/sign-in`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ signature: values.username, password: values.password })
-      });
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URL}/auth/sign-in`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            signature: values.username,
+            password: values.password,
+          }),
+        }
+      );
       const data = await response.json();
       if (!response.ok) {
         console.log(data);
@@ -55,8 +58,8 @@ const Login = () => {
   };
 
   return (
-    <div className="container mx-auto flex justify-center items-center h-screen">
-      <div className="w-[563px] mx-auto">
+    <div className="container mx-auto flex justify-center items-center h-screen relative">
+      <div className={`w-[563px] mx-auto ${loading ? 'opacity-50' : ''}`}>
         <div className="text-center font-bold">
           <h1 className="text-heading-2 text-black-800 mb-2">Masuk</h1>
           <p className="text-heading-6 text-black-600 mb-5">
@@ -100,22 +103,30 @@ const Login = () => {
               />
             </Form.Item>
             <label htmlFor="password" className="required">
-              Katasandi
+              Kata Sandi
             </label>
           </div>
 
           <Form.Item>
             <Button
+              type="primary"
               className="mt-5 bg-primary-100 text-white w-full h-[60px] rounded-xl text-heading-5 font-semibold"
               htmlType="submit"
-              disabled={loading}
-              aria-label={loading ? 'Memuat...' : 'Masuk'}
+              aria-label="Masuk"
             >
-              {loading ? 'Loading...' : 'Masuk'}
+              Masuk
             </Button>
           </Form.Item>
         </Form>
       </div>
+      {loading && (
+        <div className="absolute inset-0 flex justify-center items-center">
+          <div className="text-center">
+            <Spin size="large" />
+            <p className="text-heading-6 mt-2">Loading...</p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

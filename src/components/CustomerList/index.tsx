@@ -12,7 +12,7 @@ type TContactList = {
   contacts: EwalletUser[];
   setRecipients: (recipients: recipientsData) => void;
   nullMessage?: string;
-  refetch: () => void
+  refetch?: () => void
 };
 
 export default function CustomerList({ pathUrl, header, contacts, setRecipients, nullMessage, refetch }: TContactList) {

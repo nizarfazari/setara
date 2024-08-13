@@ -6,12 +6,12 @@ const config: Config.InitialOptions = {
   setupFilesAfterEnv: ['<rootDir>/setupTest.ts'],
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    '\\.(jpg|jpeg|png|gif|svg)$': 'jest-transform-stub',
   },
   transform: {
     '^.+\\.tsx?$': 'ts-jest',
   },
-    moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
-  
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
 };
 
 export default config;

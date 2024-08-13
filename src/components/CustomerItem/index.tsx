@@ -6,7 +6,6 @@ import { putData } from "../../utils/GetData";
 import { useAuth } from "../../hooks/useAuth";
 import { useNotification } from "../../hooks/useNotification";
 
-
 export default function CustomerItem({ id, ewallet_user_image_path, ewallet_name, ewallet_user_name, ewallet_user_phone_number, favorite }: EwalletUser) {
   const { user } = useAuth();
   

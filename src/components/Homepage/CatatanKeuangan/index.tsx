@@ -26,7 +26,7 @@ export const CatatanKeuangan = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(`${import.meta.env.VITE_API_URL}/transactions/getMonthlyReport`, {
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/transactions/get-monthly-report`, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

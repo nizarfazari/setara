@@ -7,6 +7,7 @@ import iconInvest from '/images/homepage/icon-invest.png';
 import iconCardless from '/images/homepage/info-cardless.png';
 import iconTransFav from '/images/homepage/icon-trans-fav.png';
 import iconTopupFav from '/images/homepage/icon-ewallet-fav2.png';
+import iconQR from '/images/homepage/scanqr.svg';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { GoDotFill } from 'react-icons/go';
 import { Swiper as SwiperClass } from 'swiper';
@@ -99,7 +100,7 @@ const Home = () => {
         axios.get<{
           data: { favorites: CombinedItem[] };
         }>(
-          'https://setara-api-service-production.up.railway.app/api/v1/saved-accounts',
+          'https://setara-api-service-production-77a3.up.railway.app/api/v1/saved-accounts',
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,
@@ -110,7 +111,7 @@ const Home = () => {
         axios.get<{
           data: { favorites: CombinedItem[] };
         }>(
-          'https://setara-api-service-production.up.railway.app/api/v1/saved-ewallet-users',
+          'https://setara-api-service-production-77a3.up.railway.app/api/v1/saved-ewallet-users',
           {
             headers: {
               Authorization: `Bearer ${user?.token}`,
@@ -165,7 +166,7 @@ const Home = () => {
     const token = user?.token;
     try {
       const response = await axios.get(
-        `https://setara-api-service-production.up.railway.app/api/v1/user/getBalance`,
+        `https://setara-api-service-production-77a3.up.railway.app/api/v1/user/getBalance`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -182,7 +183,7 @@ const Home = () => {
     const token = user?.token;
     try {
       const response = await axios.get(
-        `https://setara-api-service-production.up.railway.app/api/v1/transactions/getMonthlyReport`,
+        `https://setara-api-service-production-77a3.up.railway.app/api/v1/transactions/getMonthlyReport`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -274,7 +275,6 @@ const Home = () => {
       <h1 className="text-heading-5 font-bold text-primary-100">
         Halo, {user?.user.name}
       </h1>
-      <button onClick={() => logout()}>Log out</button>
       <div className="my-3">
         <div className=" bg-primary-100 rounded-lg md:w-1/3 px-7 py-5">
           <h5 className="text-white font-bold text-heading-6 mb-7">
@@ -338,7 +338,7 @@ const Home = () => {
       </div>
       <div className="my-10">
         <h1 className="text-primary-100 font-bold text-heading-6 py-3">Menu</h1>
-        <div className="grid grid-cols-3 md:grid-cols-6 py-4 gap-y-4 rounded-lg border border-primary-300 ">
+        <div className="flex flex-wrap justify-between py-4 px-6 gap-x-4 rounded-lg border border-primary-300">
           <div className=" text-center">
             <img
               src={iconInfo}
@@ -390,6 +390,14 @@ const Home = () => {
               className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
             />
             <p className="pt-2">E-Wallet</p>
+          </div>
+          <div className=" text-center" onClick={() => navigate('/qr')}>
+            <img
+              src={iconQR}
+              alt="info"
+              className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
+            />
+            <p className="pt-2">Info QR</p>
           </div>
           <div className="text-center">
             <img

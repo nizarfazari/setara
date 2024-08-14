@@ -4,7 +4,7 @@ export async function GetData<T>(url: string, token: string | null | undefined):
     try {
         const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
-        const response = await axios.get(`https://setara-api-service-production.up.railway.app/api/v1${url}`, {
+        const response = await axios.get(`https://setara-api-service-production-77a3.up.railway.app/api/v1${url}`, {
             headers: headers,
         });
 
@@ -23,7 +23,7 @@ export async function postData<TRequest, TResponse>(
 ): Promise<TResponse> {
     try {
         const headers = token ? { Authorization: `Bearer ${token}` } : {};
-        const response = await axios.post(`https://setara-api-service-production.up.railway.app/api/v1${url}`, data, {
+        const response = await axios.post(`https://setara-api-service-production-77a3.up.railway.app/api/v1${url}`, data, {
             headers: headers,
         });
 

@@ -24,7 +24,7 @@ const Login = () => {
   const onFinish: FormProps<LoginType>['onFinish'] = async (values) => {
     setLoading(true);
     try {
-      const response = await fetch('https://setara-api-service-production.up.railway.app/api/v1/auth/sign-in', {
+      const response = await fetch('https://setara-api-service-production-77a3.up.railway.app/api/v1/auth/sign-in', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

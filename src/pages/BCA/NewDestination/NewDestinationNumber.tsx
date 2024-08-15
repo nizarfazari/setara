@@ -1,20 +1,44 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import Breadcrumb from "../../../components/Breadcumb";
 import { useNavigate, useParams } from "react-router-dom";
-import { capitalFirstLetter } from "../../../utils";
-import { Button, Card, Checkbox, Flex, Form, Input, InputNumber, Select } from "antd";
+import { capitalFirstLetter, FormatCurrency } from "../../../utils";
+import { Button, Card, Checkbox, Flex, Form, Input, InputNumber, Select, Spin } from "antd";
 const { Option } = Select;
 import "./style.css";
 import { CheckCircle } from "@phosphor-icons/react";
+import { useFetchData } from "../../../hooks/useFetchData";
+import { useAuth } from "../../../hooks/useAuth";
+import { SearchBankRes, UserBalance } from "../../../types/Bank";
+import { GetData } from "../../../utils/GetData";
+import axios from "axios";
+
+type FieldType = {
+  destinationNumber: number;
+  amount: number;
+  notes: string;
+  name: string;
+  savedList: boolean;
+};
+
 
 export default function NewDestinationNumberPage() {
   const [form] = Form.useForm();
+  const { user, setProcessTransaction, setRecipients } = useAuth();
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
   const [isVerified, setIsVerified] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onFinish = (values: unknown) => {
-    console.log("Success:", values);
+  const { data: userBalance } = useFetchData<UserBalance>(`/user/getBalance`, user?.token);
+
+
+
+  const onFinish = (values: FieldType) => {
+    setProcessTransaction({
+      nominal: values.amount.toString(),
+      notes: values.notes,
+      isSavedAccount: values.savedList
+    })
     navigate(`/bca/${slug}/tinjau`);
   };
 
@@ -22,25 +46,51 @@ export default function NewDestinationNumberPage() {
     console.log("Failed:", errorInfo);
   };
 
-  const handleDestinationNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if(e.target.value == ""){
-      setIsVerified(false);
-      form.resetFields();
-    }
+  const handleDestinationNumberChange = () => {
+    setIsVerified(false);
+    form.resetFields(["name", "number", "notes", "amount", "source"]);
   }
 
-  const handleVerifiedNumber = () => {
-    const verified = true;
-    if (verified) {
-      setIsVerified(!isVerified);
-      form.setFields([
-        { name: "name", value: "JOHN DOE" },
-      ]);
+  const handleVerifiedNumber = async () => {
+    if (form.getFieldValue("destinationNumber")) {
+      setIsLoading(true);
+      try {
+        const response = await GetData<SearchBankRes>(
+          `/user/search-no-rek/${form.getFieldValue("destinationNumber")}`,
+          user?.token
+        );
+        console.log(response)
+
+        if (response) {
+          setIsVerified(true);
+          setRecipients({
+            nama: response.name,
+            wallet: response.bank,
+            bank: response.bank,
+            account_number: '',
+            numberDestination: response.no,
+            imageUrl: response.image_path,
+          })
+          form.setFields([{ name: "name", value: response.name }]);
+          setIsLoading(false);
+        }
+      } catch (error) {
+        if (axios.isAxiosError(error)) {
+          if (error.response?.data?.code == 404) {
+            setIsVerified(false);
+            form.setFields([{ name: "destinationNumber", errors: ["NOMOR TIDAK TERDAFTAR"] }]);
+          }
+        } else {
+          console.log("Error", error);
+        }
+      } finally {
+        setIsLoading(false);
+      }
     } else {
-      form.setFields([{ name: "destinationNumber", errors: ["NOMOR TIDAK TERDAFTAR"] }]);
+      form.setFields([{ name: "destinationNumber", errors: ["Nomor Tidak Boleh Kosong"] }]);
     }
   };
-
+  console.log(isVerified)
   return (
     <div className="container">
       <div className="my-[30px]">
@@ -62,12 +112,12 @@ export default function NewDestinationNumberPage() {
           >
             <div>
               <div className="flex items-center gap-2 flex-col md:flex-row md:gap-4">
-                <Input type="number" placeholder="Masukkan Nomor" className="flex-[80%]" onChange={handleDestinationNumberChange}/>
+                <Input type="number" placeholder="Masukkan Nomor" className="flex-[80%]" onChange={handleDestinationNumberChange} />
                 <Button
                   onClick={handleVerifiedNumber}
                   className="flex-[20%] bg-primary-100 text-white w-full py-[10px] rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
                 >
-                  Cari Nomor
+                  {isLoading ? <Spin /> : "Cari Nomor"}
                 </Button>
               </div>
               {isVerified && (
@@ -89,11 +139,9 @@ export default function NewDestinationNumberPage() {
 
           <Form.Item name="source" label="Sumber Rekening" required>
             <Select disabled={isVerified ? false : true} className="h-20" placeholder="Pilih Sumber Rekening">
-              <Option value="Rp1.111.111">
-                TAHAP BCA 289137645 <br /> <span className="font-bold">Rp1.111.111</span>
-              </Option>
-              <Option value="Rp2.222.222">
-                TAHAP BCA 289137646 <br /> <span className="font-bold">Rp2.222.222</span>
+              <Option value={user?.user.account_number}>
+                {`${user?.user.bank_name} ${user?.user.account_number}`} <br />{" "}
+                <span className="font-bold">{userBalance && FormatCurrency(userBalance?.balance)}</span>
               </Option>
             </Select>
           </Form.Item>
@@ -103,14 +151,16 @@ export default function NewDestinationNumberPage() {
             label="Nominal Transfer"
             rules={[
               { required: true, message: "Nominal Tidak Boleh Kosong" },
-              { type: "number", min: 10000, message: "Minimum transfer adalah 10.000, mohon isikan kembali" },
+              { type: "number", min: 1, message: "Minimum transfer adalah 1, mohon isikan kembali" },
+              { type: "number", max: userBalance?.balance, message: "Saldo Tidak Cukup, mohon isikan kembali" },
             ]}
             required
+
           >
             <InputNumber<number>
-              type="number"
+              type="text"
               prefix="Rp."
-              formatter={(value) => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
+              formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
               parser={(value) => value?.replace(/\.\s?|(,*)/g, "") as unknown as number}
               className="w-full px-[15px] py-3 md:px-6 md:py-4"
               placeholder="Masukkan Nominal"

@@ -7,7 +7,7 @@ export type BankUser = {
     account_name: string;
     user_image_path: string;
     account_number: string;
-    bank_name: string; 
+    bank_name: string;
 }
 
 // Tipe data untuk respons API
@@ -32,7 +32,7 @@ export type TransactionBankReq = {
     mpin: string
     note: string | undefined
     savedAccount: boolean
-} 
+}
 
 interface User {
     name: string;
@@ -51,7 +51,7 @@ interface TransferData {
     note: string;
 }
 
-export type TransactionBankRes = {    
+export type TransactionBankRes = {
     code: number;
     message: string;
     status: boolean;
@@ -59,5 +59,20 @@ export type TransactionBankRes = {
 
 }
 
+
+export type UserBalance = {
+    balance: number;
+    check_time: string;
+}
+
+
+
+
+export type SearchBankRes = {
+    no: string;
+    name: string;
+    bank: string;
+    image_path: string;
+};
 
 

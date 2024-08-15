@@ -7,6 +7,7 @@ import { usePostData } from "../../hooks/usePostData";
 import { useAuth } from "../../hooks/useAuth";
 import dayjs from "dayjs";
 import Breadcrumb from "../../components/Breadcumb";
+import { FormatCurrency } from "../../utils";
 
 type Transaction = {
   transaction_id: string;
@@ -43,7 +44,7 @@ const Mutasi = () => {
   const { RangePicker } = DatePicker;
   const [selectedDates, setSelectedDates] = useState([dayjs(), dayjs()]);
   const { data: datas2, post, isLoading } = usePostData<MutationReq, ApiResponse>('/transactions/get-all-mutation?page=0&size=10', user?.token);
-
+  console.log(datas2)
   const getMutation = async (startDate: string, endDate: string) => {
     await post({
       startDate,
@@ -98,9 +99,10 @@ const Mutasi = () => {
   const filteringDataMutation = (data) => {
     const groupedData = data.reduce((acc, transaction) => {
       const date = transaction.formatted_date;
+      const time = transaction.time;
       if (!acc[date]) {
         acc[date] = {
-          date: date,
+          date: time,
           transactions: []
         };
       }
@@ -108,14 +110,14 @@ const Mutasi = () => {
       return acc;
     }, {});
 
-    return Object.keys(groupedData).map(date => ({
-      date,
-      transactions: groupedData[date].transactions
-    }));
+    console.log(groupedData)
+
+    return Object.values(groupedData)
   }
 
-  const groupedTransactions = datas2?.data ? filteringDataMutation(datas2.data) : [];
 
+  const groupedTransactions = datas2?.data ? filteringDataMutation(datas2.data) : [];
+  console.log(groupedTransactions)
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
       <Breadcrumb title="Mutasi Rekening" subtitle="Pantai Pengeluaran dan Pemasukan Rekening" />
@@ -133,7 +135,7 @@ const Mutasi = () => {
       <div className="flex justify-between items-center my-5 lg:my-10">
         <div>
           <p>Rekening</p>
-          <p className="text-primary-100 font-bold">{'289137645'}</p>
+          <p className="text-primary-100 font-bold">{user?.user.account_number}</p>
         </div>
         <Button onClick={() => setModal2Open(true)} className="border-primary-100 text-primary-100 h-10" icon={<SlidersHorizontal size={16} />}>
           Filter
@@ -178,25 +180,29 @@ const Mutasi = () => {
       ) : groupedTransactions.length > 0 ? (
         groupedTransactions.map((group, index) => (
           <div key={index}>
-            <div>
-              <p className="text-primary-100 font-bold">{dayjs(group.date).format('DD MMMM YYYY')}</p>
+            <div className="my-4">
+              <p className="text-primary-100 font-bold">{new Date(group.date).toLocaleDateString('id-ID', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+              })}</p>
               <hr className="border-primary-100" />
             </div>
             {group.transactions.map((value: Transaction, index: number) => (
-              <div className="flex justify-between pt-5" key={index}>
-                <div>
-                  <p className="text-secondary-200 font-bold">Sukses</p>
-                  <p>{value.unique_code}</p>
-                  <p className="font-bold">{value.type}</p>
+              <div className="flex justify-between mb-4" key={index}>
+                <div className="">
+                  <p className="text-secondary-200 font-bold mb-2">SUKSES</p>
+                  <p className="mb-2">{value.unique_code}</p>
+                  <p className="font-bold mb-2">{value.type}</p>
                 </div>
                 <div className="text-right">
                   {value.type === 'DEPOSIT' ? (
-                    <p className="text-green-700 font-semibold">+ Rp. {value.total_amount},00</p>
+                    <p className="text-green-700 font-semibold mb-2">+ {FormatCurrency(value.total_amount)},00</p>
                   ) : (
-                    <p className="text-red-700 font-semibold">- Rp. {value.total_amount},00</p>
+                    <p className="text-red-700 font-semibold mb-2">- {FormatCurrency(value.total_amount)},00</p>
                   )}
-                  <p className="text-slate-500 font-light">{value.formatted_time} WIB</p>
-                  <p onClick={() => navigate(`/mutasi/${value.transaction_id}`)} className="cursor-pointer underline text-primary-100 font-semibold">
+                  <p className="text-slate-500 font-light mb-2">{value.formatted_time} WIB</p>
+                  <p onClick={() => navigate(`/mutasi/${value.transaction_id}`)} className="mb-2 cursor-pointer underline text-primary-100 font-semibold">
                     Lihat Bukti Transfer
                   </p>
                 </div>

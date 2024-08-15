@@ -9,7 +9,7 @@ import { postData } from '../../utils/GetData';
 import { useNotification } from '../../hooks/useNotification';
 import axios from 'axios';
 
-interface IConfirmationPINProps { }
+interface IConfirmationPINProps {}
 
 type LoginType = {
   pin: string;
@@ -20,7 +20,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
   const { user, transactions } = useAuth();
   const { openNotificationWithIcon } = useNotification();
   const navigate = useNavigate();
-  const [pin, setPin] = React.useState<string>("");
+  const [pin, setPin] = React.useState<string>('');
 
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
@@ -46,7 +46,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         },
         user?.token
       );
-    
+
       if (data.code !== 200) {
         navigate('/transaksi-gagal');
       } else {
@@ -59,7 +59,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         form.setFields([
           {
             name: 'pin',
-            errors: ["PIN Anda Salah"],
+            errors: ['PIN Anda Salah'],
           },
         ]);
       }
@@ -72,7 +72,10 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
     <>
       <div className="container mx-auto">
         <div className="my-[30px]">
-          <Breadcrumb title="Masukan PIN Anda" subtitle="Harap Masukan PIN Anda dengan teliti" />
+          <Breadcrumb
+            title="Masukan PIN Anda"
+            subtitle="Harap Masukan PIN Anda dengan teliti"
+          />
         </div>
         <div className="max-w-[563px] mx-auto">
           <Form form={form} name="basic" onFinish={onFinish} autoComplete="off">
@@ -81,15 +84,24 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
               rules={[{ required: true, message: 'Mohon Masukan PIN anda!' }]}
             >
               <div className="">
-                <label htmlFor="" className="text-body-large text-neutral-400 font-bold required">
+                <label
+                  htmlFor=""
+                  className="text-body-large text-neutral-400 font-bold required"
+                >
                   PIN Anda
                 </label>
-                <Input.Password className="input-label mt-3 py-[18px] px-6" value={pin} onChange={handlePinChange} placeholder='Masukkan PIN Anda'/>
+                <Input.Password
+                  className="input-label mt-3 py-[18px] px-6"
+                  value={pin}
+                  onChange={handlePinChange}
+                  placeholder="Masukkan PIN Anda"
+                />
               </div>
             </Form.Item>
 
             <Form.Item>
               <Button
+                type="primary"
                 className="mt-5 bg-primary-100 text-white w-full h-[60px] rounded-xl text-heading-5 font-semibold"
                 htmlType="submit"
                 disabled={isSubmitting}

@@ -170,19 +170,21 @@ export const FavoriteTransaction: React.FC = () => {
           <div className="md:flex justify-center gap-3 pt-4 hidden">
             <button
               onClick={() => swiperRef.current?.slidePrev()}
+              className="text-gray-500 hover:text-primary-100 focus:text-primary-100 transition-colors duration-300"
               aria-label="Slide sebelumnya"
               aria-controls="swiper-container"
               role="button"
             >
-              <ArrowCircleLeft size={25} color="gray" aria-hidden="true" />
+              <ArrowCircleLeft size={35} aria-hidden="true" />
             </button>
             <button
               onClick={() => swiperRef.current?.slideNext()}
+              className="text-gray-500 hover:text-primary-100 focus:text-primary-100 transition-colors duration-300"
               aria-label="Slide berikutnya"
               aria-controls="swiper-container"
               role="button"
             >
-              <ArrowCircleRight size={25} color="gray" aria-hidden="true" />
+              <ArrowCircleRight size={35} aria-hidden="true" />
             </button>
           </div>
         </Swiper>

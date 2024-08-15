@@ -39,7 +39,7 @@ export const CatatanKeuangan = () => {
     setError(null);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/transactions/getMonthlyReport`,
+        `${import.meta.env.VITE_API_URL}/transactions/get-monthly-report`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

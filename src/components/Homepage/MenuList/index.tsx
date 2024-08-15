@@ -19,11 +19,10 @@ import { useNavigate } from 'react-router-dom';
 export const MenuList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [balance, setBalance] = useState<number>();
-  const [error, setError] = useState<AxiosError | null>(null);
+  const [, setError] = useState<AxiosError | null>(null);
+  const [feedback, setFeedback] = useState<string>(''); // State for aria-live feedback
   const { user } = useAuth();
   const navigate = useNavigate();
-
-  console.log(error);
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -49,30 +48,23 @@ export const MenuList = () => {
       setError(error as AxiosError);
     }
   };
+
   useEffect(() => {
     fetchBalance();
-  }, [fetchBalance]);
+  }, [user?.token]);
+
+  const handleFeatureClick = (feature: string) => {
+    setFeedback(`Maaf, fitur ${feature} sedang dikembangkan`);
+  };
+
   return (
     <>
-      {/* {loading ? (
-        <div className="grid grid-cols-3 md:grid-cols-6 py-4 gap-y-4 rounded-lg border border-primary-300">
-          {Array(6)
-            .fill(null)
-            .map((_, i) => (
-              <div className="py-3 px-10 rounded-xl flex justify-center">
-                {" "}
-                <Space key={i}>
-                  <Skeleton.Image
-                    active
-                    style={{ width: "75px", height: "75px" }}
-                  />
-                </Space>
-              </div>
-            ))}
-        </div>
-      ) : ( */}
-      <div className="grid grid-cols-3 md:grid-cols-6 py-4 gap-y-4 rounded-lg border border-primary-300 ">
-        <div className=" text-center" aria-modal="true" aria-live="polite">
+      <div className="sr-only" aria-live="assertive">
+        {feedback}
+      </div>{' '}
+      {/* Live region for screen reader feedback */}
+      <div className="grid grid-cols-3 md:grid-cols-6 py-4 gap-y-4 rounded-lg border border-primary-300">
+        <div className="text-center" aria-modal="true" aria-live="polite">
           <img
             src={iconInfo}
             onClick={showModal}
@@ -124,7 +116,8 @@ export const MenuList = () => {
           </Modal>
           <p className="pt-2">Info</p>
         </div>
-        <div className=" text-center" onClick={() => navigate('/bca')}>
+
+        <div className="text-center" onClick={() => navigate('/bca')}>
           <img
             src={iconTransfer}
             alt="Transfer"
@@ -133,6 +126,7 @@ export const MenuList = () => {
           />
           <p className="pt-2">Transfer</p>
         </div>
+
         <div
           className="text-center"
           aria-label="E-wallet"
@@ -145,45 +139,56 @@ export const MenuList = () => {
           />
           <p className="pt-2">E-Wallet</p>
         </div>
+
         <button
           type="button"
-          disabled
-          className="cursor-not-allowed text-center"
+          className="text-center"
           aria-label="Pembelian"
+          onClick={(e) => {
+            e.preventDefault();
+            handleFeatureClick('Pembelian');
+          }}
         >
           <img
             src={iconBuy}
-            alt="pembelian"
-            className="mx-auto bg-gray-200 w-16 p-3 shadow-md rounded-xl border border-primary-300"
+            alt="Pembelian"
+            className="mx-auto bg-gray-200 w-16 p-3 shadow-md rounded-xl border border-primary-300 cursor-not-allowed"
           />
           <p className="pt-2">Pembelian</p>
         </button>
+
         <button
-          disabled
-          className="cursor-not-allowed text-center"
+          className="text-center"
           aria-label="Investasi"
+          onClick={(e) => {
+            e.preventDefault();
+            handleFeatureClick('Investasi');
+          }}
         >
           <img
             src={iconInvest}
-            alt="invest"
-            className="mx-auto w-16 p-3 bg-gray-200 shadow-md rounded-xl border border-primary-300"
+            alt="Investasi"
+            className="mx-auto w-16 p-3 bg-gray-200 shadow-md rounded-xl border border-primary-300 cursor-not-allowed"
           />
           <p className="pt-2">Investasi</p>
         </button>
+
         <button
-          disabled
-          className="cursor-not-allowed text-center"
+          className="text-center"
           aria-label="Cardless"
+          onClick={(e) => {
+            e.preventDefault();
+            handleFeatureClick('Cardless');
+          }}
         >
           <img
             src={iconCardless}
-            alt="cardless"
-            className="mx-auto w-16 p-3 bg-gray-200 shadow-md rounded-xl border border-primary-300"
+            alt="Cardless"
+            className="mx-auto w-16 p-3 bg-gray-200 shadow-md rounded-xl border border-primary-300 cursor-not-allowed"
           />
           <p className="pt-2">Cardless</p>
         </button>
       </div>
-      {/* )} */}
     </>
   );
 };

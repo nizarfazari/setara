@@ -248,6 +248,7 @@ export default function NewDestinationNumberPage() {
           </Form.Item>
 
           <Button
+            type="primary"
             className="bg-primary-100 text-white w-full h-10 rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
             htmlType="submit"
             disabled={isVerified ? false : true}

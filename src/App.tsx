@@ -33,6 +33,7 @@ import { AuthProvider } from './hooks/useAuth';
 import ProtectedUser from './middleware/ProtectedUser';
 import { NotificationProvider } from './hooks/useNotification';
 import NotFound from './pages/404';
+// import ServerError from './pages/500';
 
 function App() {
   return (

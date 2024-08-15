@@ -56,7 +56,7 @@ const Navbar = () => {
             onClick={() => navigate('/')}
             src="/images/logo.png"
             alt="Logo"
-            className="h-8"
+            className="h-8 cursor-pointer"
           />
           <ul className="hidden md:flex gap-6 text-white">
             <a

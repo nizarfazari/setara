@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import './mutasi.css';
 import { Button, DatePicker, Modal, Radio, Skeleton, Space } from "antd";
@@ -96,6 +95,27 @@ const Mutasi = () => {
     setSelectedDates(dates);
   };
 
+  const filteringDataMutation = (data) => {
+    const groupedData = data.reduce((acc, transaction) => {
+      const date = transaction.formatted_date;
+      if (!acc[date]) {
+        acc[date] = {
+          date: date,
+          transactions: []
+        };
+      }
+      acc[date].transactions.push(transaction);
+      return acc;
+    }, {});
+
+    return Object.keys(groupedData).map(date => ({
+      date,
+      transactions: groupedData[date].transactions
+    }));
+  }
+
+  const groupedTransactions = datas2?.data ? filteringDataMutation(datas2.data) : [];
+
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
       <Breadcrumb title="Mutasi Rekening" subtitle="Pantai Pengeluaran dan Pemasukan Rekening" />
@@ -155,33 +175,35 @@ const Mutasi = () => {
             <Skeleton paragraph={{ rows: 1 }} className="mt-4" />
           </div>
         </div>
-      ) : datas2?.data && datas2.data.length > 0 ? (
-        <>
-          <div>
-            <p className="text-primary-100 font-bold">{selectedDates[0].format('DD MMMM YYYY')}</p>
-            <hr className="border-primary-100" />
-          </div>
-          {datas2.data.map((value: Transaction, index: number) => (
-            <div className="flex justify-between pt-5" key={index}>
-              <div>
-                <p className="text-secondary-200 font-bold">Sukses</p>
-                <p>{value.unique_code}</p>
-                <p className="font-bold">{value.type}</p>
-              </div>
-              <div className="text-right">
-                {value.type === 'DEPOSIT' ? (
-                  <p className="text-green-700 font-semibold">+ Rp. {value.total_amount},00</p>
-                ) : (
-                  <p className="text-red-700 font-semibold">- Rp. {value.total_amount},00</p>
-                )}
-                <p className="text-slate-500 font-light">{value.formatted_time} WIB</p>
-                <p onClick={() => navigate(`/mutasi/${value.transaction_id}`)} className="cursor-pointer underline text-primary-100 font-semibold">
-                  Lihat Bukti Transfer
-                </p>
-              </div>
+      ) : groupedTransactions.length > 0 ? (
+        groupedTransactions.map((group, index) => (
+          <div key={index}>
+            <div>
+              <p className="text-primary-100 font-bold">{dayjs(group.date).format('DD MMMM YYYY')}</p>
+              <hr className="border-primary-100" />
             </div>
-          ))}
-        </>
+            {group.transactions.map((value: Transaction, index: number) => (
+              <div className="flex justify-between pt-5" key={index}>
+                <div>
+                  <p className="text-secondary-200 font-bold">Sukses</p>
+                  <p>{value.unique_code}</p>
+                  <p className="font-bold">{value.type}</p>
+                </div>
+                <div className="text-right">
+                  {value.type === 'DEPOSIT' ? (
+                    <p className="text-green-700 font-semibold">+ Rp. {value.total_amount},00</p>
+                  ) : (
+                    <p className="text-red-700 font-semibold">- Rp. {value.total_amount},00</p>
+                  )}
+                  <p className="text-slate-500 font-light">{value.formatted_time} WIB</p>
+                  <p onClick={() => navigate(`/mutasi/${value.transaction_id}`)} className="cursor-pointer underline text-primary-100 font-semibold">
+                    Lihat Bukti Transfer
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        ))
       ) : (
         <div className="text-center">
           <h5 className="text-neutral-400 text-heading-5 font-bold">Belum Ada Transaksi :/</h5>

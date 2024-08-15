@@ -178,38 +178,42 @@ const Mutasi = () => {
           </div>
         </div>
       ) : groupedTransactions.length > 0 ? (
-        groupedTransactions.map((group, index) => (
-          <div key={index}>
-            <div className="my-4">
-              <p className="text-primary-100 font-bold">{new Date(group.date).toLocaleDateString('id-ID', {
-                day: 'numeric',
-                month: 'long',
-                year: 'numeric'
-              })}</p>
-              <hr className="border-primary-100" />
-            </div>
-            {group.transactions.map((value: Transaction, index: number) => (
-              <div className="flex justify-between mb-4" key={index}>
-                <div className="">
-                  <p className="text-secondary-200 font-bold mb-2">SUKSES</p>
-                  <p className="mb-2">{value.unique_code}</p>
-                  <p className="font-bold mb-2">{value.type}</p>
-                </div>
-                <div className="text-right">
-                  {value.type === 'DEPOSIT' ? (
-                    <p className="text-green-700 font-semibold mb-2">+ {FormatCurrency(value.total_amount)},00</p>
-                  ) : (
-                    <p className="text-red-700 font-semibold mb-2">- {FormatCurrency(value.total_amount)},00</p>
-                  )}
-                  <p className="text-slate-500 font-light mb-2">{value.formatted_time} WIB</p>
-                  <p onClick={() => navigate(`/mutasi/${value.transaction_id}`)} className="mb-2 cursor-pointer underline text-primary-100 font-semibold">
-                    Lihat Bukti Transfer
-                  </p>
-                </div>
+        <>
+          {groupedTransactions.map((group, index) => (
+            <div key={index}>
+              <div className="my-4">
+                <p className="text-primary-100 font-bold">{new Date(group.date).toLocaleDateString('id-ID', {
+                  day: 'numeric',
+                  month: 'long',
+                  year: 'numeric'
+                })}</p>
+                <hr className="border-primary-100" />
               </div>
-            ))}
-          </div>
-        ))
+              {group.transactions.map((value: Transaction, index: number) => (
+                <div className="flex justify-between mb-4" key={index}>
+                  <div className="">
+                    <p className="text-secondary-200 font-bold mb-2">SUKSES</p>
+                    <p className="mb-2">{value.unique_code}</p>
+                    <p className="font-bold mb-2">{value.type}</p>
+                  </div>
+                  <div className="text-right">
+                    {value.type === 'DEPOSIT' ? (
+                      <p className="text-green-700 font-semibold mb-2">+ {FormatCurrency(value.total_amount)},00</p>
+                    ) : (
+                      <p className="text-red-700 font-semibold mb-2">- {FormatCurrency(value.total_amount)},00</p>
+                    )}
+                    <p className="text-slate-500 font-light mb-2">{value.formatted_time} WIB</p>
+                    <p onClick={() => navigate(`/mutasi/${value.transaction_id}`)} className="mb-2 cursor-pointer underline text-primary-100 font-semibold">
+                      Lihat Bukti Transfer
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ))}
+          <Button type="primary" className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg">Download Mutasi Rekening</Button>
+
+        </>
       ) : (
         <div className="text-center">
           <h5 className="text-neutral-400 text-heading-5 font-bold">Belum Ada Transaksi :/</h5>

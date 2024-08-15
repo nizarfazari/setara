@@ -9,7 +9,7 @@ const Konfirmasi = () => {
   const { slug } = useParams()
   const { transactions, user } = useAuth();
   const admin = 0
-  
+
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
       <Breadcrumb title="Konfirmasi" subtitle="Harap periksa kembali sebelum melakukan konfirmasi"></Breadcrumb>
@@ -56,7 +56,7 @@ const Konfirmasi = () => {
               <div>
                 <p>{FormatCurrency(transactions.transaction.nominal)}</p>
                 <p>{FormatCurrency(admin)}</p>
-                <p>{transactions.transaction.notes ? transactions.transaction.notes : "-" }</p>
+                <p>{transactions.transaction.notes ? transactions.transaction.notes : "-"}</p>
               </div>
             </div>
             <hr className='border-neutral-300 my-2' />

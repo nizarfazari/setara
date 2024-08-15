@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
-import {  notification, Skeleton } from "antd";
+import { notification, Skeleton } from "antd";
 import { GoDotFill } from "react-icons/go";
 import { CopySimple, Eye, EyeSlash } from "@phosphor-icons/react";
 import { FormatCurrency, formatNorek } from "../../../utils/index";
@@ -148,7 +148,7 @@ const InfoSaldo: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                  
+
                   <p className="text-neutral-100 text-caption-small mt-3 flex gap-2 items-center">
                     No. Rekening:
                     <span className="font-bold text-caption-large">

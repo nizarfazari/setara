@@ -13,7 +13,7 @@ export default function AmountTopUpPage() {
   const { transactions } = useAuth();
 
   const USER = {
-    id : '',
+    id: '',
     account_name: transactions.recipients.nama,
     bank_name: transactions.recipients.bank,
     account_number: transactions.recipients.numberDestination,

@@ -32,7 +32,7 @@ const Transfer: React.FC = () => {
                             <div
                                 onClick={() => { wallet.isActive === true ? handleWalletClick(wallet.id, `/bca/${wallet.slug}`) : null }}
                                 className={`flex justify-center shadow-inner mb-3 ${selectedWallet === wallet.id ? 'bg-primary-100' : 'bg-primary-300'} rounded-2xl sm:h-[120px] h-[75px] sm:w-[120px] w-[75px] mx-auto items-center cursor-pointer`}>
-                                <img className='w-[60px]' src={wallet.imgSrc} alt={wallet.name}  />
+                                <img className='w-[60px]' src={wallet.imgSrc} alt={wallet.name} />
                             </div>
                             <h1 className='sm:bg-black-400 font-bold text-[16px] leading-[16px]'>{wallet.name}</h1>
                         </div>

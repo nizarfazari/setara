@@ -27,7 +27,7 @@ export default function DestinationNumberPage() {
             <Skeleton active paragraph={{ rows: 0 }} className="mt-10" />
             <Skeleton.Input active block size="large" />
             <Skeleton active paragraph={{ rows: 0 }} className="mt-10" />
-            <Skeleton active paragraph={{ rows: 0 }} className="my-9"/>
+            <Skeleton active paragraph={{ rows: 0 }} className="my-9" />
           </Card>
           <Card className="border-white lg:border-[#E4EDFF] w-full">
             <Card className="w-full border-white md:border-primary-300">
@@ -65,8 +65,8 @@ export default function DestinationNumberPage() {
         <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
           {data ? (
             <Flex vertical gap={30} align="start">
-              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients} refetch={refetch}/>
-              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Tersimpan" contacts={data.saved} setRecipients={setRecipients} refetch={refetch}/>
+              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients} refetch={refetch} />
+              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Tersimpan" contacts={data.saved} setRecipients={setRecipients} refetch={refetch} />
             </Flex>
           ) : <></>}
 

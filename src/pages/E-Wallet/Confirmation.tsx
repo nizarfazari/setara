@@ -56,7 +56,7 @@ const Konfirmasi = () => {
               <div>
                 <p>{FormatCurrency(transactions.transaction.nominal)}</p>
                 <p>{FormatCurrency(admin)}</p>
-                <p>{transactions.transaction.notes ? transactions.transaction.notes : "-" }</p>
+                <p>{transactions.transaction.notes ? transactions.transaction.notes : "-"}</p>
               </div>
             </div>
             <hr className='border-neutral-300 my-2' />

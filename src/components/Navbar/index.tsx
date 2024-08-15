@@ -106,9 +106,8 @@ const Navbar = () => {
         )}
 
         <ul
-          className={`fixed mt-5 font-bold h-full text-primary-100 text-nunito bg-white z-[11] ${
-            nav ? 'right-0 w-[60%] duration-500' : 'duration-500 right-[-400px]'
-          }`}
+          className={`fixed mt-5 font-bold h-full text-primary-100 text-nunito bg-white z-[11] ${nav ? 'right-0 w-[60%] duration-500' : 'duration-500 right-[-400px]'
+            }`}
         >
           <a
             onClick={() => navigate('/')}

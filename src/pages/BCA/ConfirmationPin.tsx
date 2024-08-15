@@ -46,7 +46,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         },
         user?.token
       );
-    
+
       if (data.code !== 200) {
         navigate('/transaksi-gagal');
       } else {
@@ -84,7 +84,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
                 <label htmlFor="" className="text-body-large text-neutral-400 font-bold required">
                   PIN Anda
                 </label>
-                <Input.Password className="input-label mt-3 py-[18px] px-6" value={pin} onChange={handlePinChange} placeholder='Masukkan PIN Anda'/>
+                <Input.Password className="input-label mt-3 py-[18px] px-6" value={pin} onChange={handlePinChange} placeholder='Masukkan PIN Anda' />
               </div>
             </Form.Item>
 

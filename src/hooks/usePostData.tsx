@@ -6,7 +6,7 @@ export function usePostData<TRequest, TResponse>(url: string, token: string | nu
     const [data, setData] = useState<TResponse | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isError, setIsError] = useState<AxiosError | null>(null);
-    
+
     const post = async (data: TRequest) => {
         setIsLoading(true);
         setIsError(null);

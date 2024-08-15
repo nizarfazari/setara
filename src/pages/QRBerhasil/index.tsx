@@ -70,16 +70,16 @@ const QRBerhasil: React.FC = () => {
         </Card>
       </div>
       <div className="flex gap-3 mb-10 lg:px-28">
-        <Button 
-          onClick={onBackToHome} 
-          type="primary" 
+        <Button
+          onClick={onBackToHome}
+          type="primary"
           className="bg-primary-300 text-primary-100 font-bold h-10 w-full mt-5 lg:mt-10 rounded-lg"
         >
           Kembali Ke Homepage
         </Button>
-        <Button 
-          onClick={() => navigate('/')} 
-          type="primary" 
+        <Button
+          onClick={() => navigate('/')}
+          type="primary"
           className="bg-primary-100 h-10 w-full mt-5 lg:mt-10 rounded-lg"
         >
           Bagikan Bukti Transaksi

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Breadcrumb from "../../components/Breadcumb";
 import { Button, Input } from "antd";
@@ -18,10 +18,10 @@ const QR = () => {
     return () => clearTimeout(timer);
   }, [navigate]);
 
-  const handleNominalChange = (e) => {
+  const handleNominalChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNominal(e.target.value);
   };
-
+  
   const handleSubmit = () => {
     if (!isSubmitting) {
       localStorage.setItem('nominal', nominal);

@@ -4,11 +4,9 @@ import './mutasi.css'
 import { Button, InputNumber, Modal, Radio, RadioChangeEvent, Space } from "antd"
 import { SlidersHorizontal } from '@phosphor-icons/react';
 import { useNavigate } from "react-router-dom";
-import { useFetchData } from "../../hooks/useFetchData";
-import { ResponseBank } from "../../types/Bank";
 
 const Mutasi = () => {
-  const navigate = useNavigate() 
+  const navigate = useNavigate()
   const [filteredBy, setFilteredBy] = useState<string>('semua')
   const [modal2Open, setModal2Open] = useState(false)
   const [value, setValue] = useState(1);
@@ -17,9 +15,37 @@ const Mutasi = () => {
     console.log('radio checked', e.target.value);
     setValue(e.target.value);
   };
-  const { data, isLoading, isError } = useFetchData<ResponseBank>("/saved-accounts", user?.token);
-  console.log(isError)
 
+  const data = [
+    {
+      status: 'SUKSES',
+      id: 'W5953185',
+      destination: 'Transfer M-Banking DB',
+      amount: '10.000',
+      time: '17:16:20 WIB'
+    },
+    {
+      status: 'SUKSES',
+      id: 'W5953185',
+      destination: 'Transfer M-Banking DB',
+      amount: '10.000',
+      time: '17:16:20 WIB'
+    },
+    {
+      status: 'SUKSES',
+      id: 'W5953185',
+      destination: 'Transfer M-Banking DB',
+      amount: '10.000',
+      time: '17:16:20 WIB'
+    },
+    {
+      status: 'SUKSES',
+      id: 'W5953185',
+      destination: 'Transfer M-Banking DB',
+      amount: '10.000',
+      time: '17:16:20 WIB'
+    },
+  ]
 
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">

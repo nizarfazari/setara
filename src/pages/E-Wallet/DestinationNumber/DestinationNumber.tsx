@@ -4,7 +4,6 @@ import { Card, Flex, Skeleton } from "antd";
 import "./style.css";
 import Breadcrumb from "../../../components/Breadcumb";
 import { useParams } from "react-router-dom";
-import { capitalFirstLetter } from "../../../utils";
 import { useAuth } from "../../../hooks/useAuth";
 import { useFetchData } from "../../../hooks/useFetchData";
 import { ResponseEWallet } from "../../../types/E-Wallet";
@@ -13,7 +12,7 @@ export default function DestinationNumberPage() {
   const { slug } = useParams<{ slug: string }>();
   const { user, setRecipients } = useAuth();
 
-  const { data, isLoading, isError, refetch } = useFetchData<ResponseEWallet>(`/saved-ewallet-users?ewalletName=${capitalFirstLetter(slug)}`, user?.token);
+  const { data, isLoading, isError, refetch } = useFetchData<ResponseEWallet>(`/saved-ewallet-users?ewalletName=${slug}`, user?.token);
   console.log(isError)
 
   if (isLoading) {
@@ -54,7 +53,7 @@ export default function DestinationNumberPage() {
   return (
     <div className="container">
       <div className="my-[30px]">
-        <Breadcrumb title={capitalFirstLetter(slug)} subtitle='Masukkan Nomor Tujuan Transfer' />
+        <Breadcrumb title={slug ?? ''} subtitle='Masukkan Nomor Tujuan Transfer' />
       </div>
       <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">
         {data ? (

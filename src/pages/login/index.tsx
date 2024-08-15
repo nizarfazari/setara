@@ -38,7 +38,7 @@ const Login = () => {
       }
       openNotificationWithIcon('success', 'Success', data.message);
       login(data.data);
-      localStorage.setItem('username', values.username);
+
     } catch (error) {
       const errorMessage =
         error instanceof Error
@@ -69,7 +69,6 @@ const Login = () => {
         <Form
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
-          initialValues={{ username: username || null }}
         >
           <div className="input-group">
             <label htmlFor="username" className="required">
@@ -80,9 +79,8 @@ const Login = () => {
               rules={[{ required: true, message: 'Mohon Masukan Username!' }]}
             >
               <Input
-                className={`input-label ${
-                  username ? 'bg-black-500' : 'bg-white'
-                }`}
+                className={`input-label ${username ? 'bg-black-500' : 'bg-white'
+                  }`}
                 placeholder="Masukan Username ID Anda"
                 disabled={!!username}
                 id="username"

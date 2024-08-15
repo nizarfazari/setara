@@ -4,7 +4,6 @@ import { Card, Flex, Skeleton } from "antd";
 import "./style.css";
 import Breadcrumb from "../../../components/Breadcumb";
 import { useParams } from "react-router-dom";
-import { capitalFirstLetter } from "../../../utils";
 import { useAuth } from "../../../hooks/useAuth";
 import { useFetchData } from "../../../hooks/useFetchData";
 import { ResponseEWallet } from "../../../types/E-Wallet";
@@ -13,7 +12,7 @@ export default function DestinationNumberPage() {
   const { slug } = useParams<{ slug: string }>();
   const { user, setRecipients } = useAuth();
 
-  const { data, isLoading, isError, refetch } = useFetchData<ResponseEWallet>(`/saved-ewallet-users?ewalletName=${capitalFirstLetter(slug)}`, user?.token);
+  const { data, isLoading, isError, refetch } = useFetchData<ResponseEWallet>(`/saved-ewallet-users?ewalletName=${slug}`, user?.token);
   console.log(isError)
 
   if (isLoading) {
@@ -28,7 +27,7 @@ export default function DestinationNumberPage() {
             <Skeleton active paragraph={{ rows: 0 }} className="mt-10" />
             <Skeleton.Input active block size="large" />
             <Skeleton active paragraph={{ rows: 0 }} className="mt-10" />
-            <Skeleton active paragraph={{ rows: 0 }} className="my-9"/>
+            <Skeleton active paragraph={{ rows: 0 }} className="my-9" />
           </Card>
           <Card className="border-white lg:border-[#E4EDFF] w-full">
             <Card className="w-full border-white md:border-primary-300">
@@ -54,7 +53,7 @@ export default function DestinationNumberPage() {
   return (
     <div className="container">
       <div className="my-[30px]">
-        <Breadcrumb title={capitalFirstLetter(slug)} subtitle='Masukkan Nomor Tujuan Transfer' />
+        <Breadcrumb title={slug ?? ''} subtitle='Masukkan Nomor Tujuan Transfer' />
       </div>
       <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">
         {data ? (
@@ -66,8 +65,8 @@ export default function DestinationNumberPage() {
         <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
           {data ? (
             <Flex vertical gap={30} align="start">
-              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients} refetch={refetch}/>
-              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Tersimpan" contacts={data.saved} setRecipients={setRecipients} refetch={refetch}/>
+              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients} refetch={refetch} />
+              <CustomerList pathUrl={`/e-wallet/${slug}`} header="Daftar Tersimpan" contacts={data.saved} setRecipients={setRecipients} refetch={refetch} />
             </Flex>
           ) : <></>}
 

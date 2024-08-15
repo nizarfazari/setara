@@ -38,15 +38,12 @@ export const CatatanKeuangan = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/transactions/get-monthly-report`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          params: { month, year },
-        }
-      );
+      const response = await axios.get(`${import.meta.env.VITE_API_URL}/transactions/getMonthlyReport`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        params: { month, year },
+      });
 
       setMonthlyReport(response.data.data);
     } catch (error) {
@@ -230,13 +227,9 @@ export const CatatanKeuangan = () => {
             <h5 id="balance-label">Selisih</h5>
             <h5
               className={`${
-                (monthlyReport?.total ?? 0) < 0
-                  ? 'text-red-500'
-                  : 'text-green-600'
+                (monthlyReport?.total ?? 0) < 0 ? "text-red-500" : "text-green-600"
               } text-heading-6 font-bold`}
-              aria-label={`Selisih bulan ini: ${FormatCurrency(
-                monthlyReport?.total
-              )}`}
+              aria-label={`Selisih bulan ini: ${FormatCurrency(monthlyReport?.total)}`}
             >
               {FormatCurrency(monthlyReport?.total)}
             </h5>

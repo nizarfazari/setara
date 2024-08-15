@@ -47,6 +47,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         user?.token
       );
 
+
       if (data.code !== 200) {
         navigate('/transaksi-gagal');
       } else {

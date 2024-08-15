@@ -105,6 +105,21 @@ export const MenuList = () => {
               >
                 {formatNorek(user?.user.account_number)}
               </p>
+            <div className="border rounded-xl p-5 my-7 shadow-sm">
+              <p
+                className="text-primary-100"
+                aria-label={`Tanggal saat ini: ${formattedDate}`}
+              >
+                {formattedDate}, {formattedTimeWithColon}
+              </p>
+              <p
+                className="text-primary-100 font-semibold py-2"
+                aria-label={`Nomor Rekening: ${String(
+                  formatNorek(user?.user.account_number)
+                )}`}
+              >
+                {formatNorek(user?.user.account_number)}
+              </p>
 
               <p
                 className="text-body-large font-semibold"

@@ -5,6 +5,7 @@ import iconEwallet from '/images/homepage/tf-e-wallet.svg';
 import iconBuy from '/images/homepage/Pembelian.svg';
 import iconInvest from '/images/homepage/investasi.svg';
 import iconCardless from '/images/homepage/Cardless.svg';
+import iconQR from '/images/homepage/scanqr.svg';
 import { Button, Modal } from 'antd';
 import {
   FormatCurrency,
@@ -20,7 +21,7 @@ export const MenuList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [balance, setBalance] = useState<number>();
   const [, setError] = useState<AxiosError | null>(null);
-  const [feedback, setFeedback] = useState<string>(''); // State for aria-live feedback
+  const [feedback, setFeedback] = useState<string>('');
   const { user } = useAuth();
   const navigate = useNavigate();
 
@@ -62,8 +63,7 @@ export const MenuList = () => {
       <div className="sr-only" aria-live="assertive">
         {feedback}
       </div>{' '}
-      {/* Live region for screen reader feedback */}
-      <div className="grid grid-cols-3 md:grid-cols-6 py-4 gap-y-4 rounded-lg border border-primary-300">
+      <div className="grid grid-cols-3 md:grid-cols-7 py-4 gap-y-4 rounded-lg border border-primary-300">
         <div className="text-center" aria-modal="true" aria-live="polite">
           <img
             src={iconInfo}
@@ -105,6 +105,7 @@ export const MenuList = () => {
               >
                 {formatNorek(user?.user.account_number)}
               </p>
+            </div>
             <div className="border rounded-xl p-5 my-7 shadow-sm">
               <p
                 className="text-primary-100"
@@ -153,6 +154,15 @@ export const MenuList = () => {
             className="mx-auto w-16 p-3 shadow-md rounded-xl border border-primary-300 cursor-pointer"
           />
           <p className="pt-2">E-Wallet</p>
+        </div>
+
+        <div className=" text-center" onClick={() => navigate('/qr')}>
+          <img
+            src={iconQR}
+            alt="info"
+            className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
+          />
+          <p className="pt-2">Info QR</p>
         </div>
 
         <button

@@ -32,7 +32,7 @@ const TransferWallet: React.FC = () => {
         <div className="e-wallet flex flex-wrap sm:justify-evenly justify-center items-start gap-8 min-h-[160px] min-w-[160px]">
           {data?.map((item: EWallets) => (
             <Link
-              to={`/e-wallet/${item.name.toLowerCase()}`}
+              to={`/e-wallet/${item.name}`}
               key={item.id}
               className="text-center flex flex-col items-center"
             >

@@ -18,19 +18,16 @@ const Login = () => {
   const onFinish: FormProps<LoginType>['onFinish'] = async (values) => {
     setLoading(true);
     try {
-      const response = await fetch(
-        `${import.meta.env.VITE_API_URL}/auth/sign-in`,
-        {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            signature: values.username,
-            password: values.password,
-          }),
-        }
-      );
+      const response = await fetch(`${process.env.VITE_API_URL}/auth/sign-in`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          signature: values.username,
+          password: values.password,
+        }),
+      });
       const data = await response.json();
       if (!response.ok) {
         console.log(data);
@@ -38,7 +35,6 @@ const Login = () => {
       }
       openNotificationWithIcon('success', 'Success', data.message);
       login(data.data);
-
     } catch (error) {
       const errorMessage =
         error instanceof Error
@@ -66,10 +62,7 @@ const Login = () => {
             Selamat Datang Kembali
           </p>
         </div>
-        <Form
-          onFinish={onFinish}
-          onFinishFailed={onFinishFailed}
-        >
+        <Form onFinish={onFinish} onFinishFailed={onFinishFailed}>
           <div className="input-group">
             <label htmlFor="username" className="required">
               Username ID
@@ -79,8 +72,9 @@ const Login = () => {
               rules={[{ required: true, message: 'Mohon Masukan Username!' }]}
             >
               <Input
-                className={`input-label ${username ? 'bg-black-500' : 'bg-white'
-                  }`}
+                className={`input-label ${
+                  username ? 'bg-black-500' : 'bg-white'
+                }`}
                 placeholder="Masukan Username ID Anda"
                 disabled={!!username}
                 id="username"

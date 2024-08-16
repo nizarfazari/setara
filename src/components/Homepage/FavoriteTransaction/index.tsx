@@ -25,7 +25,7 @@ export const FavoriteTransaction: React.FC = () => {
       const [response1, response2] = await Promise.all([
         axios.get<{
           data: { favorites: CombinedItem[] };
-        }>(`${import.meta.env.VITE_API_URL}/saved-accounts`, {
+        }>(`${process.env.VITE_API_URL}/saved-accounts`, {
           headers: {
             Authorization: `Bearer ${user?.token}`,
           },
@@ -33,7 +33,7 @@ export const FavoriteTransaction: React.FC = () => {
         }),
         axios.get<{
           data: { favorites: CombinedItem[] };
-        }>(`${import.meta.env.VITE_API_URL}/saved-ewallet-users`, {
+        }>(`${process.env.VITE_API_URL}/saved-ewallet-users`, {
           headers: {
             Authorization: `Bearer ${user?.token}`,
           },
@@ -130,8 +130,9 @@ export const FavoriteTransaction: React.FC = () => {
               <div
                 className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4"
                 role="group"
-                aria-label={`Transaksi favorit: ${transaction.type === "transfer" ? "Transfer" : "Top Up"
-                  }`}
+                aria-label={`Transaksi favorit: ${
+                  transaction.type === 'transfer' ? 'Transfer' : 'Top Up'
+                }`}
               >
                 <div
                   className={`flex gap-2 items-center py-1 px-2 w-20 bg-primary-100 rounded-3xl text-white text-caption-large`}

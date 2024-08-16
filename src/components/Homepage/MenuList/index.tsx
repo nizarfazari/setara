@@ -37,7 +37,7 @@ export const MenuList = () => {
     const token = user?.token;
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/user/getBalance`,
+        `${process.env.VITE_API_URL}/user/getBalance`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

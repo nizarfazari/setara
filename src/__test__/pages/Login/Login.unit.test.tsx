@@ -43,7 +43,6 @@ describe('Login Component', () => {
   });
 
   it('calls the login function on successful form submission', async () => {
-    // Mock fetch
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,
@@ -74,7 +73,6 @@ describe('Login Component', () => {
   });
 
   it('displays error notification on failed login', async () => {
-    // Mock fetch
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: false,

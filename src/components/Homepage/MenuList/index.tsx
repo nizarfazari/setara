@@ -89,23 +89,7 @@ export const MenuList = () => {
             <h1 className="text-body-large text-primary-100 font-semibold text-center">
               Info Saldo
             </h1>
-
-            <div className="border rounded-xl p-5 my-7 shadow-sm">
-              <p
-                className="text-primary-100"
-                aria-label={`Tanggal saat ini: ${formattedDate}`}
-              >
-                {formattedDate}, {formattedTimeWithColon}
-              </p>
-              <p
-                className="text-primary-100 font-semibold py-2"
-                aria-label={`Nomor Rekening: ${String(
-                  formatNorek(user?.user.account_number)
-                )}`}
-              >
-                {formatNorek(user?.user.account_number)}
-              </p>
-            </div>
+            
             <div className="border rounded-xl p-5 my-7 shadow-sm">
               <p
                 className="text-primary-100"

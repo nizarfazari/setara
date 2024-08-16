@@ -23,7 +23,6 @@ describe('Login Integration Test', () => {
   });
 
   it('integrates useAuth and useNotification correctly', async () => {
-    // Mock fetch
     global.fetch = jest.fn(() =>
       Promise.resolve({
         ok: true,

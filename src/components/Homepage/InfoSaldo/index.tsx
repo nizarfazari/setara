@@ -57,7 +57,7 @@ const InfoSaldo: React.FC = () => {
           notification.success({
             message: 'Success',
             description: 'No. Rekening berhasil disalin',
-            duration: 2, // Duration in seconds
+            duration: 2,
           });
         })
         .catch((err) => {
@@ -65,14 +65,14 @@ const InfoSaldo: React.FC = () => {
           notification.error({
             message: 'Error',
             description: 'Tidak dapat menyalin nomor rekening.',
-            duration: 2, // Duration in seconds
+            duration: 2,
           });
         });
     } else {
       notification.error({
         message: 'Error',
         description: 'No. Rekening tidak tersedia.',
-        duration: 2, // Duration in seconds
+        duration: 2,
       });
     }
   };

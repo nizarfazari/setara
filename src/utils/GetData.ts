@@ -14,7 +14,7 @@ export async function GetData<T>(
     return response.data.data ?? [];
   } catch (error) {
     console.error(error);
-    throw error; // Re-throw the error so it can be handled by the caller
+      throw error;
   }
 }
 
@@ -36,7 +36,7 @@ export async function postData<TRequest, TResponse>(
     return response.data ?? {};
   } catch (error) {
     console.log(error);
-    throw error; // Re-throw the error so it can be handled by the caller
+    throw error;
   }
 }
 
@@ -58,6 +58,6 @@ export async function putData<TRequest, TResponse>(
     return response.data ?? {};
   } catch (error) {
     console.log(error);
-    throw error; // Re-throw the error so it can be handled by the caller
+    throw error;
   }
 }

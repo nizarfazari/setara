@@ -26,8 +26,9 @@ describe('DestinationNumber Component', () => {
         ewallet_user_name: 'Alice',
         ewallet_user_phone_number: '1234567890',
         id: '1',
-        ewallet_user_image_path: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEA',
-        ewallet_name: 'shopeepay'
+        ewallet_user_image_path:
+          'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEA',
+        ewallet_name: 'shopeepay',
       },
     ],
     saved: [
@@ -35,8 +36,9 @@ describe('DestinationNumber Component', () => {
         ewallet_user_name: 'Bob',
         ewallet_user_phone_number: '0987654321',
         id: '2',
-        ewallet_user_image_path: 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEA',
-        ewallet_name: 'ovo'
+        ewallet_user_image_path:
+          'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEA',
+        ewallet_name: 'ovo',
       },
     ],
     total_favorites: 1,
@@ -70,10 +72,10 @@ describe('DestinationNumber Component', () => {
     await waitFor(() => {
       const aliceElement = screen.queryByText(/Alice/i);
       const bobElement = screen.queryByText(/Bob/i);
-      
+
       // Debugging untuk membantu melihat struktur DOM
-      screen.debug();
-      
+      // screen.debug();
+
       expect(aliceElement).toBeInTheDocument();
       expect(bobElement).not.toBeInTheDocument();
     });

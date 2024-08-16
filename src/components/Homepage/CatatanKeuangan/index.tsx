@@ -25,9 +25,8 @@ export const CatatanKeuangan = () => {
     DATA_MONTH.find((item) => item.monthNumber == new Date().getMonth() + 1)
       ?.month
   );
-  const [selectedYear, setSelectedYear] = useState<string>(
-    new Date().getFullYear().toString()
-  );
+  const [selectedYear, setSelectedYear] = useState<string>('2024');
+  const [liveYear, setLiveYear] = useState<string>('');
   const { user } = useAuth();
   const today = new Date();
 
@@ -63,7 +62,10 @@ export const CatatanKeuangan = () => {
   };
 
   const handleYearChange: DatePickerProps['onChange'] = (_, dateString) => {
-    setSelectedYear(dateString.toString());
+    if (typeof dateString === 'string') {
+      setSelectedYear(dateString);
+      setLiveYear(dateString);
+    }
   };
 
   const handleFilterTransaction = () => {
@@ -77,6 +79,13 @@ export const CatatanKeuangan = () => {
   useEffect(() => {
     fetchMonthlyReport(today.getMonth() + 1, today.getFullYear().toString());
   }, []);
+
+  const handleMouseEnter = (month: string) => {
+    const liveRegion = document.getElementById('dropdown-live-region');
+    if (liveRegion) {
+      liveRegion.textContent = `Sorot di bulan: ${month}`;
+    }
+  };
 
   return (
     <div
@@ -100,15 +109,38 @@ export const CatatanKeuangan = () => {
             <Dropdown
               menu={{
                 items: DATA_MONTH.map((item, index) => ({
-                  label: item.month,
+                  label: (
+                    <div
+                      onMouseEnter={() => handleMouseEnter(item.month)}
+                      onFocus={() => handleMouseEnter(item.month)}
+                      tabIndex={0}
+                      role="menuitem"
+                      aria-label={`Bulan ${item.month}`}
+                    >
+                      {item.month}
+                    </div>
+                  ),
                   key: index.toString(),
                 })),
-                onClick: (e) => handleMonthChange(+e.key),
+                onClick: (e) => {
+                  handleMonthChange(+e.key);
+                  const selectedMonth = DATA_MONTH[+e.key].month;
+                  const liveRegion = document.getElementById(
+                    'dropdown-live-region'
+                  );
+                  if (liveRegion) {
+                    liveRegion.textContent = `Bulan terpilih: ${selectedMonth}`;
+                  }
+                },
               }}
               trigger={['click']}
               placement="bottom"
             >
-              <a onClick={(e) => e.preventDefault()}>
+              <a
+                onClick={(e) => e.preventDefault()}
+                role="button"
+                aria-haspopup="true"
+              >
                 <Space
                   className="flex justify-between px-5 py-3"
                   aria-label={`Pilih bulan: ${selectedMonth}`}
@@ -118,16 +150,29 @@ export const CatatanKeuangan = () => {
                 </Space>
               </a>
             </Dropdown>
+
+            <div
+              id="dropdown-live-region"
+              aria-live="polite"
+              style={{ position: 'absolute', left: '-9999px' }}
+            ></div>
           </div>
           <DatePicker
-            defaultValue={dayjs()}
             className="rounded-xl py-3 px-5"
             onChange={handleYearChange}
             picker="year"
-            placeholder="Pilih Tahun"
+            defaultValue={dayjs('2024')}
+            value={dayjs(selectedYear)}
             role="combobox"
             aria-label={`Pilih tahun: ${selectedYear}`}
           />
+          <div
+            id="year-live-region"
+            aria-live="polite"
+            style={{ position: 'absolute', left: '-9999px' }}
+          >
+            {liveYear ? `Tahun yang dipilih: ${liveYear}` : ''}
+          </div>
           <Button
             type="primary"
             className="bg-primary-100 text-white w-full sm:w-[175px] rounded-xl font-semibold text-body-small md:text-body-large h-[50px]"

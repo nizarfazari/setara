@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import './mutasi.css';
 import { Button, DatePicker, Modal, Radio, RadioChangeEvent, Skeleton, Space } from "antd";
 import { SlidersHorizontal } from '@phosphor-icons/react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { usePostData } from "../../hooks/usePostData";
 import { useAuth } from "../../hooks/useAuth";
 import dayjs, { Dayjs } from "dayjs";
@@ -43,12 +43,13 @@ type GroupedTransaction = {
 
 const Mutasi = () => {
   const navigate = useNavigate();
-  const [filteredBy, setFilteredBy] = useState<string>('ALL_TRANSACTIONS');
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [filteredBy, setFilteredBy] = useState<string>(searchParams ? searchParams.get('filter') || 'ALL_TRANSACTIONS' : 'ALL_TRANSACTIONS');
   const [modal2Open, setModal2Open] = useState(false);
-  const [value, setValue] = useState<number>(1);
+  const [value, setValue] = useState<number>(searchParams ? Number(searchParams.get('value')) || 1 : 1);
   const { user } = useAuth();
   const { RangePicker } = DatePicker;
-  const [selectedDates, setSelectedDates] = useState<[Dayjs, Dayjs]>([dayjs(), dayjs()]);
+  const [selectedDates, setSelectedDates] = useState<[Dayjs, Dayjs]>(searchParams ? searchParams.get('startDate') && searchParams.get('endDate') ? [dayjs(searchParams.get('startDate')), dayjs(searchParams.get('endDate'))] : [dayjs(), dayjs()] : [dayjs(), dayjs()]);
   const { data: datas2, post, isLoading } = usePostData<MutationReq, ApiResponse>('/transactions/get-all-mutation?page=0&size=10', user?.token);
   console.log(datas2);
 
@@ -58,6 +59,24 @@ const Mutasi = () => {
       endDate,
       transactionCategory: filteredBy,
     });
+  };
+
+  const onFilter = (value: string) => {
+    // Ambil semua parameter 'filter' dari searchParams
+    const searchParamsFilter = searchParams.getAll('filter');
+    console.log(searchParamsFilter);
+
+    // Buat salinan dari searchParams
+    const newSearchParams = new URLSearchParams(searchParams);
+
+    // Atur parameter 'filter' dengan nilai baru
+    newSearchParams.set('filter', value);
+
+    // Set parameter yang sudah diperbarui
+    setSearchParams(newSearchParams);
+
+    // Perbarui state filteredBy
+    setFilteredBy(value);
   };
 
   useEffect(() => {
@@ -96,6 +115,11 @@ const Mutasi = () => {
         endDate = today;
     }
 
+    searchParams.set('startDate', startDate.format('YYYY-MM-DD'));
+    searchParams.set('endDate', endDate.format('YYYY-MM-DD'));
+    searchParams.set('value', e.target.value.toString());
+    setSearchParams([...searchParams]);
+
     setSelectedDates([startDate, endDate]);
   };
 
@@ -132,13 +156,13 @@ const Mutasi = () => {
     <div className="container py-5 lg:py-[50px] pb-[50px]">
       <Breadcrumb title="Mutasi Rekening" subtitle="Pantai Pengeluaran dan Pemasukan Rekening" />
       <div className="my-5 lg:my-10">
-        <button onClick={() => setFilteredBy('ALL_TRANSACTIONS')} className={`btn text-primary-100 rounded-full ${filteredBy === "ALL_TRANSACTIONS" ? "bg-primary-100 text-white" : ""}`}>
+        <button onClick={() => onFilter('ALL_TRANSACTIONS')} className={`btn text-primary-100 rounded-full ${filteredBy === "ALL_TRANSACTIONS" ? "bg-primary-100 text-white" : ""}`}>
           Semua
         </button>
-        <button onClick={() => setFilteredBy('INCOMING')} className={`btn text-primary-100 rounded-full mx-2 ${filteredBy === "INCOMING" ? "bg-primary-100 text-white" : ""}`}>
+        <button onClick={() => onFilter('INCOMING')} className={`btn text-primary-100 rounded-full mx-2 ${filteredBy === "INCOMING" ? "bg-primary-100 text-white" : ""}`}>
           Pemasukan
         </button>
-        <button onClick={() => setFilteredBy('OUTGOING')} className={`btn text-primary-100 rounded-full ${filteredBy === "OUTGOING" ? "bg-primary-100 text-white" : ""}`}>
+        <button onClick={() => onFilter('OUTGOING')} className={`btn text-primary-100 rounded-full ${filteredBy === "OUTGOING" ? "bg-primary-100 text-white" : ""}`}>
           Pengeluaran
         </button>
       </div>
@@ -156,10 +180,11 @@ const Mutasi = () => {
           onOk={() => setModal2Open(false)}
           onCancel={() => setModal2Open(false)}
         >
-          <Radio.Group onChange={onChange} value={value}>
+
+          <Radio.Group onChange={onChange} value={value} >
             <Space direction="vertical">
-              <Radio value={1}>Hari Ini</Radio>
-              <Radio value={2}>7 Hari Terakhir</Radio>
+              <Radio value={1}  >Hari Ini</Radio>
+              <Radio value={2} >7 Hari Terakhir</Radio>
               <Radio value={3}>15 Hari Terakhir</Radio>
               <Radio value={4}>1 Bulan Terakhir</Radio>
               <Radio value={5}>

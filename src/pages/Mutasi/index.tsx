@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import './mutasi.css';
-import { Button, DatePicker, Modal, Radio, Skeleton, Space } from "antd";
+import { Button, DatePicker, Modal, Radio, RadioChangeEvent, Skeleton, Space } from "antd";
 import { SlidersHorizontal } from '@phosphor-icons/react';
 import { useNavigate } from "react-router-dom";
 import { usePostData } from "../../hooks/usePostData";
 import { useAuth } from "../../hooks/useAuth";
-import dayjs from "dayjs";
-import Breadcrumb from "../../components/Breadcumb";
+import dayjs, { Dayjs } from "dayjs";
+
 import { FormatCurrency } from "../../utils";
+import Breadcrumb from "../../components/Breadcumb";
 
 type Transaction = {
   transaction_id: string;
@@ -35,16 +36,22 @@ type ApiResponse = {
   status: boolean;
 };
 
+type GroupedTransaction = {
+  date: string;
+  transactions: Transaction[];
+};
+
 const Mutasi = () => {
   const navigate = useNavigate();
   const [filteredBy, setFilteredBy] = useState<string>('ALL_TRANSACTIONS');
   const [modal2Open, setModal2Open] = useState(false);
-  const [value, setValue] = useState(1);
+  const [value, setValue] = useState<number>(1);
   const { user } = useAuth();
   const { RangePicker } = DatePicker;
-  const [selectedDates, setSelectedDates] = useState([dayjs(), dayjs()]);
+  const [selectedDates, setSelectedDates] = useState<[Dayjs, Dayjs]>([dayjs(), dayjs()]);
   const { data: datas2, post, isLoading } = usePostData<MutationReq, ApiResponse>('/transactions/get-all-mutation?page=0&size=10', user?.token);
-  console.log(datas2)
+  console.log(datas2);
+
   const getMutation = async (startDate: string, endDate: string) => {
     await post({
       startDate,
@@ -58,7 +65,7 @@ const Mutasi = () => {
     getMutation(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
   }, [filteredBy, selectedDates]);
 
-  const onChange = (e: any) => {
+  const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
     const today = dayjs();
     let startDate, endDate;
@@ -92,32 +99,35 @@ const Mutasi = () => {
     setSelectedDates([startDate, endDate]);
   };
 
-  const onDateChange = (dates: any) => {
-    setSelectedDates(dates);
+  const onDateChange = (dates: [Dayjs, Dayjs] | null | undefined | unknown) => {
+    console.log(dates);
+    if (dates) {
+      setSelectedDates(dates as [Dayjs, Dayjs]);
+    }
   };
 
-  const filteringDataMutation = (data) => {
+
+  const filteringDataMutation = (data: Transaction[]): GroupedTransaction[] => {
     const groupedData = data.reduce((acc, transaction) => {
       const date = transaction.formatted_date;
-      const time = transaction.time;
       if (!acc[date]) {
         acc[date] = {
-          date: time,
+          date: transaction.time,
           transactions: []
         };
       }
       acc[date].transactions.push(transaction);
       return acc;
-    }, {});
+    }, {} as Record<string, GroupedTransaction>);
 
-    console.log(groupedData)
+    console.log(groupedData);
 
-    return Object.values(groupedData)
-  }
-
+    return Object.values(groupedData);
+  };
 
   const groupedTransactions = datas2?.data ? filteringDataMutation(datas2.data) : [];
-  console.log(groupedTransactions)
+  console.log(groupedTransactions);
+
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
       <Breadcrumb title="Mutasi Rekening" subtitle="Pantai Pengeluaran dan Pemasukan Rekening" />
@@ -212,7 +222,6 @@ const Mutasi = () => {
             </div>
           ))}
           <Button type="primary" className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg">Download Mutasi Rekening</Button>
-
         </>
       ) : (
         <div className="text-center">

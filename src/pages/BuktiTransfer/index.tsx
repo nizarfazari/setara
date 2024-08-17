@@ -28,8 +28,8 @@ const BuktiTransfer = () => {
   const { id } = useParams<{ id: string }>();
   console.log(id)
   const { user } = useAuth()
-  const { data, isLoading } = useFetchData<TransactionDetail>(`/transactions/get-mutation-detail/${id}`, user?.token)
-  console.log(data)
+  const { data } = useFetchData<TransactionDetail>(`/transactions/get-mutation-detail/${id}`, user?.token)
+
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
       <Breadcrumb

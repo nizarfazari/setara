@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { BankUser } from "../../../types/Bank";
 import { recipientsData } from "../../../types/Transaction";
 
-
 type TContactList = {
   pathUrl: string;
   header: string;

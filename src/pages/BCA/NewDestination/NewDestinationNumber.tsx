@@ -43,7 +43,7 @@ export default function NewDestinationNumberPage() {
   };
 
   const onFinishFailed = (errorInfo: unknown) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
 
   const handleDestinationNumberChange = () => {
@@ -94,7 +94,10 @@ export default function NewDestinationNumberPage() {
   return (
     <div className="container">
       <div className="my-[30px]">
-        <Breadcrumb title={capitalFirstLetter(slug)} subtitle="Masukan Nomor Tujuan dan Nominal Transfer" />
+        <Breadcrumb
+          title={capitalFirstLetter(slug)}
+          subtitle="Masukan Nomor Tujuan dan Nominal Transfer"
+        />
       </div>
       <Card className="w-full max-w-[690px] mx-auto border-white md:border-primary-300">
         <Form
@@ -107,13 +110,14 @@ export default function NewDestinationNumberPage() {
           <Form.Item
             name="destinationNumber"
             label="Nomor Transfer Baru"
-            rules={[{ required: true, message: "Nomor Tidak Boleh Kosong" }]}
+            rules={[{ required: true, message: 'Nomor Tidak Boleh Kosong' }]}
             required
           >
             <div>
               <div className="flex items-center gap-2 flex-col md:flex-row md:gap-4">
                 <Input type="number" placeholder="Masukkan Nomor" className="flex-[80%]" onChange={handleDestinationNumberChange} />
                 <Button
+                  type="primary"
                   onClick={handleVerifiedNumber}
                   className="flex-[20%] bg-primary-100 text-white w-full py-[10px] rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
                 >
@@ -123,18 +127,27 @@ export default function NewDestinationNumberPage() {
               {isVerified && (
                 <Flex gap={6} align="center" className="mt-6">
                   <CheckCircle size={18} weight="fill" color="#12D79C" />
-                  <p className="text-[#12D79C] font-bold text-caption-small">VERIFIED</p>
+                  <p className="text-[#12D79C] font-bold text-caption-small">
+                    VERIFIED
+                  </p>
                 </Flex>
               )}
             </div>
           </Form.Item>
 
           <Form.Item name="savedList" valuePropName="checked">
-            <Checkbox className="text-neutral-300 font-bold text-caption-large">Masukkan ke Daftar Tersimpan</Checkbox>
+            <Checkbox className="text-neutral-300 font-bold text-caption-large">
+              Masukkan ke Daftar Tersimpan
+            </Checkbox>
           </Form.Item>
 
           <Form.Item name="name" label="Nama Transfer">
-            <Input type="text" placeholder="Masukkan Nama" disabled={isVerified ? false : true} readOnly />
+            <Input
+              type="text"
+              placeholder="Masukkan Nama"
+              disabled={isVerified ? false : true}
+              readOnly
+            />
           </Form.Item>
 
           <Form.Item name="source" label="Sumber Rekening" required>
@@ -169,10 +182,15 @@ export default function NewDestinationNumberPage() {
           </Form.Item>
 
           <Form.Item label="Catatan" name="notes">
-            <Input type="text" placeholder="Masukkan Catatan (Opsional)" disabled={isVerified ? false : true} />
+            <Input
+              type="text"
+              placeholder="Masukkan Catatan (Opsional)"
+              disabled={isVerified ? false : true}
+            />
           </Form.Item>
 
           <Button
+            type="primary"
             className="bg-primary-100 text-white w-full h-10 rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
             htmlType="submit"
             disabled={isVerified ? false : true}

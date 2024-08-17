@@ -66,7 +66,7 @@ const Transfer: React.FC = () => {
       setSelectedWallet(id);
       navigate(navigateTo);
     } else {
-      playSpeech('Maaf, fitur sedang dikembangkan');
+      playSpeech('Maaf, fitur sedang dikembangkan');  
     }
   };
 
@@ -102,6 +102,7 @@ const Transfer: React.FC = () => {
                 role="button"
                 aria-live="polite"
                 aria-disabled={!wallet.isActive ? 'true' : 'false'}
+                tabIndex={0}
               >
                 <img
                   className="w-[60px]"

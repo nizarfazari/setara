@@ -24,9 +24,8 @@ const Mutasi = () => {
   const [selectedDates, setSelectedDates] = useState<[Dayjs, Dayjs]>(searchParams ? searchParams.get('startDate') && searchParams.get('endDate') ? [dayjs(searchParams.get('startDate')), dayjs(searchParams.get('endDate'))] : [dayjs(), dayjs()] : [dayjs(), dayjs()]);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize] = useState<number>(10); // Mengatur ukuran halaman tetap 10
-  const { data: datas2, post, isLoading } = usePostData<MutationReq, ApiResponse>(`/transactions/get-all-mutation?page=${currentPage - 1}&size=${pageSize}`, user?.token);
+  const { data, post, isLoading } = usePostData<MutationReq, ApiResponse>(`/transactions/get-all-mutation?page=${currentPage - 1}&size=${pageSize}`, user?.token);
 
-  console.log(datas2?.data?.total_pages)
 
   const getMutation = async (startDate: string, endDate: string) => {
     await post({
@@ -111,7 +110,7 @@ const Mutasi = () => {
     return Object.values(groupedData);
   };
 
-  const groupedTransactions = datas2?.data.mutation_responses ? filteringDataMutation(datas2.data.mutation_responses) : [];
+  const groupedTransactions = data?.data.mutation_responses ? filteringDataMutation(data.data.mutation_responses) : [];
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -211,7 +210,7 @@ const Mutasi = () => {
             </div>
           ))}
           <div className="flex justify-center mb-4">
-            <Pagination current={currentPage} pageSize={pageSize} total={datas2?.data.total_pages} onChange={handlePageChange} showSizeChanger={false} />
+            <Pagination current={currentPage} pageSize={pageSize} total={data?.data.total_pages} onChange={handlePageChange} showSizeChanger={false} />
           </div>
           <Button type="primary" className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg">Download Mutasi Rekening</Button>
         </>

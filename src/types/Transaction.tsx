@@ -38,7 +38,6 @@ type transasction = {
     
 }
 
-
 export interface AuthContextType {
     user: AuthData | null;
     login: (data: object) => void;

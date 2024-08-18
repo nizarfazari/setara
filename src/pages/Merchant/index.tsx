@@ -3,26 +3,28 @@ import { BrowserQRCodeReader, IScannerControls } from '@zxing/browser';
 import Breadcrumb from '../../components/Breadcumb';
 import axios from 'axios';
 import { useAuth } from '../../hooks/useAuth';
+import { useNavigate } from 'react-router-dom';
 
-// Definisikan tipe untuk transactionDetail
 interface TransactionDetail {
   id: string;
   amount: number;
   date: string;
   status: string;
-  // Tambahkan properti lain yang sesuai dengan struktur data yang Anda terima
+  name: string; // Add these fields if they are part of the response
+  address: string;
+  imageUrl: string;
 }
 
 const QRISScanner = () => {
   const { user } = useAuth();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [result, setResult] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [transactionDetail, setTransactionDetail] =
-    useState<TransactionDetail | null>(null);
+  const [, setTransactionDetail] = useState<TransactionDetail | null>(null);
   const codeReader = useRef<BrowserQRCodeReader | null>(null);
   const scannerControlsRef = useRef<IScannerControls | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     codeReader.current = new BrowserQRCodeReader();
@@ -48,7 +50,7 @@ const QRISScanner = () => {
                   stopScan();
                 }
                 if (err) {
-                  //   console.error('QR Scan Error:', err);
+                  // Handle error
                 }
               }
             );
@@ -90,12 +92,11 @@ const QRISScanner = () => {
         }
       );
       setTransactionDetail(response.data);
-      console.log(response.data);
+      navigate('/payqr', { state: { transactionDetail: response.data } });
     } catch (err) {
-      setError(`Error fetching transaction details, ${err}`);
+      setError(`Error fetching transaction details: ${err}`);
       console.error('API Fetch Error:', err);
     }
-    console.log('Fetching transaction detail with:', result);
   };
 
   useEffect(() => {
@@ -182,20 +183,7 @@ const QRISScanner = () => {
             )}
             {result && !isProcessing && (
               <p className="result-text text-center text-green-600 font-semibold mb-6 text-lg">
-                QR Code Result: {result}
-              </p>
-            )}
-            {transactionDetail && (
-              <div className="transaction-detail text-center mt-6">
-                <h3 className="font-bold text-lg">Transaction Details</h3>
-                <pre className="bg-gray-100 p-4 rounded-lg text-left">
-                  {JSON.stringify(transactionDetail, null, 2)}
-                </pre>
-              </div>
-            )}
-            {error && !isProcessing && (
-              <p className="error-text text-center text-red-600 font-semibold mb-6 text-lg">
-                Error: {error}
+                QR Code Result: {result} SUCCESS
               </p>
             )}
           </div>

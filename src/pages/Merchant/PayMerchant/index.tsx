@@ -1,7 +1,7 @@
 import { Button, Form, InputNumber } from 'antd';
 import Breadcrumb from '../../../components/Breadcumb';
 import { useAuth } from '../../../hooks/useAuth';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 type TFormPayQris = {
   amount: number;
@@ -11,13 +11,22 @@ type TFormPayQris = {
 const PayQris = () => {
   const { user, setProcessTransaction } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const transactionDetail = location.state?.transactionDetail;
+  console.log(transactionDetail);
 
   const onFinish = (values: TFormPayQris) => {
     setProcessTransaction({
       nominal: values.amount.toString(),
       notes: values.notes,
     });
-    navigate('/path/to/next/page');
+    navigate('/confirmpayqr', {
+      state: {
+        transactionDetail,
+        amount: values.amount,
+        notes: values.notes,
+      },
+    });
   };
 
   const onFinishFailed = (errorInfo: unknown) => {
@@ -48,14 +57,14 @@ const PayQris = () => {
               <div className="text-center my-4 lg:order-1 lg:w-1/2">
                 <img
                   className="w-[200px] lg:w-[200px] m-auto lg:h-[200px]"
-                  src="../../../../public/images/img-profile-merchant.svg"
+                  src={transactionDetail?.data.image_path}
                   alt="Merchant (src ganti image path dari api)"
                 />
                 <p className="mt-2 font-bold text-2xl text-primary-100">
-                  SIOMAY MBA YU (name)
+                  {transactionDetail?.data.name}
                 </p>
                 <p className="text-lg text-primary-100">
-                  Ruko Summarecon Bekasi (address)
+                  {transactionDetail?.data.address}
                 </p>
               </div>
 
@@ -67,7 +76,7 @@ const PayQris = () => {
                 <div className="flex flex-nowrap items-start mt-2">
                   <img
                     className="w-[70px] mr-4"
-                    src="../../../../public/images/img-profile-merchant.svg"
+                    src={user?.user.image_path}
                     alt="Account"
                   />
                   <div className="text-[12px] md:text-[14px]">

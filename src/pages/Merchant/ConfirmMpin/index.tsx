@@ -1,12 +1,12 @@
 import * as React from 'react';
-import Breadcrumb from '../../components/Breadcumb';
+import Breadcrumb from '../../../components/Breadcumb';
 import type { FormProps } from 'antd';
 import { Button, Form, Input, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { TransactionBankReq, TransactionBankRes } from '../../types/Bank';
-import { postData } from '../../utils/GetData';
-import { useNotification } from '../../hooks/useNotification';
+import { useAuth } from '../../../hooks/useAuth';
+import { TransactionBankReq, TransactionBankRes } from '../../../types/Bank';
+import { postData } from '../../../utils/GetData';
+import { useNotification } from '../../../hooks/useNotification';
 import axios from 'axios';
 
 interface IConfirmationPINProps {}
@@ -34,7 +34,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
 
     try {
       const data = await postData<TransactionBankReq, TransactionBankRes>(
-        '/transactions/merchant-transfer',
+        '/transactions/bca-transfer',
         {
           account_number: transactions.transactionId,
           destinationAccountNumber: transactions.recipients.numberDestination,

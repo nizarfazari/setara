@@ -103,6 +103,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
 
           <Form.Item>
             <Button
+              type="primary"
               className="mt-5 bg-primary-100 text-white w-full h-[60px] rounded-xl text-heading-5 font-semibold"
               htmlType="submit"
             >

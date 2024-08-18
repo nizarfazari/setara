@@ -1,4 +1,4 @@
-import { Button, Form, InputNumber } from 'antd';
+import { Button, Form, Input, InputNumber } from 'antd';
 import Breadcrumb from '../../../components/Breadcumb';
 import { useAuth } from '../../../hooks/useAuth';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -9,7 +9,7 @@ type TFormPayQris = {
 };
 
 const PayQris = () => {
-  const { user, setProcessTransaction } = useAuth();
+  const { user, setProcessTransaction, transactions } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   const transactionDetail = location.state?.transactionDetail;
@@ -20,13 +20,7 @@ const PayQris = () => {
       nominal: values.amount.toString(),
       notes: values.notes,
     });
-    navigate('/confirmpayqr', {
-      state: {
-        transactionDetail,
-        amount: values.amount,
-        notes: values.notes,
-      },
-    });
+    navigate('/confirmpayqr');
   };
 
   const onFinishFailed = (errorInfo: unknown) => {
@@ -49,22 +43,22 @@ const PayQris = () => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             initialValues={{
-              amount: null,
-              notes: '',
+              amount: +transactions?.transaction?.nominal || null,
+              notes: transactions?.transaction?.notes || null,
             }}
           >
             <div className="lg:flex lg:justify-center lg:space-x-40">
               <div className="text-center my-4 lg:order-1 lg:w-1/2">
                 <img
                   className="w-[200px] lg:w-[200px] m-auto lg:h-[200px]"
-                  src={transactionDetail?.data.image_path}
+                  src={transactions.recipients.imageUrl}
                   alt="Merchant (src ganti image path dari api)"
                 />
                 <p className="mt-2 font-bold text-2xl text-primary-100">
-                  {transactionDetail?.data.name}
+                  {transactions.recipients.nama}
                 </p>
                 <p className="text-lg text-primary-100">
-                  {transactionDetail?.data.address}
+                  {transactionDetail?.address}
                 </p>
               </div>
 
@@ -104,6 +98,7 @@ const PayQris = () => {
                   label={
                     <span className="text-primary-100">Masukkan Nominal</span>
                   }
+
                   rules={[
                     {
                       validator(_, value) {
@@ -126,7 +121,7 @@ const PayQris = () => {
                   required
                 >
                   <InputNumber<number>
-                    type="number"
+                    type="text"
                     prefix="Rp."
                     formatter={(value) =>
                       `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
@@ -137,6 +132,9 @@ const PayQris = () => {
                     className="w-full px-[15px] py-3 md:px-6 md:py-4"
                     placeholder="Masukkan Nominal"
                   />
+                </Form.Item>
+                <Form.Item label="Catatan" name="notes">
+                  <Input type="text" placeholder="Masukkan Catatan (Opsional)" />
                 </Form.Item>
 
                 <Button

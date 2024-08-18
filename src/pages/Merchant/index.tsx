@@ -1,19 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { BrowserQRCodeReader, IScannerControls } from '@zxing/browser';
 import Breadcrumb from '../../components/Breadcumb';
-import axios from 'axios';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
+import { GetData } from '../../utils/GetData';
 
-interface TransactionDetail {
-  id: string;
-  amount: number;
-  date: string;
-  status: string;
-  name: string; // Add these fields if they are part of the response
+interface MerchantData {
+  name: string;
+  nmid: string;
+  terminal_id: string;
+  amount: number | null;
+  image_path: string;
   address: string;
-  imageUrl: string;
+  qris_code: string;
 }
+
 
 const QRISScanner = () => {
   const { user } = useAuth();
@@ -21,11 +22,11 @@ const QRISScanner = () => {
   const [result, setResult] = useState<string | null>(null);
   const [, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [, setTransactionDetail] = useState<TransactionDetail | null>(null);
   const codeReader = useRef<BrowserQRCodeReader | null>(null);
   const scannerControlsRef = useRef<IScannerControls | null>(null);
+  const {  setRecipients, transactions } = useAuth()
   const navigate = useNavigate();
-
+  console.log(transactions)
   useEffect(() => {
     codeReader.current = new BrowserQRCodeReader();
 
@@ -83,16 +84,17 @@ const QRISScanner = () => {
 
   const fetchTransactionDetail = async (merchantId: string) => {
     try {
-      const response = await axios.get<TransactionDetail>(
-        `${process.env.VITE_API_URL}/merchants/qris/${merchantId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${user?.token}`,
-          },
-        }
-      );
-      setTransactionDetail(response.data);
-      navigate('/payqr', { state: { transactionDetail: response.data } });
+      const response = await GetData<MerchantData>(`/merchants/qris/${merchantId}`, user?.token)
+
+      setRecipients({
+        nama: response.name,
+        wallet: response.terminal_id,
+        bank: 'QRIS',
+        account_number: merchantId,
+        numberDestination: response.nmid,
+        imageUrl: response.image_path
+      })
+      navigate('/payqr', { state: { transactionDetail: response } });
     } catch (err) {
       setError(`Error fetching transaction details: ${err}`);
       console.error('API Fetch Error:', err);

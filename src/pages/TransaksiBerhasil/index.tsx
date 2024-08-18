@@ -6,7 +6,10 @@ import { FormatCurrency } from '../../utils';
 const TransaksiBerhasil = () => {
   const navigate = useNavigate();
   const { user, transactions, clearTransaction } = useAuth();
-  const admin = transactions.recipients.wallet == 'Tahapan BCA' ? 0 : 1000;
+  const isTahapanBCA = transactions.recipients.wallet == 'Tahapan BCA';
+  const isQRIS = transactions.recipients.bank == 'QRIS';
+
+  const admin = isTahapanBCA || isQRIS ? 0 : 100;
 
   const onBackToHome = () => {
     clearTransaction();

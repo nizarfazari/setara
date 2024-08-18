@@ -1,16 +1,12 @@
 import { Button, Card } from 'antd';
 import Breadcrumb from '../../../components/Breadcumb';
-import { useLocation, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import { FormatCurrency } from '../../../utils';
 
 const Konfirmasi = () => {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const location = useLocation();
-  const transactionDetail = location.state?.transactionDetail;
-  const amount = location.state?.amount;
-  const notes = location.state?.notes;
+  const { user, transactions } = useAuth();
   const admin = 0;
 
   return (
@@ -26,16 +22,16 @@ const Konfirmasi = () => {
             <div className="flex items-center">
               <img
                 className="w-[70px] mr-4"
-                src={transactionDetail?.data.image_path}
+                src={transactions.recipients.imageUrl}
                 alt="Penerima"
               />
               <div className="text-[12px] md:text-[14px]">
                 <p className="font-bold text-lg">
-                  {transactionDetail?.data.name}
+                  {transactions.recipients.nama}
                 </p>
                 <div className="flex items-center">
                   <p className="font-bold text-lg">
-                    {transactionDetail?.data.terminal_id}
+                    {transactions.recipients.wallet}
                   </p>
                   <img
                     className="w-[6px] h-[6px] mx-2"
@@ -43,7 +39,7 @@ const Konfirmasi = () => {
                     alt="Dot"
                   />
                   <p className="font-bold text-lg">
-                    {transactionDetail?.data.nmid}
+                    {transactions.recipients.numberDestination}
                   </p>
                 </div>
               </div>
@@ -86,16 +82,16 @@ const Konfirmasi = () => {
                 <p className="font-bold text-lg">Catatan</p>
               </div>
               <div className="flex flex-col items-end">
-                <p className="font-bold text-lg">{FormatCurrency(amount)}</p>
+                <p className="font-bold text-lg">{FormatCurrency(+transactions.transaction.nominal)}</p>
                 <p className="font-bold text-lg">{FormatCurrency(admin)}</p>
-                <p className="font-bold text-lg">{notes || '-'}</p>
+                <p className="font-bold text-lg">{transactions.transaction.notes || '-'}</p>
               </div>
             </div>
             <hr className="border-neutral-300 my-2" />
             <div className="flex justify-between font-bold">
               <p className="font-bold text-lg">Total</p>
               <p className="font-bold text-lg">
-                {FormatCurrency(amount + admin)}
+                {FormatCurrency(+transactions.transaction.nominal + admin)}
               </p>
             </div>
           </Card>

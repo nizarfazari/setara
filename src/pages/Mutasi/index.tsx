@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import './mutasi.css';
-import { Button, DatePicker, Modal, Radio, RadioChangeEvent, Skeleton, Space } from "antd";
+import { Button, DatePicker, Modal, Pagination, Radio, RadioChangeEvent, Skeleton, Space } from "antd";
 import { SlidersHorizontal } from '@phosphor-icons/react';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { usePostData } from "../../hooks/usePostData";
@@ -9,37 +9,9 @@ import dayjs, { Dayjs } from "dayjs";
 
 import { FormatCurrency } from "../../utils";
 import Breadcrumb from "../../components/Breadcumb";
+import { ApiResponse, GroupedTransaction, MutationReq, Transaction } from "../../types/Mutation";
 
-type Transaction = {
-  transaction_id: string;
-  unique_code: string;
-  type: string;
-  total_amount: number;
-  time: string;
-  reference_number: string;
-  destination_account_number: string | null;
-  destination_phone_number: string | null;
-  formatted_date: string;
-  formatted_time: string;
-};
 
-type MutationReq = {
-  startDate: string;
-  endDate: string;
-  transactionCategory: string;
-};
-
-type ApiResponse = {
-  code: number;
-  data: Transaction[];
-  message: string;
-  status: boolean;
-};
-
-type GroupedTransaction = {
-  date: string;
-  transactions: Transaction[];
-};
 
 const Mutasi = () => {
   const navigate = useNavigate();
@@ -50,39 +22,33 @@ const Mutasi = () => {
   const { user } = useAuth();
   const { RangePicker } = DatePicker;
   const [selectedDates, setSelectedDates] = useState<[Dayjs, Dayjs]>(searchParams ? searchParams.get('startDate') && searchParams.get('endDate') ? [dayjs(searchParams.get('startDate')), dayjs(searchParams.get('endDate'))] : [dayjs(), dayjs()] : [dayjs(), dayjs()]);
-  const { data: datas2, post, isLoading } = usePostData<MutationReq, ApiResponse>('/transactions/get-all-mutation?page=0&size=10', user?.token);
-  console.log(datas2);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [pageSize] = useState<number>(10); // Mengatur ukuran halaman tetap 10
+  const { data: datas2, post, isLoading } = usePostData<MutationReq, ApiResponse>(`/transactions/get-all-mutation?page=${currentPage - 1}&size=${pageSize}`, user?.token);
+
+  console.log(datas2?.data?.total_pages)
 
   const getMutation = async (startDate: string, endDate: string) => {
     await post({
       startDate,
       endDate,
       transactionCategory: filteredBy,
+      page: currentPage - 1,
+      size: pageSize
     });
   };
 
   const onFilter = (value: string) => {
-    // Ambil semua parameter 'filter' dari searchParams
-    const searchParamsFilter = searchParams.getAll('filter');
-    console.log(searchParamsFilter);
-
-    // Buat salinan dari searchParams
     const newSearchParams = new URLSearchParams(searchParams);
-
-    // Atur parameter 'filter' dengan nilai baru
     newSearchParams.set('filter', value);
-
-    // Set parameter yang sudah diperbarui
     setSearchParams(newSearchParams);
-
-    // Perbarui state filteredBy
     setFilteredBy(value);
   };
 
   useEffect(() => {
     const [startDate, endDate] = selectedDates;
     getMutation(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
-  }, [filteredBy, selectedDates]);
+  }, [filteredBy, selectedDates, currentPage]);
 
   const onChange = (e: RadioChangeEvent) => {
     setValue(e.target.value);
@@ -124,12 +90,10 @@ const Mutasi = () => {
   };
 
   const onDateChange = (dates: [Dayjs, Dayjs] | null | undefined | unknown) => {
-    console.log(dates);
     if (dates) {
       setSelectedDates(dates as [Dayjs, Dayjs]);
     }
   };
-
 
   const filteringDataMutation = (data: Transaction[]): GroupedTransaction[] => {
     const groupedData = data.reduce((acc, transaction) => {
@@ -144,13 +108,14 @@ const Mutasi = () => {
       return acc;
     }, {} as Record<string, GroupedTransaction>);
 
-    console.log(groupedData);
-
     return Object.values(groupedData);
   };
 
-  const groupedTransactions = datas2?.data ? filteringDataMutation(datas2.data) : [];
-  console.log(groupedTransactions);
+  const groupedTransactions = datas2?.data.mutation_responses ? filteringDataMutation(datas2.data.mutation_responses) : [];
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
@@ -180,11 +145,10 @@ const Mutasi = () => {
           onOk={() => setModal2Open(false)}
           onCancel={() => setModal2Open(false)}
         >
-
-          <Radio.Group onChange={onChange} value={value} >
+          <Radio.Group onChange={onChange} value={value}>
             <Space direction="vertical">
-              <Radio value={1}  >Hari Ini</Radio>
-              <Radio value={2} >7 Hari Terakhir</Radio>
+              <Radio value={1}>Hari Ini</Radio>
+              <Radio value={2}>7 Hari Terakhir</Radio>
               <Radio value={3}>15 Hari Terakhir</Radio>
               <Radio value={4}>1 Bulan Terakhir</Radio>
               <Radio value={5}>
@@ -200,14 +164,14 @@ const Mutasi = () => {
         </Modal>
       </div>
       {isLoading ? (
-        <div className="flex justify-between pt-5">
+        <div className="h-[200px] ">
           <div>
             <Skeleton active />
             <Skeleton paragraph={{ rows: 1 }} className="mt-4" />
             <Skeleton paragraph={{ rows: 1 }} className="mt-4" />
           </div>
           <div className="text-right">
-            <Skeleton paragraph={{ rows: 1 }} className="mt-4" />
+            <Skeleton active />
             <Skeleton paragraph={{ rows: 1 }} className="mt-4" />
             <Skeleton paragraph={{ rows: 1 }} className="mt-4" />
           </div>
@@ -246,6 +210,9 @@ const Mutasi = () => {
               ))}
             </div>
           ))}
+          <div className="flex justify-center mb-4">
+            <Pagination current={currentPage} pageSize={pageSize} total={datas2?.data.total_pages} onChange={handlePageChange} showSizeChanger={false} />
+          </div>
           <Button type="primary" className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg">Download Mutasi Rekening</Button>
         </>
       ) : (

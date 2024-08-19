@@ -12,9 +12,10 @@ type TContactList = {
   contacts: EwalletUser[];
   setRecipients: (recipients: recipientsData) => void;
   nullMessage?: string;
+  refetch?: () => void
 };
 
-export default function CustomerList({ pathUrl, header, contacts, setRecipients, nullMessage }: TContactList) {
+export default function CustomerList({ pathUrl, header, contacts, setRecipients, nullMessage, refetch }: TContactList) {
   const navigate = useNavigate();
 
   const onClickCard = (contact: EwalletUser) => {
@@ -40,7 +41,7 @@ export default function CustomerList({ pathUrl, header, contacts, setRecipients,
           <Flex vertical gap={12}>
             {contacts.map((contact, index) => (
               <Card className="border-white lg:border-primary-300" id="contact-item" key={index} onClick={() => onClickCard(contact)}>
-                <CustomerItem  {...contact} />
+                <CustomerItem  {...contact}  refetch={refetch}/>
               </Card>
             ))}
           </Flex>

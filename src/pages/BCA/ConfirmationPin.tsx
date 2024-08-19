@@ -9,7 +9,7 @@ import { postData } from '../../utils/GetData';
 import { useNotification } from '../../hooks/useNotification';
 import axios from 'axios';
 
-interface IConfirmationPINProps { }
+interface IConfirmationPINProps {}
 
 type LoginType = {
   pin: string;
@@ -20,8 +20,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
   const { user, transactions } = useAuth();
   const { openNotificationWithIcon } = useNotification();
   const navigate = useNavigate();
-  const [pin, setPin] = React.useState<string>("");
-
+  const [pin, setPin] = React.useState<string>('');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
   const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,7 +45,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         },
         user?.token
       );
-    
+
       if (data.code !== 200) {
         navigate('/transaksi-gagal');
       } else {
@@ -59,7 +58,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         form.setFields([
           {
             name: 'pin',
-            errors: ["PIN Anda Salah"],
+            errors: ['PIN Anda Salah'],
           },
         ]);
       }
@@ -69,38 +68,56 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
   };
 
   return (
-    <>
-      <div className="container mx-auto">
-        <div className="my-[30px]">
-          <Breadcrumb title="Masukan PIN Anda" subtitle="Harap Masukan PIN Anda dengan teliti" />
-        </div>
-        <div className="max-w-[563px] mx-auto">
-          <Form form={form} name="basic" onFinish={onFinish} autoComplete="off">
-            <Form.Item<LoginType>
-              name="pin"
-              rules={[{ required: true, message: 'Mohon Masukan PIN anda!' }]}
-            >
-              <div className="">
-                <label htmlFor="" className="text-body-large text-neutral-400 font-bold required">
-                  PIN Anda
-                </label>
-                <Input.Password className="input-label mt-3 py-[18px] px-6" value={pin} onChange={handlePinChange} placeholder='Masukkan PIN Anda'/>
-              </div>
-            </Form.Item>
-
-            <Form.Item>
-              <Button
-                className="mt-5 bg-primary-100 text-white w-full h-[60px] rounded-xl text-heading-5 font-semibold"
-                htmlType="submit"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? <Spin size="small" /> : 'Lanjutkan'}
-              </Button>
-            </Form.Item>
-          </Form>
-        </div>
+    <div className="container mx-auto relative">
+      <div className="my-[30px]">
+        <Breadcrumb
+          title="Masukan PIN Anda"
+          subtitle="Harap Masukan PIN Anda dengan teliti"
+        />
       </div>
-    </>
+      <div className="max-w-[563px] mx-auto">
+        <Form form={form} name="basic" onFinish={onFinish} autoComplete="off">
+          <Form.Item<LoginType>
+            name="pin"
+            rules={[{ required: true, message: 'Mohon Masukan PIN anda!' }]}
+          >
+            <div>
+              <label
+                htmlFor=""
+                className="text-body-large text-neutral-400 font-bold required"
+              >
+                PIN Anda
+              </label>
+              <Input.Password
+                className="input-label mt-3 py-[18px] px-6"
+                value={pin}
+                onChange={handlePinChange}
+                placeholder="Masukkan PIN Anda"
+              />
+            </div>
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              type="primary"
+              className="mt-5 bg-primary-100 text-white w-full h-[60px] rounded-xl text-heading-5 font-semibold"
+              htmlType="submit"
+            >
+              Lanjutkan
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+
+      {isSubmitting && (
+        <div className="absolute inset-0 flex justify-center items-center bg-white opacity-75">
+          <div className="text-center">
+            <Spin size="large" />
+            <p className="text-heading-6 mt-2">Loading...</p>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 

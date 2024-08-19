@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
-import axios, { AxiosError } from "axios";
-import {  notification, Skeleton } from "antd";
-import { GoDotFill } from "react-icons/go";
-import { CopySimple, Eye, EyeSlash } from "@phosphor-icons/react";
-import { FormatCurrency, formatNorek } from "../../../utils/index";
-import SkeletonInput from "antd/es/skeleton/Input";
-import { useAuth } from "../../../hooks/useAuth";
+import React, { useEffect, useState } from 'react';
+import axios, { AxiosError } from 'axios';
+import { notification, Skeleton } from 'antd';
+import { GoDotFill } from 'react-icons/go';
+import { CopySimple, Eye, EyeSlash } from '@phosphor-icons/react';
+import { FormatCurrency, formatNorek } from '../../../utils/index';
+import SkeletonInput from 'antd/es/skeleton/Input';
+import { useAuth } from '../../../hooks/useAuth';
 
 const InfoSaldo: React.FC = () => {
   const [isBalanceHidden, setIsBalanceHidden] = useState<boolean>(true);
   const [balance, setBalance] = useState<number>();
   const [error, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  console.log(error)
+  console.log(error);
   const { user } = useAuth();
   const dots = new Array(7).fill(null);
 
@@ -21,7 +21,7 @@ const InfoSaldo: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/user/getBalance`,
+        `${process.env.VITE_API_URL}/user/getBalance`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -32,8 +32,8 @@ const InfoSaldo: React.FC = () => {
     } catch (error) {
       setError(error as AxiosError);
       notification.error({
-        message: "Error",
-        description: "Terjadi kesalahan saat memuat saldo.",
+        message: 'Error',
+        description: 'Terjadi kesalahan saat memuat saldo.',
         duration: 2, // Duration in seconds
       });
     } finally {
@@ -55,24 +55,24 @@ const InfoSaldo: React.FC = () => {
         .writeText(accountNumber.toString())
         .then(() => {
           notification.success({
-            message: "Success",
-            description: "No. Rekening berhasil disalin",
-            duration: 2, // Duration in seconds
+            message: 'Success',
+            description: 'No. Rekening berhasil disalin',
+            duration: 2,
           });
         })
         .catch((err) => {
-          console.error("Could not copy text: ", err);
+          console.error('Could not copy text: ', err);
           notification.error({
-            message: "Error",
-            description: "Tidak dapat menyalin nomor rekening.",
-            duration: 2, // Duration in seconds
+            message: 'Error',
+            description: 'Tidak dapat menyalin nomor rekening.',
+            duration: 2,
           });
         });
     } else {
       notification.error({
-        message: "Error",
-        description: "No. Rekening tidak tersedia.",
-        duration: 2, // Duration in seconds
+        message: 'Error',
+        description: 'No. Rekening tidak tersedia.',
+        duration: 2,
       });
     }
   };
@@ -129,8 +129,8 @@ const InfoSaldo: React.FC = () => {
                         onClick={toggleBalanceVisibility}
                         aria-label={
                           isBalanceHidden
-                            ? "Saldo ditampilkan"
-                            : "Saldo disembunyikan"
+                            ? 'Saldo ditampilkan'
+                            : 'Saldo disembunyikan'
                         }
                       >
                         {isBalanceHidden ? (
@@ -148,7 +148,7 @@ const InfoSaldo: React.FC = () => {
                       </button>
                     </div>
                   </div>
-                  
+
                   <p className="text-neutral-100 text-caption-small mt-3 flex gap-2 items-center">
                     No. Rekening:
                     <span className="font-bold text-caption-large">

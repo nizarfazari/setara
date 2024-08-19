@@ -19,7 +19,7 @@ export default function DestinationNumberPage() {
   const [search, setSearch] = useState("");
   console.log(search)
 
-  const { data, isLoading, isError } = useFetchData<ResponseBank>("/saved-accounts", user?.token);
+  const { data, isLoading, isError, refetch } = useFetchData<ResponseBank>("/saved-accounts", user?.token);
   console.log(isError)
 
   React.useEffect(() => {
@@ -89,15 +89,15 @@ export default function DestinationNumberPage() {
             <DestinationNumber pathUrl={`bca/${slug}`} bank={data ?? []} onSearch={handleSearch} />
           )}
           <div className="mt-6">
-            <CustomerList header="Hasil Pencarian" contacts={filteredResults} setRecipients={setRecipients} pathUrl={""} />
+            <CustomerList header="Hasil Pencarian" contacts={filteredResults} setRecipients={setRecipients} pathUrl={""} refetch={refetch} />
           </div>
         </div>
         <div className="lg:basis-1/2 w-full">
           <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
             {data && (
               <Flex vertical gap={30} align="start">
-                <CustomerList pathUrl={`bca/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients} />
-                <CustomerList pathUrl={`bca/${slug}`} header="Daftar Tersimpan" contacts={data.saved} setRecipients={setRecipients} />
+                <CustomerList pathUrl={`bca/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients} refetch={refetch} />
+                <CustomerList pathUrl={`bca/${slug}`} header="Daftar Tersimpan" contacts={data.saved} setRecipients={setRecipients} refetch={refetch} />
               </Flex>
             )}
           </Card>

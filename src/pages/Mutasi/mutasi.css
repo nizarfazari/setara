@@ -4,3 +4,9 @@
   font-weight: 400;
   height: 40px;
 }
+
+.checked-radio {
+  font-weight: bold;
+  color: #ffffff; /* Ganti warna sesuai kebutuhan */
+  background-color: #1890ff; /* Ganti warna sesuai kebutuhan */
+}

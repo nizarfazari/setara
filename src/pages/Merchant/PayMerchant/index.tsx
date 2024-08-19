@@ -60,7 +60,7 @@ const PayQris = () => {
                   {transactions.recipients.nama}
                 </p>
                 <p className="text-lg text-primary-100">
-                  {transactionDetail?.address}
+                  {transactions.recipients.address}
                 </p>
               </div>
 
@@ -130,7 +130,7 @@ const PayQris = () => {
                     parser={(value) =>
                       value?.replace(/\.\s?|(,*)/g, '') as unknown as number
                     }
-                    className="w-full px-[15px] py-3 md:px-6 md:py-4"
+                    className={`w-full px-[15px] py-3 md:px-6 md:py-4 ${apiAmount ? 'font-bold !text-[#000]' : '' }`}
                     placeholder="Masukkan Nominal"
                     disabled={!!apiAmount}
                   />

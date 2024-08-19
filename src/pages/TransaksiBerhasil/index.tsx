@@ -82,11 +82,13 @@ const TransaksiBerhasil = () => {
           <p className="font-bold text-lg">Detail</p>
           <div className="flex justify-between mt-4">
             <div className="text-neutral-300 font-normal">
-              <p className="font-bold text-lg">Nominal Top Up</p>
+              {isQRIS && <p className="font-bold text-lg">Lokasi Merchant</p>}
+              <p className="font-bold text-lg">{isTahapanBCA || isQRIS ? 'Nominal Transfer' : 'Nominal Top Up'}</p>
               <p className="font-bold text-lg">Biaya Admin</p>
               <p className="font-bold text-lg">Catatan</p>
             </div>
             <div className="flex flex-col items-end">
+              {isQRIS && <p className="font-bold text-lg">{transactions.recipients.address}</p>}
               <p className="font-bold text-lg">
                 {FormatCurrency(transactions.transaction.nominal)}
               </p>

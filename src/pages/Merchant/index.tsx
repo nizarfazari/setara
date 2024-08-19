@@ -4,6 +4,7 @@ import Breadcrumb from '../../components/Breadcumb';
 import { useAuth } from '../../hooks/useAuth';
 import { useNavigate } from 'react-router-dom';
 import { GetData } from '../../utils/GetData';
+import { CameraSlash } from '@phosphor-icons/react';
 
 interface MerchantData {
   name: string;
@@ -20,13 +21,14 @@ const QRISScanner = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [result, setResult] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [videoAllowed, setVideoAllowed] = useState<boolean>(true);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
   const [scanFailed, setScanFailed] = useState<boolean>(false);
   const codeReader = useRef<BrowserQRCodeReader | null>(null);
   const scannerControlsRef = useRef<IScannerControls | null>(null);
-  const { setRecipients, transactions } = useAuth();
+  const { setRecipients } = useAuth();
   const navigate = useNavigate();
-  console.log(transactions);
+  console.log(error);
 
   useEffect(() => {
     codeReader.current = new BrowserQRCodeReader();
@@ -61,6 +63,7 @@ const QRISScanner = () => {
         }
       } catch (err) {
         setError(`Error starting scan: ${err}`);
+        setVideoAllowed(false);
       }
     };
 
@@ -99,6 +102,7 @@ const QRISScanner = () => {
         account_number: merchantId,
         numberDestination: response.nmid,
         imageUrl: response.image_path,
+        address: response.address
       });
       navigate('/payqr', { state: { transactionDetail: response } });
     } catch (err) {
@@ -170,7 +174,7 @@ const QRISScanner = () => {
   };
 
   return (
-    <div className="container">
+    <div className="container mx-auto">
       <div className="my-[30px]">
         <div className="mb-5">
           <Breadcrumb
@@ -181,12 +185,20 @@ const QRISScanner = () => {
 
         <div className="flex items-center justify-center">
           <div className="scanner-container p-12 rounded-lg shadow-lg w-full max-w-2xl">
-            <div className="video-container mb-8">
-              <video
-                ref={videoRef}
-                className="video-preview w-full h-80 rounded-lg shadow-inner"
-                style={{ transform: 'scaleX(-1)' }}
-              ></video>
+            <div className="video-container mb-8 flex justify-center">
+
+              {videoAllowed ? (
+                <video
+                  ref={videoRef}
+                  className="video-preview  rounded-2xl  w-[500px] h-full"
+                  style={{ transform: 'scaleX(-1)' }}
+                ></video>
+              ) : (
+                <div className="bg-gray-400 w-[500px] h-[400px] rounded-2xl flex items-center justify-center flex-col">
+                  <CameraSlash size={64} />
+                  <p className="text-black-800 text-lg font-semibold mt-3">Vidio Tidak Diijinkan</p>
+                </div>
+              )}
             </div>
             <div className="upload-container mb-8">
               <label className="block text-base font-medium text-gray-700 mb-3">

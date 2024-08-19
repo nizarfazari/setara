@@ -34,7 +34,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
 
     try {
       const data = await postData<TransactionBankReq, TransactionBankRes>(
-        '/transactions/merchant-transfer',
+        '/transactions/bca-transfer',
         {
           account_number: transactions.transactionId,
           destinationAccountNumber: transactions.recipients.numberDestination,

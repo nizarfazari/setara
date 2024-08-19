@@ -20,7 +20,6 @@ type FieldType = {
   savedList: boolean;
 };
 
-
 export default function NewDestinationNumberPage() {
   const [form] = Form.useForm();
   const { user, setProcessTransaction, setRecipients } = useAuth();
@@ -30,8 +29,6 @@ export default function NewDestinationNumberPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const { data: userBalance } = useFetchData<UserBalance>(`/user/getBalance`, user?.token);
-
-
 
   const onFinish = (values: FieldType) => {
     setProcessTransaction({

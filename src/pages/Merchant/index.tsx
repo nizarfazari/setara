@@ -15,18 +15,19 @@ interface MerchantData {
   qris_code: string;
 }
 
-
 const QRISScanner = () => {
   const { user } = useAuth();
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const [result, setResult] = useState<string | null>(null);
-  const [, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [scanFailed, setScanFailed] = useState<boolean>(false);
   const codeReader = useRef<BrowserQRCodeReader | null>(null);
   const scannerControlsRef = useRef<IScannerControls | null>(null);
-  const {  setRecipients, transactions } = useAuth()
+  const { setRecipients, transactions } = useAuth();
   const navigate = useNavigate();
-  console.log(transactions)
+  console.log(transactions);
+
   useEffect(() => {
     codeReader.current = new BrowserQRCodeReader();
 
@@ -47,7 +48,9 @@ const QRISScanner = () => {
               videoRef.current,
               (result, err) => {
                 if (result) {
-                  setResult(result.getText());
+                  const scannedResult = result.getText();
+                  setResult(scannedResult);
+                  setScanFailed(!isValidQRCode(scannedResult)); // Set scan failure status if the result is invalid
                   stopScan();
                 }
                 if (err) {
@@ -84,7 +87,10 @@ const QRISScanner = () => {
 
   const fetchTransactionDetail = async (merchantId: string) => {
     try {
-      const response = await GetData<MerchantData>(`/merchants/qris/${merchantId}`, user?.token)
+      const response = await GetData<MerchantData>(
+        `/merchants/qris/${merchantId}`,
+        user?.token
+      );
 
       setRecipients({
         nama: response.name,
@@ -92,8 +98,8 @@ const QRISScanner = () => {
         bank: 'QRIS',
         account_number: merchantId,
         numberDestination: response.nmid,
-        imageUrl: response.image_path
-      })
+        imageUrl: response.image_path,
+      });
       navigate('/payqr', { state: { transactionDetail: response } });
     } catch (err) {
       setError(`Error fetching transaction details: ${err}`);
@@ -103,9 +109,20 @@ const QRISScanner = () => {
 
   useEffect(() => {
     if (result) {
-      fetchTransactionDetail(result);
+      if (isValidQRCode(result)) {
+        fetchTransactionDetail(result);
+      } else {
+        setScanFailed(true);
+      }
     }
   }, [result]);
+
+  const isValidQRCode = (code: string): boolean => {
+    // Implement your validation logic here. For example, checking if the code is a valid merchant ID.
+    // This is a basic example. Adjust the validation as needed for your use case.
+    const idPattern = /^[a-f0-9\-]{36}$/; // Example pattern for UUID
+    return idPattern.test(code.trim());
+  };
 
   const handleFileUpload = async (
     event: React.ChangeEvent<HTMLInputElement>
@@ -115,6 +132,7 @@ const QRISScanner = () => {
       setIsProcessing(true);
       setResult(null);
       setError(null);
+      setScanFailed(false);
 
       try {
         const reader = new FileReader();
@@ -130,10 +148,13 @@ const QRISScanner = () => {
                 const result = await codeReader.decodeFromImageElement(
                   imageElement
                 );
-                setResult(result.getText());
+                const scannedResult = result.getText();
+                setResult(scannedResult);
+                setScanFailed(!isValidQRCode(scannedResult)); // Set scan failure status if the result is invalid
               } catch (err) {
                 setError('Error decoding QR code from image');
                 console.error('Image Decode Error:', err);
+                setScanFailed(true);
               } finally {
                 setIsProcessing(false);
               }
@@ -183,9 +204,9 @@ const QRISScanner = () => {
                 Processing...
               </p>
             )}
-            {result && !isProcessing && (
-              <p className="result-text text-center text-green-600 font-semibold mb-6 text-lg">
-                QR Code Result: {result} SUCCESS
+            {scanFailed && !isProcessing && (
+              <p className="result-text text-center text-red-600 font-semibold mb-6 text-lg">
+                Pemindaian QR Code Gagal, Format tidak valid! Silakan coba lagi.
               </p>
             )}
           </div>

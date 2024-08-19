@@ -13,6 +13,8 @@ const PayQris = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const transactionDetail = location.state?.transactionDetail;
+  const apiAmount = transactionDetail?.amount;
+
   console.log(transactionDetail);
 
   const onFinish = (values: TFormPayQris) => {
@@ -43,7 +45,7 @@ const PayQris = () => {
             onFinish={onFinish}
             onFinishFailed={onFinishFailed}
             initialValues={{
-              amount: +transactions?.transaction?.nominal || null,
+              amount: apiAmount || +transactions?.transaction?.nominal || null,
               notes: transactions?.transaction?.notes || null,
             }}
           >
@@ -98,7 +100,6 @@ const PayQris = () => {
                   label={
                     <span className="text-primary-100">Masukkan Nominal</span>
                   }
-
                   rules={[
                     {
                       validator(_, value) {
@@ -131,10 +132,14 @@ const PayQris = () => {
                     }
                     className="w-full px-[15px] py-3 md:px-6 md:py-4"
                     placeholder="Masukkan Nominal"
+                    disabled={!!apiAmount}
                   />
                 </Form.Item>
                 <Form.Item label="Catatan" name="notes">
-                  <Input type="text" placeholder="Masukkan Catatan (Opsional)" />
+                  <Input
+                    type="text"
+                    placeholder="Masukkan Catatan (Opsional)"
+                  />
                 </Form.Item>
 
                 <Button

@@ -38,8 +38,9 @@ const DestinationNumber: React.FC<PropsDestinationNumber> = ({
 
   return (
     <Card className="w-full border-white md:border-primary-300">
+      
       <Button
-        className="bg-primary-100 text-white w-full h-10 rounded-xl mb-3 font-semibold text-body-small md:mb-6 md:text-heading-6 md:h-[60px]"
+        tabIndex={0} aria-label="button tambah nomor baru" role="button" className="bg-primary-100 text-white w-full h-10 rounded-xl mb-3 font-semibold text-body-small md:mb-6 md:text-heading-6 md:h-[60px]"
         onClick={() => navigate(`/${pathUrl}/nomor-tujuan-baru`)}
       >
         <Plus size={24} />
@@ -48,7 +49,8 @@ const DestinationNumber: React.FC<PropsDestinationNumber> = ({
       <Form layout="vertical" onFinish={onFinish}>
         <Form.Item
           name="destinationNumber"
-          label="Nomor Tujuan"
+          label="Cari Tujuan Transfer"
+          aria-label="Cari Tujuan Transfer"
           className="mb-0"
           rules={[{ required: true, message: "Nomor Tidak Boleh Kosong" }]}
         >

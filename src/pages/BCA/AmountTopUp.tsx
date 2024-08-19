@@ -11,7 +11,7 @@ import { useAuth } from "../../hooks/useAuth";
 export default function AmountTopUpPage() {
   const { slug } = useParams<{ slug: string }>();
   const { transactions } = useAuth();
-
+  console.log(transactions);
   const USER = {
     id: '',
     account_name: transactions.recipients.nama,
@@ -37,7 +37,7 @@ export default function AmountTopUpPage() {
         <Card className="border-white md:border-primary-300">
           <Flex vertical gap={28}>
             <div>
-              <h5 className="text-primary-100 mb-2 text-body-small md:text-heading-5">Penerima</h5>
+              <h5 tabIndex={0} className="text-primary-100 mb-2 text-body-small md:text-heading-5">Penerima</h5>
               <CustomerItem {...USER} />
             </div>
             <FormTopUp pathUrl={`/bca/${slug}`} isTfBa />

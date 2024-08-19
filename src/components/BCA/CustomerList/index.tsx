@@ -5,16 +5,15 @@ import { useNavigate } from "react-router-dom";
 import { BankUser } from "../../../types/Bank";
 import { recipientsData } from "../../../types/Transaction";
 
-
 type TContactList = {
   pathUrl: string;
   header: string;
-  contacts: BankUser[];
+  contacts?: BankUser[];  // Made optional to handle undefined cases
   setRecipients: (recipients: recipientsData) => void;
-  refetch : () => void
+  refetch: () => void;
 };
 
-export default function CustomerList({  header, contacts, setRecipients, refetch }: TContactList) {
+export default function CustomerList({ header, contacts = [], setRecipients, refetch }: TContactList) {
   const navigate = useNavigate();
 
   const onClickCard = (contact: BankUser) => {
@@ -23,7 +22,7 @@ export default function CustomerList({  header, contacts, setRecipients, refetch
       bank: contact.bank_name,
       numberDestination: contact.account_number,
       imageUrl: contact.user_image_path,
-      wallet:  contact.bank_name,
+      wallet: contact.bank_name,
       account_number: ""
     });
     navigate(`/bca/transfer-antar-bca/nominal-topup/`);
@@ -31,7 +30,7 @@ export default function CustomerList({  header, contacts, setRecipients, refetch
 
   return (
     <div className="text-primary-100 w-full">
-      <h5 className="font-bold mb-3 text-body-small md:text-heading-5">{`${header} (${contacts.length})`}</h5>
+      <h5 tabIndex={0} className="font-bold mb-3 text-body-small md:text-heading-5">{`${header} (${contacts.length})`}</h5>
       {contacts.length !== 0 ? (
         <Card
           className="lg:p-0 py-[23px] px-[18px] rounded-xl shadow-[0px_5px_30px_0px_#0000000D] lg:shadow-none lg:border-none"

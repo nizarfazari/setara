@@ -4,7 +4,7 @@ import AppProvider from './context'
 import Home from './pages/Home';
 import TransactionFailed from './pages/TransaksiGagal';
 import TransactionSuccess from './pages/TransaksiBerhasil';
-import QRSuccess from './pages/QRBerhasil';
+import QRBerhasil from './pages/QRBerhasil';
 import Mutasi from './pages/Mutasi/index';
 import BuktiTransfer from './pages/BuktiTransfer';
 import Notifikasi from './pages/Notifikasi';
@@ -36,7 +36,6 @@ import ProtectedUser from './middleware/ProtectedUser';
 import { NotificationProvider } from './hooks/useNotification';
 import NotFound from './pages/404';
 
-
 function App() {
   return (
     <AppProvider>
@@ -49,7 +48,7 @@ function App() {
                   <Route index element={<Home />} />
                   <Route path="/transaksi-gagal" element={<TransactionFailed />} />
                   <Route path="/transaksi-berhasil" element={<TransactionSuccess />} />
-                  <Route path="/qrberhasil" element={<QRSuccess />} />
+                  <Route path="qrberhasil" element={<QRBerhasil />} />
                   <Route path="/mutasi" element={<Mutasi />} />
                   <Route path="/mutasi/:id" element={<BuktiTransfer />} />
                   <Route path="/notifikasi" element={<Notifikasi />} />

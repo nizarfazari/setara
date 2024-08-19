@@ -114,6 +114,7 @@ export default function NewDestinationNumberPage() {
               <div className="flex items-center gap-2 flex-col md:flex-row md:gap-4">
                 <Input type="number" placeholder="Masukkan Nomor" className="flex-[80%]" onChange={handleDestinationNumberChange} />
                 <Button
+                  tabIndex={0}
                   onClick={handleVerifiedNumber}
                   className="flex-[20%] bg-primary-100 text-white w-full py-[10px] rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
                 >
@@ -122,26 +123,26 @@ export default function NewDestinationNumberPage() {
               </div>
               {isVerified && (
                 <Flex gap={6} align="center" className="mt-6">
-                  <CheckCircle size={18} weight="fill" color="#12D79C" />
-                  <p className="text-[#12D79C] font-bold text-caption-small">VERIFIED</p>
+                  <CheckCircle tabIndex={0} size={18} weight="fill" color="#12D79C" />
+                  <p tabIndex={0} className="text-[#12D79C] font-bold text-caption-small">VERIFIED</p>
                 </Flex>
               )}
             </div>
           </Form.Item>
 
           <Form.Item name="savedList" valuePropName="checked">
-            <Checkbox className="text-neutral-300 font-bold text-caption-large">Masukkan ke Daftar Tersimpan</Checkbox>
+            <Checkbox tabIndex={0} className="text-neutral-300 font-bold text-caption-large">Masukkan ke Daftar Tersimpan</Checkbox>
           </Form.Item>
 
           <Form.Item name="name" label="Nama Transfer">
-            <Input type="text" placeholder="Masukkan Nama" disabled={isVerified ? false : true} readOnly />
+            <Input type="text" tabIndex={0} placeholder="Masukkan Nama" disabled={isVerified ? false : true} readOnly />
           </Form.Item>
 
           <Form.Item name="source" label="Sumber Rekening" required>
             <Select disabled={isVerified ? false : true} className="h-20" placeholder="Pilih Sumber Rekening">
-              <Option value={user?.user.account_number}>
+              <Option tabIndex={0} value={user?.user.account_number}>
                 {`${user?.user.bank_name} ${user?.user.account_number}`} <br />{" "}
-                <span className="font-bold">{userBalance && FormatCurrency(userBalance?.balance)}</span>
+                <span tabIndex={0}  className="font-bold">{userBalance && FormatCurrency(userBalance?.balance)}</span>
               </Option>
             </Select>
           </Form.Item>
@@ -158,6 +159,7 @@ export default function NewDestinationNumberPage() {
 
           >
             <InputNumber<number>
+              tabIndex={0}
               type="text"
               prefix="Rp."
               formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
@@ -169,10 +171,11 @@ export default function NewDestinationNumberPage() {
           </Form.Item>
 
           <Form.Item label="Catatan" name="notes">
-            <Input type="text" placeholder="Masukkan Catatan (Opsional)" disabled={isVerified ? false : true} />
+            <Input tabIndex={0} type="text" placeholder="Masukkan Catatan (Opsional)" disabled={isVerified ? false : true} />
           </Form.Item>
 
           <Button
+            tabIndex={0}
             className="bg-primary-100 text-white w-full h-10 rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
             htmlType="submit"
             disabled={isVerified ? false : true}

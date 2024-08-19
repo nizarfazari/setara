@@ -8,7 +8,13 @@ import QRSuccess from './pages/QRBerhasil';
 import Mutasi from './pages/Mutasi/index';
 import BuktiTransfer from './pages/BuktiTransfer';
 import Notifikasi from './pages/Notifikasi';
+
+// QR
 import QR from './pages/QR';
+import ScanQR from './pages/Merchant';
+import PayQR from './pages/Merchant/PayMerchant';
+import ConfirmMerchant from './pages/Merchant/ConfirmMerchant';
+import MpinMerchant from './pages/Merchant/ConfirmMpin';
 
 /* 
   BCA
@@ -53,7 +59,13 @@ function App() {
                   <Route path="/mutasi" element={<Mutasi />} />
                   <Route path="/mutasi/:id" element={<BuktiTransfer />} />
                   <Route path="/notifikasi" element={<Notifikasi />} />
+
                   <Route path="/qr" element={<QR />} />
+                  <Route path="/scanqr" element={<ScanQR />} />
+                  <Route path="/payqr" element={<PayQR />} />
+                  <Route path="/confirmpayqr" element={<ConfirmMerchant />} />
+                  <Route path="/confirmpayqrmpin" element={<MpinMerchant />} />
+
                 </Route>
                 <Route path="/e-wallet" element={<PlainLayout />}>
                   <Route index element={<TransferWallet />} />

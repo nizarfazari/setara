@@ -37,11 +37,11 @@ export const formattedTimeWithColon = formattedTime.replace(/\./g, ':');
 
 export function FormatCurrency(value: number | string | undefined) {
   if (typeof value === 'undefined') {
-    return 0
+    return `Rp. 0`
   }
 
   if (!value) {
-    return 0
+    return `Rp. 0`  
   }
   const rupiah = value.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1.");
   return `Rp. ${rupiah}`;

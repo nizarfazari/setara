@@ -58,8 +58,8 @@ const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl, isTfBa = false }) => {
                 return Promise.reject(
                   new Error(
                     isTfBa
-                      ? 'Minimum transfer adalah 1, mohon isikan kembali'
-                      : 'Minimum transfer adalah 10.000, mohon isikan kembali'
+                      ? 'Minimum transfer adalah Rp. 1, mohon isikan kembali'
+                      : 'Minimum transfer adalah Rp. 10.000, mohon isikan kembali'
                   )
                 );
               }

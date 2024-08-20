@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import './mutasi.css';
-import { Button, DatePicker, Modal, Pagination, Radio, RadioChangeEvent, Skeleton, Space } from "antd";
+import { Button, DatePicker, Modal, Pagination, Radio, RadioChangeEvent, Skeleton, Space, Spin } from "antd";
 import { SlidersHorizontal } from '@phosphor-icons/react';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { usePostData } from "../../hooks/usePostData";
@@ -10,6 +10,8 @@ import dayjs, { Dayjs } from "dayjs";
 import { FormatCurrency } from "../../utils";
 import Breadcrumb from "../../components/Breadcumb";
 import { ApiResponse, GroupedTransaction, MutationReq, Transaction } from "../../types/Mutation";
+import { GetData } from "../../utils/GetData";
+
 
 
 
@@ -25,7 +27,7 @@ const Mutasi = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [pageSize] = useState<number>(10); // Mengatur ukuran halaman tetap 10
   const { data, post, isLoading } = usePostData<MutationReq, ApiResponse>(`/transactions/get-all-mutation?page=${currentPage - 1}&size=${pageSize}`, user?.token);
-
+  const [loading, setLoading] = useState(false);
 
   const getMutation = async (startDate: string, endDate: string) => {
     await post({
@@ -98,6 +100,28 @@ const Mutasi = () => {
     }
   };
 
+  const onDownloadFile = async () => {
+    setLoading(true);
+    try {
+      const blob = await GetData<Blob>('/transactions/generate-all-mutation-report', user?.token, true) as Blob;
+
+      // Buat URL dari Blob dan trigger download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = 'Mutasi_Rekening.pdf'; // Nama file yang akan diunduh
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   const filteringDataMutation = (data: Transaction[]): GroupedTransaction[] => {
     const groupedData = data.reduce((acc, transaction) => {
       const date = transaction.formatted_date;
@@ -123,7 +147,7 @@ const Mutasi = () => {
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
       <Breadcrumb
-        title="Mutasi Rekening" 
+        title="Mutasi Rekening"
         subtitle="Pantau Pengeluaran dan Pemasukan Rekening"
       />
       <div className="my-5 lg:my-10">
@@ -217,9 +241,16 @@ const Mutasi = () => {
             </div>
           ))}
           <div className="flex justify-center mb-4">
-            <Pagination current={currentPage} pageSize={pageSize} total={data?.data.total_pages && +data?.data.total_pages * 10 } onChange={handlePageChange} showSizeChanger={false} />
+            <Pagination current={currentPage} pageSize={pageSize} total={data?.data.total_pages && +data?.data.total_pages * 10} onChange={handlePageChange} showSizeChanger={false} />
           </div>
-          <Button type="primary" className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg">Download Mutasi Rekening</Button>
+          {groupedTransactions.length == 0 && <Button
+            onClick={onDownloadFile}
+            type="primary"
+            className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg"
+            disabled={loading}
+          >
+            {loading ? <Spin /> : 'Download Mutasi Rekening'} {/* Tampilkan spinner saat loading */}
+          </Button>}
         </>
       ) : (
         <div className="text-center">

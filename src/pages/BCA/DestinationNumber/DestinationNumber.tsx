@@ -16,16 +16,14 @@ export default function DestinationNumberPage() {
   const [favorites, setFavorites] = useState<BankUser[]>([]);
   const [saved, setSaved] = useState<BankUser[]>([]);
   const [filteredResults, setFilteredResults] = useState<BankUser[]>([]);
-  const [search, setSearch] = useState("");
-  console.log(search)
+  const [, setSearch] = useState("");
 
   const { data, isLoading, isError, refetch } = useFetchData<ResponseBank>("/saved-accounts", user?.token);
-  console.log(isError)
 
   React.useEffect(() => {
     if (data) {
-      setFavorites(data.favorites);
-      setSaved(data.saved);
+      setFavorites(Array.isArray(data.favorites) ? data.favorites : []);
+      setSaved(Array.isArray(data.saved) ? data.saved : []);
     }
   }, [data]);
 
@@ -53,7 +51,7 @@ export default function DestinationNumberPage() {
         </div>
         <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">
           <Card className="w-full border-white md:border-primary-300">
-            <Skeleton.Button active block size="large" />
+            <Skeleton.Button aria-label="button tambah nomor baru" active block size="large" />
             <Skeleton active paragraph={{ rows: 0 }} className="mt-10" />
             <Skeleton.Input active block size="large" />
           </Card>
@@ -78,6 +76,10 @@ export default function DestinationNumberPage() {
     );
   }
 
+  if (isError) {
+    return <div tabIndex={0} className="container">An error occurred while fetching data.</div>;
+  }
+
   return (
     <div className="container">
       <div className="my-[30px]">
@@ -86,18 +88,18 @@ export default function DestinationNumberPage() {
       <div className="w-full mb-12 flex flex-col lg:flex-row gap-6 justify-center items-start">
         <div className="lg:basis-1/2 w-full">
           {data && (
-            <DestinationNumber pathUrl={`bca/${slug}`} bank={data ?? []} onSearch={handleSearch} />
+            <DestinationNumber pathUrl={`bca/${slug}`} bank={data} onSearch={handleSearch} />
           )}
           <div className="mt-6">
-            <CustomerList header="Hasil Pencarian" contacts={filteredResults} setRecipients={setRecipients} pathUrl={""} refetch={refetch} />
+            <CustomerList header="Hasil Pencarian" contacts={filteredResults} setRecipients={setRecipients} pathUrl="" refetch={refetch} />
           </div>
         </div>
         <div className="lg:basis-1/2 w-full">
           <Card className="border-white lg:border-[#E4EDFF] w-full" id="contacts">
             {data && (
               <Flex vertical gap={30} align="start">
-                <CustomerList pathUrl={`bca/${slug}`} header="Daftar Favorit" contacts={data.favorites} setRecipients={setRecipients} refetch={refetch} />
-                <CustomerList pathUrl={`bca/${slug}`} header="Daftar Tersimpan" contacts={data.saved} setRecipients={setRecipients} refetch={refetch} />
+                <CustomerList pathUrl={`bca/${slug}`} header="Daftar Favorit" contacts={favorites} setRecipients={setRecipients} refetch={refetch} />
+                <CustomerList pathUrl={`bca/${slug}`} header="Daftar Tersimpan" contacts={saved} setRecipients={setRecipients} refetch={refetch} />
               </Flex>
             )}
           </Card>

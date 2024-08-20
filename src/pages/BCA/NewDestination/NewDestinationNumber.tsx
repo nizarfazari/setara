@@ -109,22 +109,25 @@ export default function NewDestinationNumberPage() {
             label="Nomor Transfer Baru"
             rules={[{ required: true, message: 'Nomor Tidak Boleh Kosong' }]}
             required
+            aria-label="Nomor Transfer Baru"
           >
             <div>
               <div className="flex items-center gap-2 flex-col md:flex-row md:gap-4">
-                <Input type="number" placeholder="Masukkan Nomor" className="flex-[80%]" onChange={handleDestinationNumberChange} />
+                <Input type="number" placeholder="Masukkan Nomor" className="flex-[80%]" onChange={handleDestinationNumberChange} aria-label="Input nomor transfer baru" />
                 <Button
                   type="primary"
+                  tabIndex={0}
                   onClick={handleVerifiedNumber}
                   className="flex-[20%] bg-primary-100 text-white w-full py-[10px] rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
+                  aria-label="Cari Nomor"
                 >
                   {isLoading ? <Spin /> : "Cari Nomor"}
                 </Button>
               </div>
               {isVerified && (
-                <Flex gap={6} align="center" className="mt-6">
-                  <CheckCircle size={18} weight="fill" color="#12D79C" />
-                  <p className="text-[#12D79C] font-bold text-caption-small">
+                <Flex gap={6} align="center" className="mt-6" aria-label="Nomor Terverifikasi">
+                  <CheckCircle tabIndex={0} size={18} weight="fill" color="#12D79C" />
+                  <p tabIndex={0} className="text-[#12D79C] font-bold text-caption-small">
                     VERIFIED
                   </p>
                 </Flex>
@@ -133,7 +136,11 @@ export default function NewDestinationNumberPage() {
           </Form.Item>
 
           <Form.Item name="savedList" valuePropName="checked">
-            <Checkbox className="text-neutral-300 font-bold text-caption-large">
+            <Checkbox
+              className="text-neutral-300 font-bold text-caption-large"
+              aria-label="Masukkan ke daftar tersimpan"
+              tabIndex={0}
+            >
               Masukkan ke Daftar Tersimpan
             </Checkbox>
           </Form.Item>
@@ -141,17 +148,27 @@ export default function NewDestinationNumberPage() {
           <Form.Item name="name" label="Nama Transfer">
             <Input
               type="text"
+              tabIndex={0}
               placeholder="Masukkan Nama"
               disabled={isVerified ? false : true}
               readOnly
+              aria-label="Input nama penerima"
             />
           </Form.Item>
 
           <Form.Item name="source" label="Sumber Rekening" required>
-            <Select disabled={isVerified ? false : true} className="h-20" placeholder="Pilih Sumber Rekening">
-              <Option value={user?.user.account_number}>
+            <Select
+              disabled={isVerified ? false : true}
+              className="h-20"
+              placeholder="Pilih Sumber Rekening"
+              aria-label="Pilih Sumber Rekening"
+            >
+              <Option
+                value={user?.user.account_number}
+                aria-label={`${user?.user.bank_name} ${user?.user.account_number} ${FormatCurrency(userBalance?.balance)}`}
+              >
                 {`${user?.user.bank_name} ${user?.user.account_number}`} <br />{" "}
-                <span className="font-bold">{userBalance && FormatCurrency(userBalance?.balance)}</span>
+                <span tabIndex={0} className="font-bold">{userBalance && FormatCurrency(userBalance?.balance)}</span>
               </Option>
             </Select>
           </Form.Item>
@@ -165,9 +182,9 @@ export default function NewDestinationNumberPage() {
               { type: "number", max: userBalance?.balance, message: "Saldo Tidak Cukup, mohon isikan kembali" },
             ]}
             required
-
           >
             <InputNumber<number>
+              tabIndex={0}
               type="text"
               prefix="Rp."
               formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
@@ -175,6 +192,7 @@ export default function NewDestinationNumberPage() {
               className="w-full px-[15px] py-3 md:px-6 md:py-4"
               placeholder="Masukkan Nominal"
               disabled={isVerified ? false : true}
+              aria-label="Input Nominal Transfer"
             />
           </Form.Item>
 
@@ -183,19 +201,22 @@ export default function NewDestinationNumberPage() {
               type="text"
               placeholder="Masukkan Catatan (Opsional)"
               disabled={isVerified ? false : true}
+              aria-label="Input Catatan"
             />
           </Form.Item>
 
           <Button
             type="primary"
-            className="bg-primary-100 text-white w-full h-10 rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
-            htmlType="submit"
-            disabled={isVerified ? false : true}
-          >
-            Lanjutkan
-          </Button>
-        </Form>
-      </Card>
-    </div>
+      className="bg-primary-100 text-white w-full h-10 rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
+      htmlType="submit"
+      disabled={isVerified ? false : true}
+      aria-label="Lanjutkan"
+      role="button"
+    >
+      Lanjutkan
+    </Button>
+        </Form >
+      </Card >
+    </div >
   );
 }

@@ -110,7 +110,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
       </div>
 
       {isSubmitting && (
-        <div className="absolute inset-0 flex justify-center items-center bg-white opacity-75">
+        <div className="absolute inset-0 flex justify-center items-center bg-white opacity-75 z-10">
           <div className="text-center">
             <Spin size="large" />
             <p className="text-heading-6 mt-2">Loading...</p>

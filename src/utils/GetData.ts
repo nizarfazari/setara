@@ -4,7 +4,7 @@ export async function GetData<T>(
   url: string,
   token: string | null | undefined,
   isFileDownload: boolean = false // Parameter untuk menentukan apakah mengunduh file
-): Promise<T | Blob> {
+): Promise<T > {
   try {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 

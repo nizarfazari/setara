@@ -1,9 +1,9 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import '@testing-library/jest-dom';
-import { CatatanKeuangan } from "../../components/Homepage/CatatanKeuangan";
+import { CatatanKeuangan } from "../../../components/Homepage/CatatanKeuangan";
 import axios from "axios";
-import { DATA_MONTH } from "../../utils/constant";
-import { useAuth } from "../../hooks/useAuth";
+import { DATA_MONTH } from "../../../utils/constant";
+import { useAuth } from "../../../hooks/useAuth";
 
 // Mock the useAuth hook
 jest.mock('../../../hooks/useAuth');

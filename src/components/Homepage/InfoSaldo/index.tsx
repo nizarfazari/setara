@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
-import {  notification, Skeleton } from "antd";
+import {  notification } from "antd";
 import { GoDotFill } from "react-icons/go";
 import { CopySimple, Eye, EyeSlash } from "@phosphor-icons/react";
 import { FormatCurrency, formatNorek } from "../../../utils/index";
-import SkeletonInput from "antd/es/skeleton/Input";
 import { useAuth } from "../../../hooks/useAuth";
 
 const InfoSaldo: React.FC = () => {
@@ -21,7 +20,7 @@ const InfoSaldo: React.FC = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/user/getBalance`,
+        `https://setara-api-service-staging-93e4.up.railway.app/api/v1/user/getBalance`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -85,8 +84,7 @@ const InfoSaldo: React.FC = () => {
     <>
       {loading ? (
         <div className="my-3 border p-5 md:w-1/3 grid gap-3">
-          <SkeletonInput active size="small" />
-          <Skeleton loading={loading} active avatar></Skeleton>
+         <p>Loading</p>
         </div>
       ) : (
         <div>

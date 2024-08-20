@@ -23,6 +23,7 @@ export type recipientsData = {
     account_number:string;
     numberDestination: string;
     imageUrl: string;
+    address? : string
 }
 
 export type transactionData = {

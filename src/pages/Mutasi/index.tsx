@@ -122,7 +122,10 @@ const Mutasi = () => {
 
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
-      <Breadcrumb title="Mutasi Rekening" subtitle="Pantai Pengeluaran dan Pemasukan Rekening" />
+      <Breadcrumb
+        title="Mutasi Rekening" 
+        subtitle="Pantau Pengeluaran dan Pemasukan Rekening"
+      />
       <div className="my-5 lg:my-10">
         <button onClick={() => onFilter('ALL_TRANSACTIONS')} className={`btn text-primary-100 rounded-full ${filteredBy === "ALL_TRANSACTIONS" ? "bg-primary-100 text-white" : ""}`}>
           Semua

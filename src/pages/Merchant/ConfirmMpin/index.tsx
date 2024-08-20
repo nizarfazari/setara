@@ -1,19 +1,27 @@
 import * as React from 'react';
-import Breadcrumb from '../../components/Breadcumb';
+import Breadcrumb from '../../../components/Breadcumb';
 import type { FormProps } from 'antd';
 import { Button, Form, Input, Spin } from 'antd';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../hooks/useAuth';
-import { TransactionBankReq, TransactionBankRes } from '../../types/Bank';
-import { postData } from '../../utils/GetData';
-import { useNotification } from '../../hooks/useNotification';
+import { useAuth } from '../../../hooks/useAuth';
+import { postData } from '../../../utils/GetData';
+import { useNotification } from '../../../hooks/useNotification';
 import axios from 'axios';
+import { QrRes } from '../../../types/QrCode';
 
-interface IConfirmationPINProps {}
+interface IConfirmationPINProps { }
 
 type LoginType = {
   pin: string;
 };
+
+
+type qrReq = {
+  idQris: string;
+  amount: number
+  note?: string
+  mpin: string
+}
 
 const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
   const [form] = Form.useForm();
@@ -22,7 +30,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
   const navigate = useNavigate();
   const [pin, setPin] = React.useState<string>('');
   const [isSubmitting, setIsSubmitting] = React.useState(false);
-
+  
   const handlePinChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (/^[0-9]*$/.test(e.target.value) && e.target.value.length <= 6) {
       setPin(e.target.value);
@@ -33,15 +41,13 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
     setIsSubmitting(true);
 
     try {
-      const data = await postData<TransactionBankReq, TransactionBankRes>(
-        '/transactions/bca-transfer',
+      const data = await postData<qrReq, QrRes>(
+        `/transactions/merchant-transaction`,
         {
-          account_number: transactions.transactionId,
-          destinationAccountNumber: transactions.recipients.numberDestination,
+          idQris: transactions.recipients.account_number,
           amount: +transactions.transaction.nominal,
           mpin: values.pin.toString(),
           note: transactions.transaction.notes,
-          savedAccount: transactions.transaction.isSavedAccount ?? false,
         },
         user?.token
       );
@@ -110,7 +116,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
       </div>
 
       {isSubmitting && (
-        <div className="absolute inset-0 flex justify-center items-center bg-white opacity-75">
+        <div className="absolute inset-0 flex justify-center items-center bg-white opacity-75 z-10">
           <div className="text-center">
             <Spin size="large" />
             <p className="text-heading-6 mt-2">Loading...</p>

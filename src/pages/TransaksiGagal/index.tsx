@@ -1,11 +1,11 @@
-import image from "/images/error/Feeling sorry-pana 1.png";
-import { useNavigate } from "react-router-dom";
+import image from '/images/error/Feeling sorry-pana 1.png';
+import { useNavigate } from 'react-router-dom';
 
 const TransactionFailed = () => {
   const navigate = useNavigate();
 
   const handleHome = () => {
-    navigate("/");
+    navigate('/');
   };
   return (
     <div className="flex justify-center items-center container mt-10">

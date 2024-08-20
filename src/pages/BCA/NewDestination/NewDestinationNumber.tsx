@@ -20,7 +20,6 @@ type FieldType = {
   savedList: boolean;
 };
 
-
 export default function NewDestinationNumberPage() {
   const [form] = Form.useForm();
   const { user, setProcessTransaction, setRecipients } = useAuth();
@@ -30,8 +29,6 @@ export default function NewDestinationNumberPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   const { data: userBalance } = useFetchData<UserBalance>(`/user/getBalance`, user?.token);
-
-
 
   const onFinish = (values: FieldType) => {
     setProcessTransaction({
@@ -43,7 +40,7 @@ export default function NewDestinationNumberPage() {
   };
 
   const onFinishFailed = (errorInfo: unknown) => {
-    console.log("Failed:", errorInfo);
+    console.log('Failed:', errorInfo);
   };
 
   const handleDestinationNumberChange = () => {
@@ -94,7 +91,10 @@ export default function NewDestinationNumberPage() {
   return (
     <div className="container">
       <div className="my-[30px]">
-        <Breadcrumb title={capitalFirstLetter(slug)} subtitle="Masukan Nomor Tujuan dan Nominal Transfer" />
+        <Breadcrumb
+          title={capitalFirstLetter(slug)}
+          subtitle="Masukan Nomor Tujuan dan Nominal Transfer"
+        />
       </div>
       <Card className="w-full max-w-[690px] mx-auto border-white md:border-primary-300">
         <Form
@@ -107,42 +107,68 @@ export default function NewDestinationNumberPage() {
           <Form.Item
             name="destinationNumber"
             label="Nomor Transfer Baru"
-            rules={[{ required: true, message: "Nomor Tidak Boleh Kosong" }]}
+            rules={[{ required: true, message: 'Nomor Tidak Boleh Kosong' }]}
             required
+            aria-label="Nomor Transfer Baru"
           >
             <div>
               <div className="flex items-center gap-2 flex-col md:flex-row md:gap-4">
-                <Input type="number" placeholder="Masukkan Nomor" className="flex-[80%]" onChange={handleDestinationNumberChange} />
+                <Input type="number" placeholder="Masukkan Nomor" className="flex-[80%]" onChange={handleDestinationNumberChange} aria-label="Input nomor transfer baru" />
                 <Button
+                  type="primary"
                   tabIndex={0}
                   onClick={handleVerifiedNumber}
                   className="flex-[20%] bg-primary-100 text-white w-full py-[10px] rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
+                  aria-label="Cari Nomor"
                 >
                   {isLoading ? <Spin /> : "Cari Nomor"}
                 </Button>
               </div>
               {isVerified && (
-                <Flex gap={6} align="center" className="mt-6">
+                <Flex gap={6} align="center" className="mt-6" aria-label="Nomor Terverifikasi">
                   <CheckCircle tabIndex={0} size={18} weight="fill" color="#12D79C" />
-                  <p tabIndex={0} className="text-[#12D79C] font-bold text-caption-small">VERIFIED</p>
+                  <p tabIndex={0} className="text-[#12D79C] font-bold text-caption-small">
+                    VERIFIED
+                  </p>
                 </Flex>
               )}
             </div>
           </Form.Item>
 
           <Form.Item name="savedList" valuePropName="checked">
-            <Checkbox tabIndex={0} className="text-neutral-300 font-bold text-caption-large">Masukkan ke Daftar Tersimpan</Checkbox>
+            <Checkbox
+              className="text-neutral-300 font-bold text-caption-large"
+              aria-label="Masukkan ke daftar tersimpan"
+              tabIndex={0}
+            >
+              Masukkan ke Daftar Tersimpan
+            </Checkbox>
           </Form.Item>
 
           <Form.Item name="name" label="Nama Transfer">
-            <Input type="text" tabIndex={0} placeholder="Masukkan Nama" disabled={isVerified ? false : true} readOnly />
+            <Input
+              type="text"
+              tabIndex={0}
+              placeholder="Masukkan Nama"
+              disabled={isVerified ? false : true}
+              readOnly
+              aria-label="Input nama penerima"
+            />
           </Form.Item>
 
           <Form.Item name="source" label="Sumber Rekening" required>
-            <Select disabled={isVerified ? false : true} className="h-20" placeholder="Pilih Sumber Rekening">
-              <Option tabIndex={0} value={user?.user.account_number}>
+            <Select
+              disabled={isVerified ? false : true}
+              className="h-20"
+              placeholder="Pilih Sumber Rekening"
+              aria-label="Pilih Sumber Rekening"
+            >
+              <Option
+                value={user?.user.account_number}
+                aria-label={`${user?.user.bank_name} ${user?.user.account_number} ${FormatCurrency(userBalance?.balance)}`}
+              >
                 {`${user?.user.bank_name} ${user?.user.account_number}`} <br />{" "}
-                <span tabIndex={0}  className="font-bold">{userBalance && FormatCurrency(userBalance?.balance)}</span>
+                <span tabIndex={0} className="font-bold">{userBalance && FormatCurrency(userBalance?.balance)}</span>
               </Option>
             </Select>
           </Form.Item>
@@ -156,7 +182,6 @@ export default function NewDestinationNumberPage() {
               { type: "number", max: userBalance?.balance, message: "Saldo Tidak Cukup, mohon isikan kembali" },
             ]}
             required
-
           >
             <InputNumber<number>
               tabIndex={0}
@@ -167,23 +192,31 @@ export default function NewDestinationNumberPage() {
               className="w-full px-[15px] py-3 md:px-6 md:py-4"
               placeholder="Masukkan Nominal"
               disabled={isVerified ? false : true}
+              aria-label="Input Nominal Transfer"
             />
           </Form.Item>
 
           <Form.Item label="Catatan" name="notes">
-            <Input tabIndex={0} type="text" placeholder="Masukkan Catatan (Opsional)" disabled={isVerified ? false : true} />
+            <Input
+              type="text"
+              placeholder="Masukkan Catatan (Opsional)"
+              disabled={isVerified ? false : true}
+              aria-label="Input Catatan"
+            />
           </Form.Item>
 
           <Button
-            tabIndex={0}
-            className="bg-primary-100 text-white w-full h-10 rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
-            htmlType="submit"
-            disabled={isVerified ? false : true}
-          >
-            Lanjutkan
-          </Button>
-        </Form>
-      </Card>
-    </div>
+            type="primary"
+      className="bg-primary-100 text-white w-full h-10 rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
+      htmlType="submit"
+      disabled={isVerified ? false : true}
+      aria-label="Lanjutkan"
+      role="button"
+    >
+      Lanjutkan
+    </Button>
+        </Form >
+      </Card >
+    </div >
   );
 }

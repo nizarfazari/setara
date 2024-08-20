@@ -1,9 +1,11 @@
-import { Card } from "antd"
+import { Button, Card, Spin } from "antd"
 import Breadcrumb from "../../components/Breadcumb"
 import { useParams } from "react-router-dom";
 import { useFetchData } from "../../hooks/useFetchData";
 import { useAuth } from "../../hooks/useAuth";
 import { FormatCurrency } from "../../utils";
+import { useState } from "react";
+import { GetData } from "../../utils/GetData";
 
 type TransactionDetail = {
   sender: {
@@ -26,9 +28,31 @@ type TransactionDetail = {
 const BuktiTransfer = () => {
 
   const { id } = useParams<{ id: string }>();
+  const [loading, setLoading] = useState(false);
   console.log(id)
   const { user } = useAuth()
   const { data } = useFetchData<TransactionDetail>(`/transactions/get-mutation-detail/${id}`, user?.token)
+  const onDownloadFile = async () => {
+    setLoading(true);
+    try {
+      const blob = await GetData<Blob>(`/transactions/generate-receipt/${id}`, user?.token, true) as Blob;
+
+      // Buat URL dari Blob dan trigger download
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+      a.download = 'Mutasi_Rekening.pdf'; // Nama file yang akan diunduh
+      document.body.appendChild(a);
+      a.click();
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
@@ -42,13 +66,13 @@ const BuktiTransfer = () => {
           <div>
             <p className="font-bold">Pengirim</p>
             <div className="flex items-center mt-2">
-              <img className="w-[70px] mr-4" src={data?.sender.image_path} alt="" />
+              <img className="w-[70px] mr-4" src={data?.sender?.image_path} alt="" />
               <div>
-                <p className="font-bold">{data?.sender.name}</p>
+                <p className="font-bold">{data?.sender?.name}</p>
                 <div className="flex items-center">
-                  <p>{data?.sender.vendor_name}</p>
+                  <p>{data?.sender?.vendor_name}</p>
                   <img className="w-[6px] h-[6px] mx-2" src="/images/icons/dot.png"></img>
-                  <p>{data?.sender.account_number}</p>
+                  <p>{data?.sender?.account_number}</p>
                 </div>
               </div>
             </div>
@@ -56,13 +80,13 @@ const BuktiTransfer = () => {
           <div className="my-2 mb-5">
             <p className="font-bold mb-2">Penerima</p>
             <div className="flex items-center">
-              <img className="w-[70px] mr-4" src={data?.receiver.image_path} alt="" />
+              <img className="w-[70px] mr-4" src={data?.receiver?.image_path} alt="" />
               <div>
-                <p className="font-bold">{data?.receiver.name}</p>
+                <p className="font-bold">{data?.receiver?.name}</p>
                 <div className="flex items-center">
-                  <p>{data?.receiver.vendor_name}</p>
+                  <p>{data?.receiver?.vendor_name}</p>
                   <img className="w-[6px] h-[6px] mx-2" src="/images/icons/dot.png"></img>
-                  <p>{data?.receiver.account_number}</p>
+                  <p>{data?.receiver?.account_number}</p>
                 </div>
               </div>
             </div>
@@ -87,6 +111,14 @@ const BuktiTransfer = () => {
           </div>
         </Card>
       </div>
+      <Button
+        onClick={onDownloadFile}
+        type="primary"
+        className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg"
+        disabled={loading}
+      >
+        {loading ? <Spin /> : 'Download Mutasi Rekening'} {/* Tampilkan spinner saat loading */}
+      </Button>
     </div>
   )
 }

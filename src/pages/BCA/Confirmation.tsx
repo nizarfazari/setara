@@ -83,7 +83,7 @@ const Konfirmasi = () => {
                   {FormatCurrency(transactions.transaction.nominal)}
                 </p>
                 <p className="font-bold text-lg" tabIndex={0} >{FormatCurrency(admin)}</p>
-                <p className="font-bold text-lg" >
+                <p className="font-bold text-lg" tabIndex={0}>
                   {transactions.transaction.notes
                     ? transactions.transaction.notes
                     : '-'}

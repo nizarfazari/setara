@@ -1,4 +1,3 @@
-import React from "react";
 import { Button, Card } from "antd";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
@@ -57,7 +56,7 @@ const QRBerhasil = () => {
               <p>Catatan</p>
             </div>
             <div>
-              <p>{FormatCurrency(nominal)}</p>
+              <p>{FormatCurrency(Number(nominal))}</p>
               <p>{FormatCurrency(admin)}</p>
               <p>-</p>
             </div>
@@ -65,7 +64,7 @@ const QRBerhasil = () => {
           <hr className='border-neutral-300 my-2' />
           <div className='flex justify-between font-bold'>
             <p>Total</p>
-            <p>{FormatCurrency(+nominal + admin)}</p>
+            <p>{FormatCurrency(Number(nominal) + admin)}</p>
           </div>
         </Card>
       </div>

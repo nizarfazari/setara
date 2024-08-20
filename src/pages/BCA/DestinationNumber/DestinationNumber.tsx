@@ -16,7 +16,7 @@ export default function DestinationNumberPage() {
   const [favorites, setFavorites] = useState<BankUser[]>([]);
   const [saved, setSaved] = useState<BankUser[]>([]);
   const [filteredResults, setFilteredResults] = useState<BankUser[]>([]);
-  const [search, setSearch] = useState("");
+  const [, setSearch] = useState("");
 
   const { data, isLoading, isError, refetch } = useFetchData<ResponseBank>("/saved-accounts", user?.token);
 

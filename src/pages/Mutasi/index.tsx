@@ -79,6 +79,7 @@ const Mutasi = () => {
         startDate = today;
         endDate = today;
     }
+    console.log(selectedDates)
 
     searchParams.set('startDate', startDate.format('YYYY-MM-DD'));
     searchParams.set('endDate', endDate.format('YYYY-MM-DD'));
@@ -89,7 +90,10 @@ const Mutasi = () => {
   };
 
   const onDateChange = (dates: [Dayjs, Dayjs] | null | undefined | unknown) => {
-    if (dates) {
+    if (Array.isArray(dates)) {
+      searchParams.set('startDate', dates[0].format('YYYY-MM-DD'));
+      searchParams.set('endDate', dates[1].format('YYYY-MM-DD'));
+      setSearchParams([...searchParams]);
       setSelectedDates(dates as [Dayjs, Dayjs]);
     }
   };
@@ -118,7 +122,10 @@ const Mutasi = () => {
 
   return (
     <div className="container py-5 lg:py-[50px] pb-[50px]">
-      <Breadcrumb title="Mutasi Rekening" subtitle="Pantai Pengeluaran dan Pemasukan Rekening" />
+      <Breadcrumb
+        title="Mutasi Rekening" 
+        subtitle="Pantau Pengeluaran dan Pemasukan Rekening"
+      />
       <div className="my-5 lg:my-10">
         <button onClick={() => onFilter('ALL_TRANSACTIONS')} className={`btn text-primary-100 rounded-full ${filteredBy === "ALL_TRANSACTIONS" ? "bg-primary-100 text-white" : ""}`}>
           Semua
@@ -210,7 +217,7 @@ const Mutasi = () => {
             </div>
           ))}
           <div className="flex justify-center mb-4">
-            <Pagination current={currentPage} pageSize={pageSize} total={data?.data.total_pages} onChange={handlePageChange} showSizeChanger={false} />
+            <Pagination current={currentPage} pageSize={pageSize} total={data?.data.total_pages && +data?.data.total_pages * 10 } onChange={handlePageChange} showSizeChanger={false} />
           </div>
           <Button type="primary" className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg">Download Mutasi Rekening</Button>
         </>

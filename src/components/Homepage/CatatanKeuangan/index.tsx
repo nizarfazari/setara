@@ -22,10 +22,12 @@ export const CatatanKeuangan = () => {
     null
   );
   const [selectedMonth, setSelectedMonth] = useState(
-    DATA_MONTH.find((item) => item.monthNumber == new Date().getMonth() + 1)
-      ?.month
+    DATA_MONTH.find((item) => item.monthNumber === new Date().getMonth() + 1)
+      ?.month || ''
   );
-  const [selectedYear, setSelectedYear] = useState<string>('2024');
+  const [selectedYear, setSelectedYear] = useState(
+    new Date().getFullYear().toString()
+  );
   const [liveYear, setLiveYear] = useState<string>('');
   const { user } = useAuth();
   const today = new Date();
@@ -70,7 +72,7 @@ export const CatatanKeuangan = () => {
 
   const handleFilterTransaction = () => {
     const selectedMonthNumber = DATA_MONTH.find(
-      (item) => item.month == selectedMonth
+      (item) => item.month === selectedMonth
     )?.monthNumber;
     selectedMonthNumber &&
       fetchMonthlyReport(selectedMonthNumber, selectedYear);
@@ -161,7 +163,6 @@ export const CatatanKeuangan = () => {
             className="rounded-xl py-3 px-5"
             onChange={handleYearChange}
             picker="year"
-            defaultValue={dayjs('2024')}
             value={dayjs(selectedYear)}
             role="combobox"
             aria-label={`Pilih tahun: ${selectedYear}`}

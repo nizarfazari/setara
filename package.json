@@ -13,6 +13,8 @@
   },
   "dependencies": {
     "@phosphor-icons/react": "^2.1.7",
+    "@zxing/browser": "^0.1.5",
+    "@zxing/library": "^0.21.2",
     "antd": "^5.19.2",
     "axios": "^1.3.1",
     "dayjs": "^1.11.12",
@@ -23,6 +25,7 @@
     "react-hook-form": "^7.52.2",
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.24.1",
+    "react-zxing": "^2.0.2",
     "setara": "file:",
     "swiper": "^11.1.5"
   },

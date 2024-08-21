@@ -23,6 +23,7 @@ type TransactionDetail = {
   amount: number;
   admin_fee: number;
   total_amount: number;
+  note: string;
 };
 
 const BuktiTransfer = () => {
@@ -34,6 +35,7 @@ const BuktiTransfer = () => {
     `/transactions/get-mutation-detail/${id}`,
     user?.token
   );
+  console.log(data);
   const onDownloadFile = async () => {
     setLoading(true);
     try {
@@ -136,7 +138,7 @@ const BuktiTransfer = () => {
               <p className="font-bold text-lg">
                 {FormatCurrency(data?.admin_fee)}
               </p>
-              <p className="font-bold text-lg">{'-'}</p>
+              <p className="font-bold text-lg">{data?.note || '-'}</p>
             </div>
           </div>
           <hr className="border-neutral-300 my-2" />

@@ -1,19 +1,31 @@
-import { Button, Card } from 'antd';
+import  { useState } from 'react';
+import { Button, Card, Modal } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { FormatCurrency } from '../../utils';
+import { ReactShareSocial } from 'react-share-social';
 
 const TransaksiBerhasil = () => {
   const navigate = useNavigate();
   const { user, transactions, clearTransaction } = useAuth();
+
   const isTahapanBCA = transactions.recipients.wallet == 'Tahapan BCA';
   const isQRIS = transactions.recipients.bank == 'QRIS';
-
   const admin = isTahapanBCA || isQRIS ? 0 : 1000;
+  const [isShareModalVisible, setIsShareModalVisible] = useState(false);
+
 
   const onBackToHome = () => {
     clearTransaction();
     navigate('/');
+  };
+
+  const showShareModal = () => {
+    setIsShareModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsShareModalVisible(false);
   };
 
   return (
@@ -29,6 +41,7 @@ const TransaksiBerhasil = () => {
           alt=""
         />
         <Card className="px-5 py-3 lg:w-[38%] text-primary-100 shadow-lg lg:mr-32">
+          {/* Konten Pengirim dan Penerima */}
           <div>
             <p className="font-bold text-lg" tabIndex={0}>Pengirim</p>
             <div className="flex items-center mt-2">
@@ -44,7 +57,7 @@ const TransaksiBerhasil = () => {
                   <img
                     className="w-[6px] h-[6px] mx-2"
                     src="/images/icons/dot.png"
-                  ></img>
+                  />
                   <p className="font-bold text-lg" tabIndex={0}>
                     {user?.user.account_number}
                   </p>
@@ -52,6 +65,7 @@ const TransaksiBerhasil = () => {
               </div>
             </div>
           </div>
+          {/* Konten Detail Transaksi */}
           <div className="my-2 mb-5">
             <p className="font-bold text-lg" tabIndex={0}>Penerima</p>
             <div className="flex items-center">
@@ -71,7 +85,7 @@ const TransaksiBerhasil = () => {
                   <img
                     className="w-[6px] h-[6px] mx-2"
                     src="/images/icons/dot.png"
-                  ></img>
+                  />
                   <p className="font-bold text-lg" tabIndex={0}>
                     {transactions.recipients.numberDestination}
                   </p>
@@ -79,6 +93,7 @@ const TransaksiBerhasil = () => {
               </div>
             </div>
           </div>
+          {/* Konten Total */}
           <p tabIndex={0} className="font-bold text-lg">Detail</p>
           <div className="flex justify-between mt-4">
             <div className="text-neutral-300 font-normal">
@@ -94,9 +109,7 @@ const TransaksiBerhasil = () => {
               </p>
               <p className="font-bold text-lg" tabIndex={0}>{FormatCurrency(admin)}</p>
               <p className="font-bold text-lg" tabIndex={0}>
-                {transactions.transaction.notes
-                  ? transactions.transaction.notes
-                  : '-'}
+                {transactions.transaction.notes ? transactions.transaction.notes : '-'}
               </p>
             </div>
           </div>
@@ -120,13 +133,28 @@ const TransaksiBerhasil = () => {
         </Button>
         <Button
           tabIndex={0}
-          onClick={() => navigate('/')}
+          onClick={showShareModal}
           type="primary"
           className="bg-primary-100 h-10 w-full mt-5 lg:mt-10 rounded-lg"
         >
           Bagikan Bukti Transaksi
         </Button>
       </div>
+
+      {/* Modal Share */}
+      <Modal
+        title="Bagikan Bukti Transaksi"
+        visible={isShareModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        <ReactShareSocial
+          url={`${window.location.origin}/transaksi-berhasil`}
+          title='Bukti Transfer'
+          socialTypes={['facebook', 'twitter', 'linkedin', 'whatsapp']}
+          onSocialButtonClicked={ data => console.log(data)} 
+        />
+      </Modal>
     </div>
   );
 };

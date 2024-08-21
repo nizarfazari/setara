@@ -117,7 +117,7 @@ const BuktiTransfer = () => {
         className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg"
         disabled={loading}
       >
-        {loading ? <Spin /> : 'Download Mutasi Rekening'} {/* Tampilkan spinner saat loading */}
+        {loading ? <Spin /> : 'Download Bukti Transfer'}
       </Button>
     </div>
   )

@@ -46,6 +46,7 @@ const Mutasi = () => {
   useEffect(() => {
     const [startDate, endDate] = selectedDates;
     getMutation(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredBy, selectedDates, currentPage]);
 
   const onChange = (e: RadioChangeEvent) => {

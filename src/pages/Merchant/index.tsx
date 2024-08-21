@@ -119,6 +119,7 @@ const QRISScanner = () => {
         setScanFailed(true);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result]);
 
   const isValidQRCode = (code: string): boolean => {

@@ -10,9 +10,9 @@ import { useAuth } from '../../../hooks/useAuth';
 const InfoSaldo: React.FC = () => {
   const [isBalanceHidden, setIsBalanceHidden] = useState<boolean>(true);
   const [balance, setBalance] = useState<number>();
-  const [error, setError] = useState<AxiosError | null>(null);
+  const [, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  console.log(error);
+  
   const { user } = useAuth();
   const dots = new Array(7).fill(null);
 
@@ -45,6 +45,7 @@ const InfoSaldo: React.FC = () => {
     if (user) {
       fetchBalance();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const copyToClipboard = () => {

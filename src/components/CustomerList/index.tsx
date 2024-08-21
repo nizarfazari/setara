@@ -29,7 +29,7 @@ export default function CustomerList({ pathUrl, header, contacts, setRecipients,
     })
     navigate(`${pathUrl}/nominal-topup`)
   }
-  console.log(contacts)
+  
   return (
     <div className="text-primary-100 w-full">
       <h5 className="font-bold mb-3 text-body-small md:text-heading-5">{`${header} (${contacts.length})`}</h5>

@@ -21,6 +21,7 @@ export default function ProtectedUser() {
 
     useEffect(() => {
         SetupAxiosInterceptors();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return user ? <Outlet /> : <Navigate to="/login" replace />

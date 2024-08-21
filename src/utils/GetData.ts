@@ -35,7 +35,7 @@ export async function postData<TRequest, TResponse>(
     );
 
     return response.data ?? {};
-  } catch (error) {
+  } catch (error : unknown) {
     console.log(error);
     throw error;
   }

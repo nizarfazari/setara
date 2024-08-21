@@ -12,9 +12,6 @@ import Breadcrumb from "../../components/Breadcumb";
 import { ApiResponse, GroupedTransaction, MutationReq, Transaction } from "../../types/Mutation";
 import { GetData } from "../../utils/GetData";
 
-
-
-
 const Mutasi = () => {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -25,7 +22,7 @@ const Mutasi = () => {
   const { RangePicker } = DatePicker;
   const [selectedDates, setSelectedDates] = useState<[Dayjs, Dayjs]>(searchParams ? searchParams.get('startDate') && searchParams.get('endDate') ? [dayjs(searchParams.get('startDate')), dayjs(searchParams.get('endDate'))] : [dayjs(), dayjs()] : [dayjs(), dayjs()]);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const [pageSize] = useState<number>(10); // Mengatur ukuran halaman tetap 10
+  const [pageSize] = useState<number>(10);
   const { data, post, isLoading } = usePostData<MutationReq, ApiResponse>(`/transactions/get-all-mutation?page=${currentPage - 1}&size=${pageSize}`, user?.token);
   const [loading, setLoading] = useState(false);
 
@@ -105,12 +102,11 @@ const Mutasi = () => {
     try {
       const blob = await GetData<Blob>('/transactions/generate-all-mutation-report', user?.token, true) as Blob;
 
-      // Buat URL dari Blob dan trigger download
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.style.display = 'none';
       a.href = url;
-      a.download = 'Mutasi_Rekening.pdf'; // Nama file yang akan diunduh
+      a.download = 'Mutasi_Rekening.pdf';
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -249,7 +245,7 @@ const Mutasi = () => {
             className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg"
             disabled={loading}
           >
-            {loading ? <Spin /> : 'Download Mutasi Rekening'} {/* Tampilkan spinner saat loading */}
+            {loading ? <Spin /> : 'Download Mutasi Rekening'}
           </Button>}
         </>
       ) : (

@@ -64,7 +64,6 @@ const TransaksiBerhasil = () => {
               </div>
             </div>
           </div>
-          {/* Konten Detail Transaksi */}
           <div className="my-2 mb-5">
             <p className="font-bold text-lg" tabIndex={0}>Penerima</p>
             <div className="flex items-center">
@@ -92,7 +91,6 @@ const TransaksiBerhasil = () => {
               </div>
             </div>
           </div>
-          {/* Konten Total */}
           <p tabIndex={0} className="font-bold text-lg">Detail</p>
           <div className="flex justify-between mt-4">
             <div className="text-neutral-300 font-normal">
@@ -139,8 +137,6 @@ const TransaksiBerhasil = () => {
           Bagikan Bukti Transaksi
         </Button>
       </div>
-
-      {/* Modal Share */}
       <Modal
         title="Bagikan Bukti Transaksi"
         visible={isShareModalVisible}

@@ -102,7 +102,7 @@ const QRISScanner = () => {
         account_number: merchantId,
         numberDestination: response.nmid,
         imageUrl: response.image_path,
-        address: response.address
+        address: response.address,
       });
       navigate('/payqr', { state: { transactionDetail: response } });
     } catch (err) {
@@ -124,7 +124,7 @@ const QRISScanner = () => {
   const isValidQRCode = (code: string): boolean => {
     // Implement your validation logic here. For example, checking if the code is a valid merchant ID.
     // This is a basic example. Adjust the validation as needed for your use case.
-    const idPattern = /^[a-f0-9\-]{36}$/; // Example pattern for UUID
+    const idPattern = /^[a-f0-9\\-]{36}$/; // Example pattern for UUID
     return idPattern.test(code.trim());
   };
 
@@ -186,7 +186,6 @@ const QRISScanner = () => {
         <div className="flex items-center justify-center">
           <div className="scanner-container p-12 rounded-lg shadow-lg w-full max-w-2xl">
             <div className="video-container mb-8 flex justify-center">
-
               {videoAllowed ? (
                 <video
                   ref={videoRef}
@@ -196,7 +195,6 @@ const QRISScanner = () => {
               ) : (
                 <div className="bg-gray-400 w-[500px] h-[400px] rounded-2xl flex items-center justify-center flex-col">
                   <CameraSlash size={64} />
-                  <p className="text-black-800 text-lg font-semibold mt-3">Vidio Tidak Diijinkan</p>
                 </div>
               )}
             </div>

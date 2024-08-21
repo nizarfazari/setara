@@ -131,7 +131,7 @@ const BuktiTransfer = () => {
               <p className="font-bold text-lg">Biaya Admin</p>
               <p className="font-bold text-lg">Catatan</p>
             </div>
-            <div>
+            <div className="flex flex-col items-end">
               <p className="font-bold text-lg">
                 {FormatCurrency(data?.amount)}
               </p>

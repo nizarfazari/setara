@@ -8,10 +8,12 @@ import { ReactShareSocial } from 'react-share-social';
 const TransaksiBerhasil = () => {
   const navigate = useNavigate();
   const { user, transactions, clearTransaction } = useAuth();
-  const isTahapanBCA = transactions.recipients.wallet === 'Tahapan BCA';
-  const isQRIS = transactions.recipients.bank === 'QRIS';
-  const admin = isTahapanBCA || isQRIS ? 0 : 100;
+
+  const isTahapanBCA = transactions.recipients.wallet == 'Tahapan BCA';
+  const isQRIS = transactions.recipients.bank == 'QRIS';
+  const admin = isTahapanBCA || isQRIS ? 0 : 1000;
   const [isShareModalVisible, setIsShareModalVisible] = useState(false);
+
 
   const onBackToHome = () => {
     clearTransaction();
@@ -39,7 +41,6 @@ const TransaksiBerhasil = () => {
           alt=""
         />
         <Card className="px-5 py-3 lg:w-[38%] text-primary-100 shadow-lg lg:mr-32">
-          {/* Konten Pengirim dan Penerima */}
           <div>
             <p className="font-bold text-lg" tabIndex={0}>Pengirim</p>
             <div className="flex items-center mt-2">

@@ -25,6 +25,7 @@
     "react-hook-form": "^7.52.2",
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.24.1",
+    "react-share-social": "^0.1.60",
     "react-zxing": "^2.0.2",
     "setara": "file:",
     "swiper": "^11.1.5"

@@ -154,7 +154,7 @@ const QRISScanner = () => {
                 );
                 const scannedResult = result.getText();
                 setResult(scannedResult);
-                setScanFailed(!isValidQRCode(scannedResult)); // Set scan failure status if the result is invalid
+                setScanFailed(!isValidQRCode(scannedResult));
               } catch (err) {
                 setError('Error decoding QR code from image');
                 console.error('Image Decode Error:', err);

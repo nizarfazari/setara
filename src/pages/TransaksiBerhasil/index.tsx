@@ -9,7 +9,7 @@ const TransaksiBerhasil = () => {
   const isTahapanBCA = transactions.recipients.wallet == 'Tahapan BCA';
   const isQRIS = transactions.recipients.bank == 'QRIS';
 
-  const admin = isTahapanBCA || isQRIS ? 0 : 100;
+  const admin = isTahapanBCA || isQRIS ? 0 : 1000;
 
   const onBackToHome = () => {
     clearTransaction();

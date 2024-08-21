@@ -41,7 +41,6 @@ const TransaksiBerhasil = () => {
           alt=""
         />
         <Card className="px-5 py-3 lg:w-[38%] text-primary-100 shadow-lg lg:mr-32">
-          {/* Konten Pengirim dan Penerima */}
           <div>
             <p className="font-bold text-lg" tabIndex={0}>Pengirim</p>
             <div className="flex items-center mt-2">

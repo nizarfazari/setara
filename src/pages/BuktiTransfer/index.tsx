@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { FormatCurrency } from "../../utils";
 import { useState } from "react";
 import { GetData } from "../../utils/GetData";
+import dayjs from "dayjs";
 
 type TransactionDetail = {
   sender: {
@@ -32,17 +33,23 @@ const BuktiTransfer = () => {
   console.log(id)
   const { user } = useAuth()
   const { data } = useFetchData<TransactionDetail>(`/transactions/get-mutation-detail/${id}`, user?.token)
+
+  console.log(data)
   const onDownloadFile = async () => {
     setLoading(true);
     try {
       const blob = await GetData<Blob>(`/transactions/generate-receipt/${id}`, user?.token, true) as Blob;
-
+      console.log(blob)
       // Buat URL dari Blob dan trigger download
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.style.display = 'none';
       a.href = url;
-      a.download = 'Mutasi_Rekening.pdf'; // Nama file yang akan diunduh
+
+      const formattedDate = dayjs().format('YYYY-MM-DD HH-mm-ss');
+      const fileName = `Mutasi Rekening - ${id} - (${formattedDate}).pdf`;
+
+      a.download = fileName ; // Nama file yang akan diunduh
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);

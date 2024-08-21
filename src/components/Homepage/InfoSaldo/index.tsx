@@ -45,6 +45,7 @@ const InfoSaldo: React.FC = () => {
     if (user) {
       fetchBalance();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const copyToClipboard = () => {

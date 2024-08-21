@@ -30,6 +30,7 @@ export const NotificationProvider = ({ children }: Props) => {
     const value = useMemo(() => ({
         contextHolder,
         openNotificationWithIcon
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }), [contextHolder]);
 
 
@@ -43,6 +44,7 @@ export const NotificationProvider = ({ children }: Props) => {
 };
 
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useNotification
     = (): UseNotificationReturnType => {
         return useContext(NotificationContext)!;

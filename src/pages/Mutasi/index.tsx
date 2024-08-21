@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import './mutasi.css';
 import { Button, DatePicker, Modal, Pagination, Radio, RadioChangeEvent, Skeleton, Space, Spin } from "antd";
-import { SlidersHorizontal } from '@phosphor-icons/react';
+import { SlidersHorizontal, DownloadSimple } from '@phosphor-icons/react';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { usePostData } from "../../hooks/usePostData";
 import { useAuth } from "../../hooks/useAuth";
@@ -170,9 +170,20 @@ const Mutasi = () => {
           <p>Rekening</p>
           <p className="text-primary-100 font-bold">{user?.user.account_number}</p>
         </div>
-        <Button onClick={() => setModal2Open(true)} className="border-primary-100 text-primary-100 h-10" icon={<SlidersHorizontal size={16} />}>
-          Filter
-        </Button>
+        <div className="flex items-center gap-4 ">
+          {groupedTransactions.length >= 0 && <Button
+            icon={<DownloadSimple size={16} />}
+            onClick={onDownloadFile}
+            type="primary"
+            className="bg-primary-100 h-10 rounded-lg  font-semibold"
+            disabled={loading}
+          >
+            {loading ? <Spin /> : 'Download'}
+          </Button>}
+          <Button onClick={() => setModal2Open(true)} className="border-primary-100 text-primary-100 h-10 font-semibold" icon={<SlidersHorizontal size={16} />}>
+            Filter
+          </Button>
+        </div>
         <Modal
           centered
           open={modal2Open}
@@ -244,13 +255,13 @@ const Mutasi = () => {
               ))}
             </div>
           ))}
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-start mb-4">
             <Pagination current={currentPage} pageSize={pageSize} total={data?.data.total_pages && +data?.data.total_pages * 10} onChange={handlePageChange} showSizeChanger={false} />
           </div>
           {groupedTransactions.length >= 0 && <Button
             onClick={onDownloadFile}
             type="primary"
-            className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg"
+            className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg sm:hidden"
             disabled={loading}
           >
             {loading ? <Spin /> : 'Download Mutasi Rekening'}

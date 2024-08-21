@@ -38,9 +38,11 @@ const DestinationNumber: React.FC<PropsDestinationNumber> = ({
 
   return (
     <Card className="w-full border-white md:border-primary-300">
-      
       <Button
-      tabIndex={0} aria-label="button tambah nomor baru" role="button" 
+        type="primary"
+        tabIndex={0}
+        aria-label="button tambah nomor baru"
+        role="button"
         className="bg-primary-100 text-white w-full h-10 rounded-xl mb-3 font-semibold text-body-small md:mb-6 md:text-heading-6 md:h-[60px]"
         onClick={() => navigate(`/${pathUrl}/nomor-tujuan-baru`)}
       >

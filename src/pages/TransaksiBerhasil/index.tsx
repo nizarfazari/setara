@@ -143,7 +143,7 @@ const TransaksiBerhasil = () => {
       {/* Modal Share */}
       <Modal
         title="Bagikan Bukti Transaksi"
-        visible={isShareModalVisible}
+        open={isShareModalVisible}
         onCancel={handleCancel}
         footer={null}
       >

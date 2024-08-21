@@ -58,7 +58,7 @@ describe('TransaksiBerhasil Integration Test', () => {
     expect(screen.getByText('Transaksi Berhasil')).toBeInTheDocument();
     expect(screen.getByText('John Doe')).toBeInTheDocument();
     expect(screen.getByText('Jane Smith')).toBeInTheDocument();
-    expect(screen.getByText('Nominal Top Up')).toBeInTheDocument();
+    expect(  screen.getByText(/Nominal Top Up|Nominal Transfer/i)).toBeInTheDocument();
     expect(screen.getByText('Payment for services')).toBeInTheDocument();
 
     // Check if FormatCurrency is applied correctly

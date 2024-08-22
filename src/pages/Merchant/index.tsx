@@ -119,12 +119,12 @@ const QRISScanner = () => {
         setScanFailed(true);
       }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result]);
 
   const isValidQRCode = (code: string): boolean => {
-    // Implement your validation logic here. For example, checking if the code is a valid merchant ID.
-    // This is a basic example. Adjust the validation as needed for your use case.
-    const idPattern = /^[a-f0-9\\-]{36}$/; // Example pattern for UUID
+    // eslint-disable-next-line no-useless-escape
+    const idPattern = /^[a-f0-9\-]{36}$/; 
     return idPattern.test(code.trim());
   };
 

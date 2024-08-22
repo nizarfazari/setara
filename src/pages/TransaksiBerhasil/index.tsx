@@ -139,7 +139,7 @@ const TransaksiBerhasil = () => {
       </div>
       <Modal
         title="Bagikan Bukti Transaksi"
-        visible={isShareModalVisible}
+        open={isShareModalVisible}
         onCancel={handleCancel}
         footer={null}
       >

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import './mutasi.css';
 import { Button, DatePicker, Modal, Pagination, Radio, RadioChangeEvent, Skeleton, Space, Spin } from "antd";
-import { SlidersHorizontal } from '@phosphor-icons/react';
+import { SlidersHorizontal, DownloadSimple } from '@phosphor-icons/react';
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { usePostData } from "../../hooks/usePostData";
 import { useAuth } from "../../hooks/useAuth";
@@ -46,6 +46,7 @@ const Mutasi = () => {
   useEffect(() => {
     const [startDate, endDate] = selectedDates;
     getMutation(startDate.format('YYYY-MM-DD'), endDate.format('YYYY-MM-DD'));
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filteredBy, selectedDates, currentPage]);
 
   const onChange = (e: RadioChangeEvent) => {
@@ -101,12 +102,18 @@ const Mutasi = () => {
     setLoading(true);
     try {
       const blob = await GetData<Blob>('/transactions/generate-all-mutation-report', user?.token, true) as Blob;
-
+      console.log(blob)
+      // Buat URL dari Blob dan trigger download
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.style.display = 'none';
       a.href = url;
-      a.download = 'Mutasi_Rekening.pdf';
+
+      const formattedDate = dayjs().format('YYYY-MM-DD HH-mm-ss');
+      const fileName = `Mutasi Rekening - (${formattedDate}).pdf`;
+
+      // "Mutasi Rekening (" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH-mm-ss")) + ").pdf";
+      a.download = fileName;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);
@@ -136,6 +143,8 @@ const Mutasi = () => {
 
   const groupedTransactions = data?.data.mutation_responses ? filteringDataMutation(data.data.mutation_responses) : [];
 
+  console.log(groupedTransactions)
+
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
   };
@@ -162,9 +171,20 @@ const Mutasi = () => {
           <p>Rekening</p>
           <p className="text-primary-100 font-bold">{user?.user.account_number}</p>
         </div>
-        <Button onClick={() => setModal2Open(true)} className="border-primary-100 text-primary-100 h-10" icon={<SlidersHorizontal size={16} />}>
-          Filter
-        </Button>
+        <div className="flex items-center gap-4 ">
+          {groupedTransactions.length >= 0 && <Button
+            icon={<DownloadSimple size={16} />}
+            onClick={onDownloadFile}
+            type="primary"
+            className="bg-primary-100 h-10 rounded-lg  font-semibold"
+            disabled={loading}
+          >
+            {loading ? <Spin /> : 'Download'}
+          </Button>}
+          <Button onClick={() => setModal2Open(true)} className="border-primary-100 text-primary-100 h-10 font-semibold" icon={<SlidersHorizontal size={16} />}>
+            Filter
+          </Button>
+        </div>
         <Modal
           centered
           open={modal2Open}
@@ -236,13 +256,13 @@ const Mutasi = () => {
               ))}
             </div>
           ))}
-          <div className="flex justify-center mb-4">
+          <div className="flex justify-start mb-4">
             <Pagination current={currentPage} pageSize={pageSize} total={data?.data.total_pages && +data?.data.total_pages * 10} onChange={handlePageChange} showSizeChanger={false} />
           </div>
-          {groupedTransactions.length == 0 && <Button
+          {groupedTransactions.length >= 0 && <Button
             onClick={onDownloadFile}
             type="primary"
-            className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg"
+            className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg sm:hidden"
             disabled={loading}
           >
             {loading ? <Spin /> : 'Download Mutasi Rekening'}

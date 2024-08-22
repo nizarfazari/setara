@@ -1,3 +1,4 @@
+// eslint-disable-next-line react-refresh/only-export-components
 export function capitalFirstLetter(val: string | undefined) {
   if (typeof val === 'undefined') {
     return ''
@@ -8,6 +9,7 @@ export function capitalFirstLetter(val: string | undefined) {
     .join(' ');
 }
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const formatNorek = (norek: string | number | undefined): string | number => {
   if (typeof norek === "undefined") {
     return 0;
@@ -21,6 +23,8 @@ export const formatNorek = (norek: string | number | undefined): string | number
 };
 
 const currentDate = new Date();
+
+// eslint-disable-next-line react-refresh/only-export-components
 export const formattedDate = currentDate.toLocaleDateString("id-ID", {
   year: "numeric",
   month: "long",
@@ -33,6 +37,8 @@ export const formattedDate = currentDate.toLocaleDateString("id-ID", {
   second: "numeric",
 });
 
+
+// eslint-disable-next-line react-refresh/only-export-components
 export const formattedTimeWithColon = formattedTime.replace(/\./g, ':');
 
 export function FormatCurrency(value: number | string | undefined) {

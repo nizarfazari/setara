@@ -16,7 +16,7 @@ import dayjs from 'dayjs';
 import { DATA_MONTH } from '../../../utils/constant';
 
 export const CatatanKeuangan = () => {
-  const [error, setError] = useState<AxiosError | null>(null);
+  const [, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [monthlyReport, setMonthlyReport] = useState<MonthlyReport | null>(
     null
@@ -32,7 +32,7 @@ export const CatatanKeuangan = () => {
   const { user } = useAuth();
   const today = new Date();
 
-  console.log(error);
+ 
 
   const fetchMonthlyReport = async (month: number, year: string) => {
     const token = user?.token;
@@ -80,6 +80,7 @@ export const CatatanKeuangan = () => {
 
   useEffect(() => {
     fetchMonthlyReport(today.getMonth() + 1, today.getFullYear().toString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleMouseEnter = (month: string) => {
@@ -275,11 +276,10 @@ export const CatatanKeuangan = () => {
           <div>
             <h5 id="balance-label">Selisih</h5>
             <h5
-              className={`${
-                (monthlyReport?.total ?? 0) < 0
+              className={`${(monthlyReport?.total ?? 0) < 0
                   ? 'text-red-500'
                   : 'text-green-600'
-              } text-heading-6 font-bold`}
+                } text-heading-6 font-bold`}
               aria-label={`Selisih bulan ini: ${FormatCurrency(
                 monthlyReport?.total
               )}`}

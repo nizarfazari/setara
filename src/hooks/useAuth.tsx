@@ -76,6 +76,7 @@ export const AuthProvider = ({ children }: AuthProps) => {
         transactions,
         setProcessTransaction,
         clearTransaction,
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }), [user, transactions]);
 
     return (
@@ -85,6 +86,7 @@ export const AuthProvider = ({ children }: AuthProps) => {
     );
 };
 
+// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = (): AuthContextType => {
     return useContext(AuthContext)!;
 };

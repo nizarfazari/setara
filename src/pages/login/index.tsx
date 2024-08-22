@@ -30,7 +30,6 @@ const Login = () => {
       });
       const data = await response.json();
       if (!response.ok) {
-        console.log(data);
         throw new Error(data.errors ?? 'Email atau Password Salah');
       }
       openNotificationWithIcon('success', 'Success', data.message);
@@ -41,16 +40,13 @@ const Login = () => {
           ? error.message
           : 'An unexpected error occurred.';
       openNotificationWithIcon('error', 'Error', errorMessage);
-      console.log('Sign in error:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const onFinishFailed: FormProps<LoginType>['onFinishFailed'] = (
-    errorInfo
-  ) => {
-    console.log('Failed:', errorInfo);
+  const onFinishFailed: FormProps<LoginType>['onFinishFailed'] = () => {
+    // console.log('Failed:', errorInfo);
   };
 
   return (

@@ -1,16 +1,26 @@
-import { useState } from "react";
-import Breadcrumb from "../../../components/Breadcumb";
-import { useNavigate, useParams } from "react-router-dom";
-import { capitalFirstLetter, FormatCurrency } from "../../../utils";
-import { Button, Card, Checkbox, Flex, Form, Input, InputNumber, Select, Spin } from "antd";
+import { useState } from 'react';
+import Breadcrumb from '../../../components/Breadcumb';
+import { useNavigate, useParams } from 'react-router-dom';
+import { capitalFirstLetter, FormatCurrency } from '../../../utils';
+import {
+  Button,
+  Card,
+  Checkbox,
+  Flex,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Spin,
+} from 'antd';
 const { Option } = Select;
-import "./style.css";
-import { CheckCircle } from "@phosphor-icons/react";
-import { useFetchData } from "../../../hooks/useFetchData";
-import { useAuth } from "../../../hooks/useAuth";
-import { SearchBankRes, UserBalance } from "../../../types/Bank";
-import { GetData } from "../../../utils/GetData";
-import axios from "axios";
+import './style.css';
+import { CheckCircle } from '@phosphor-icons/react';
+import { useFetchData } from '../../../hooks/useFetchData';
+import { useAuth } from '../../../hooks/useAuth';
+import { SearchBankRes, UserBalance } from '../../../types/Bank';
+import { GetData } from '../../../utils/GetData';
+import axios from 'axios';
 
 type FieldType = {
   destinationNumber: number;
@@ -28,14 +38,17 @@ export default function NewDestinationNumberPage() {
   const [isVerified, setIsVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data: userBalance } = useFetchData<UserBalance>(`/user/getBalance`, user?.token);
+  const { data: userBalance } = useFetchData<UserBalance>(
+    `/user/getBalance`,
+    user?.token
+  );
 
   const onFinish = (values: FieldType) => {
     setProcessTransaction({
       nominal: values.amount.toString(),
       notes: values.notes,
-      isSavedAccount: values.savedList
-    })
+      isSavedAccount: values.savedList,
+    });
     navigate(`/bca/${slug}/tinjau`);
   };
 
@@ -45,18 +58,17 @@ export default function NewDestinationNumberPage() {
 
   const handleDestinationNumberChange = () => {
     setIsVerified(false);
-    form.resetFields(["name", "number", "notes", "amount", "source"]);
-  }
+    form.resetFields(['name', 'number', 'notes', 'amount', 'source']);
+  };
 
   const handleVerifiedNumber = async () => {
-    if (form.getFieldValue("destinationNumber")) {
+    if (form.getFieldValue('destinationNumber')) {
       setIsLoading(true);
       try {
         const response = await GetData<SearchBankRes>(
-          `/user/search-no-rek/${form.getFieldValue("destinationNumber")}`,
+          `/user/search-no-rek/${form.getFieldValue('destinationNumber')}`,
           user?.token
         );
-        console.log(response)
 
         if (response) {
           setIsVerified(true);
@@ -67,27 +79,30 @@ export default function NewDestinationNumberPage() {
             account_number: '',
             numberDestination: response.no,
             imageUrl: response.image_path,
-          })
-          form.setFields([{ name: "name", value: response.name }]);
+          });
+          form.setFields([{ name: 'name', value: response.name }]);
           setIsLoading(false);
         }
       } catch (error) {
         if (axios.isAxiosError(error)) {
           if (error.response?.data?.code == 404) {
             setIsVerified(false);
-            form.setFields([{ name: "destinationNumber", errors: ["NOMOR TIDAK TERDAFTAR"] }]);
+            form.setFields([
+              { name: 'destinationNumber', errors: ['NOMOR TIDAK TERDAFTAR'] },
+            ]);
           }
         } else {
-          console.log("Error", error);
+          // console.log('Error', error);
         }
       } finally {
         setIsLoading(false);
       }
     } else {
-      form.setFields([{ name: "destinationNumber", errors: ["Nomor Tidak Boleh Kosong"] }]);
+      form.setFields([
+        { name: 'destinationNumber', errors: ['Nomor Tidak Boleh Kosong'] },
+      ]);
     }
   };
-  console.log(isVerified)
   return (
     <div className="container">
       <div className="my-[30px]">
@@ -113,7 +128,13 @@ export default function NewDestinationNumberPage() {
           >
             <div>
               <div className="flex items-center gap-2 flex-col md:flex-row md:gap-4">
-                <Input type="number" placeholder="Masukkan Nomor" className="flex-[80%]" onChange={handleDestinationNumberChange} aria-label="Input nomor transfer baru" />
+                <Input
+                  type="number"
+                  placeholder="Masukkan Nomor"
+                  className="flex-[80%]"
+                  onChange={handleDestinationNumberChange}
+                  aria-label="Input nomor transfer baru"
+                />
                 <Button
                   type="primary"
                   tabIndex={0}
@@ -121,13 +142,26 @@ export default function NewDestinationNumberPage() {
                   className="flex-[20%] bg-primary-100 text-white w-full py-[10px] rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
                   aria-label="Cari Nomor"
                 >
-                  {isLoading ? <Spin /> : "Cari Nomor"}
+                  {isLoading ? <Spin /> : 'Cari Nomor'}
                 </Button>
               </div>
               {isVerified && (
-                <Flex gap={6} align="center" className="mt-6" aria-label="Nomor Terverifikasi">
-                  <CheckCircle tabIndex={0} size={18} weight="fill" color="#12D79C" />
-                  <p tabIndex={0} className="text-[#12D79C] font-bold text-caption-small">
+                <Flex
+                  gap={6}
+                  align="center"
+                  className="mt-6"
+                  aria-label="Nomor Terverifikasi"
+                >
+                  <CheckCircle
+                    tabIndex={0}
+                    size={18}
+                    weight="fill"
+                    color="#12D79C"
+                  />
+                  <p
+                    tabIndex={0}
+                    className="text-[#12D79C] font-bold text-caption-small"
+                  >
                     VERIFIED
                   </p>
                 </Flex>
@@ -165,10 +199,14 @@ export default function NewDestinationNumberPage() {
             >
               <Option
                 value={user?.user.account_number}
-                aria-label={`${user?.user.bank_name} ${user?.user.account_number} ${FormatCurrency(userBalance?.balance)}`}
+                aria-label={`${user?.user.bank_name} ${
+                  user?.user.account_number
+                } ${FormatCurrency(userBalance?.balance)}`}
               >
-                {`${user?.user.bank_name} ${user?.user.account_number}`} <br />{" "}
-                <span tabIndex={0} className="font-bold">{userBalance && FormatCurrency(userBalance?.balance)}</span>
+                {`${user?.user.bank_name} ${user?.user.account_number}`} <br />{' '}
+                <span tabIndex={0} className="font-bold">
+                  {userBalance && FormatCurrency(userBalance?.balance)}
+                </span>
               </Option>
             </Select>
           </Form.Item>
@@ -177,9 +215,17 @@ export default function NewDestinationNumberPage() {
             name="amount"
             label="Nominal Transfer"
             rules={[
-              { required: true, message: "Nominal Tidak Boleh Kosong" },
-              { type: "number", min: 1, message: "Minimum transfer adalah 1, mohon isikan kembali" },
-              { type: "number", max: userBalance?.balance, message: "Saldo Tidak Cukup, mohon isikan kembali" },
+              { required: true, message: 'Nominal Tidak Boleh Kosong' },
+              {
+                type: 'number',
+                min: 1,
+                message: 'Minimum transfer adalah 1, mohon isikan kembali',
+              },
+              {
+                type: 'number',
+                max: userBalance?.balance,
+                message: 'Saldo Tidak Cukup, mohon isikan kembali',
+              },
             ]}
             required
           >
@@ -187,8 +233,12 @@ export default function NewDestinationNumberPage() {
               tabIndex={0}
               type="text"
               prefix="Rp."
-              formatter={value => `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ".")}
-              parser={(value) => value?.replace(/\.\s?|(,*)/g, "") as unknown as number}
+              formatter={(value) =>
+                `${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+              }
+              parser={(value) =>
+                value?.replace(/\.\s?|(,*)/g, '') as unknown as number
+              }
               className="w-full px-[15px] py-3 md:px-6 md:py-4"
               placeholder="Masukkan Nominal"
               disabled={isVerified ? false : true}
@@ -207,16 +257,16 @@ export default function NewDestinationNumberPage() {
 
           <Button
             type="primary"
-      className="bg-primary-100 text-white w-full h-10 rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
-      htmlType="submit"
-      disabled={isVerified ? false : true}
-      aria-label="Lanjutkan"
-      role="button"
-    >
-      Lanjutkan
-    </Button>
-        </Form >
-      </Card >
-    </div >
+            className="bg-primary-100 text-white w-full h-10 rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
+            htmlType="submit"
+            disabled={isVerified ? false : true}
+            aria-label="Lanjutkan"
+            role="button"
+          >
+            Lanjutkan
+          </Button>
+        </Form>
+      </Card>
+    </div>
   );
 }

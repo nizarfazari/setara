@@ -1,12 +1,12 @@
-import { Button, Card, Spin } from "antd"
-import Breadcrumb from "../../components/Breadcumb"
-import { useParams } from "react-router-dom";
-import { useFetchData } from "../../hooks/useFetchData";
-import { useAuth } from "../../hooks/useAuth";
-import { FormatCurrency } from "../../utils";
-import { useState } from "react";
-import { GetData } from "../../utils/GetData";
-import dayjs from "dayjs";
+import { Button, Card, Spin } from 'antd';
+import Breadcrumb from '../../components/Breadcumb';
+import { useParams } from 'react-router-dom';
+import { useFetchData } from '../../hooks/useFetchData';
+import { useAuth } from '../../hooks/useAuth';
+import { FormatCurrency } from '../../utils';
+import { useState } from 'react';
+import { GetData } from '../../utils/GetData';
+import dayjs from 'dayjs';
 
 type TransactionDetail = {
   sender: {
@@ -30,17 +30,20 @@ type TransactionDetail = {
 const BuktiTransfer = () => {
   const { id } = useParams<{ id: string }>();
   const [loading, setLoading] = useState(false);
-  console.log(id)
-  const { user } = useAuth()
-  const { data } = useFetchData<TransactionDetail>(`/transactions/get-mutation-detail/${id}`, user?.token)
+  const { user } = useAuth();
+  const { data } = useFetchData<TransactionDetail>(
+    `/transactions/get-mutation-detail/${id}`,
+    user?.token
+  );
 
-  console.log(data)
   const onDownloadFile = async () => {
     setLoading(true);
     try {
-      const blob = await GetData<Blob>(`/transactions/generate-receipt/${id}`, user?.token, true) as Blob;
-      console.log(blob)
-      // Buat URL dari Blob dan trigger download
+      const blob = (await GetData<Blob>(
+        `/transactions/generate-receipt/${id}`,
+        user?.token,
+        true
+      )) as Blob;
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.style.display = 'none';
@@ -49,7 +52,7 @@ const BuktiTransfer = () => {
       const formattedDate = dayjs().format('YYYY-MM-DD HH-mm-ss');
       const fileName = `Mutasi Rekening - ${id} - (${formattedDate}).pdf`;
 
-      a.download = fileName ; // Nama file yang akan diunduh
+      a.download = fileName;
       document.body.appendChild(a);
       a.click();
       window.URL.revokeObjectURL(url);

@@ -28,7 +28,6 @@ const QRISScanner = () => {
   const scannerControlsRef = useRef<IScannerControls | null>(null);
   const { setRecipients } = useAuth();
   const navigate = useNavigate();
-  console.log(error);
 
   useEffect(() => {
     codeReader.current = new BrowserQRCodeReader();

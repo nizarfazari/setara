@@ -179,7 +179,7 @@ const TransaksiBerhasil = () => {
           url={`${window.location.origin}/transaksi-berhasil`}
           title="Bukti Transfer"
           socialTypes={['facebook', 'twitter', 'linkedin', 'whatsapp']}
-          onSocialButtonClicked={(data) => console.log(data)}
+          // onSocialButtonClicked={(data) => console.log(data)}
         />
       </Modal>
     </div>

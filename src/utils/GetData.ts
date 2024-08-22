@@ -3,14 +3,14 @@ import axios from 'axios';
 export async function GetData<T>(
   url: string,
   token: string | null | undefined,
-  isFileDownload: boolean = false // Parameter untuk menentukan apakah mengunduh file
-): Promise<T > {
+  isFileDownload: boolean = false
+): Promise<T> {
   try {
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     const response = await axios.get(`${process.env.VITE_API_URL}${url}`, {
       headers: headers,
-      responseType: isFileDownload ? 'blob' : 'json', // Jika file, ubah responseType menjadi 'blob'
+      responseType: isFileDownload ? 'blob' : 'json',
     });
 
     return isFileDownload ? response.data : response.data.data ?? [];
@@ -35,7 +35,7 @@ export async function postData<TRequest, TResponse>(
     );
 
     return response.data ?? {};
-  } catch (error : unknown) {
+  } catch (error: unknown) {
     console.log(error);
     throw error;
   }

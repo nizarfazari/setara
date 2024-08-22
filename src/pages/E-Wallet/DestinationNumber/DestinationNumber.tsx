@@ -12,11 +12,10 @@ export default function DestinationNumberPage() {
   const { slug } = useParams<{ slug: string }>();
   const { user, setRecipients } = useAuth();
 
-  const { data, isLoading, isError, refetch } = useFetchData<ResponseEWallet>(
+  const { data, isLoading, refetch } = useFetchData<ResponseEWallet>(
     `/saved-ewallet-users?ewalletName=${slug}`,
     user?.token
   );
-  console.log(isError);
 
   if (isLoading) {
     return (

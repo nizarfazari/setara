@@ -15,12 +15,10 @@ const TransferWallet: React.FC = () => {
     setTransactionId(id);
   };
 
-  const { data, isLoading, isError } = useFetchData<EWallets[]>(
+  const { data, isLoading } = useFetchData<EWallets[]>(
     `/vendor/ewallets`,
     user?.token
   );
-
-  console.log(isError);
 
   return (
     <div className="container my-[30px]">

@@ -28,7 +28,6 @@ const QRISScanner = () => {
   const scannerControlsRef = useRef<IScannerControls | null>(null);
   const { setRecipients } = useAuth();
   const navigate = useNavigate();
-  console.log(error);
 
   useEffect(() => {
     codeReader.current = new BrowserQRCodeReader();
@@ -52,7 +51,7 @@ const QRISScanner = () => {
                 if (result) {
                   const scannedResult = result.getText();
                   setResult(scannedResult);
-                  setScanFailed(!isValidQRCode(scannedResult)); // Set scan failure status if the result is invalid
+                  setScanFailed(!isValidQRCode(scannedResult));
                   stopScan();
                 }
                 if (err) {
@@ -102,12 +101,24 @@ const QRISScanner = () => {
         account_number: merchantId,
         numberDestination: response.nmid,
         imageUrl: response.image_path,
-        address: response.address
+        address: response.address,
       });
+
       navigate('/payqr', { state: { transactionDetail: response } });
     } catch (err) {
-      setError(`Error fetching transaction details: ${err}`);
-      console.error('API Fetch Error:', err);
+      if (err instanceof Error) {
+        const typedError = err as { response?: { status?: number } };
+
+        if (typedError.response?.status === 404) {
+          setError('Pemindaian QR Code Gagal, Format tidak valid!');
+        } else {
+          setError(`Error fetching transaction details: ${err.message}`);
+        }
+
+        console.error('API Fetch Error:', err);
+      } else {
+        setError('An unexpected error occurred');
+      }
     }
   };
 
@@ -119,12 +130,12 @@ const QRISScanner = () => {
         setScanFailed(true);
       }
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [result]);
 
   const isValidQRCode = (code: string): boolean => {
     // eslint-disable-next-line no-useless-escape
-    const idPattern = /^[a-f0-9\-]{36}$/; 
+    const idPattern = /^[a-f0-9\-]{36}$/;
     return idPattern.test(code.trim());
   };
 
@@ -184,41 +195,74 @@ const QRISScanner = () => {
         </div>
 
         <div className="flex items-center justify-center">
-          <div className="scanner-container p-12 rounded-lg shadow-lg w-full max-w-2xl">
+          <div
+            className="scanner-container p-12 rounded-lg shadow-lg w-full max-w-2xl"
+            role="region"
+            aria-labelledby="qr-scan-title"
+          >
+            <h2 id="qr-scan-title" className="sr-only">
+              QRIS Scanner
+            </h2>
             <div className="video-container mb-8 flex justify-center">
-
               {videoAllowed ? (
                 <video
                   ref={videoRef}
-                  className="video-preview  rounded-2xl  w-[500px] h-full"
+                  className="video-preview rounded-2xl w-[500px] h-full"
                   style={{ transform: 'scaleX(-1)' }}
+                  aria-label="Live video feed for QR code scanning"
                 ></video>
               ) : (
-                <div className="bg-gray-400 w-[500px] h-[400px] rounded-2xl flex items-center justify-center flex-col">
-                  <CameraSlash size={64} />
-                  <p className="text-black-800 text-lg font-semibold mt-3">Vidio Tidak Diijinkan</p>
+                <div
+                  className="bg-gray-400 w-[500px] h-[400px] rounded-2xl flex items-center justify-center flex-col"
+                  role="alert"
+                  aria-label="Camera not available"
+                >
+                  <CameraSlash size={64} aria-hidden="true" />
+                  <span>No camera available</span>
                 </div>
               )}
             </div>
             <div className="upload-container mb-8">
-              <label className="block text-base font-medium text-gray-700 mb-3">
+              <label
+                htmlFor="file-upload"
+                className="block text-base font-medium text-gray-700 mb-3"
+              >
                 Upload Image
               </label>
               <input
                 type="file"
+                id="file-upload"
                 accept="image/*"
                 onChange={handleFileUpload}
                 className="block w-full text-base text-gray-500 file:mr-4 file:py-3 file:px-5 file:rounded-full file:border-0 file:text-base file:font-semibold file:bg-primary-100 file:text-white hover:file:bg-primary-200"
               />
             </div>
+
             {isProcessing && (
-              <p className="result-text text-center text-gray-600 mb-6 text-lg">
+              <p
+                className="result-text text-center text-gray-600 mb-6 text-lg"
+                role="status"
+                aria-live="polite"
+              >
                 Processing...
               </p>
             )}
             {scanFailed && !isProcessing && (
-              <p className="result-text text-center text-red-600 font-semibold mb-6 text-lg">
+              <p
+                className="result-text text-center text-red-600 font-semibold mb-6 text-lg"
+                role="alert"
+                aria-live="assertive"
+              >
                 Pemindaian QR Code Gagal, Format tidak valid! Silakan coba lagi.
+              </p>
+            )}
+            {error && (
+              <p
+                className="result-text text-center text-red-600 font-semibold mb-6 text-lg"
+                role="alert"
+                aria-live="assertive"
+              >
+                {error}
               </p>
             )}
           </div>

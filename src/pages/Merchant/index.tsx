@@ -61,7 +61,7 @@ const QRISScanner = () => {
             );
         }
       } catch (err) {
-        setError(`Error starting scan: ${err}`);
+        setError('No camera devices found');
         setVideoAllowed(false);
       }
     };
@@ -218,7 +218,6 @@ const QRISScanner = () => {
                   aria-label="Camera not available"
                 >
                   <CameraSlash size={64} aria-hidden="true" />
-                  <span>No camera available</span>
                 </div>
               )}
             </div>

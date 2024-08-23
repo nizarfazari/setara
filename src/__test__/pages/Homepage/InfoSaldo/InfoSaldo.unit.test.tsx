@@ -1,9 +1,10 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import InfoSaldo from '../../../components/Homepage/InfoSaldo';
-import { useAuth } from '../../../hooks/useAuth';
+import InfoSaldo from '../../../../components/Homepage/InfoSaldo';
+import { useAuth } from '../../../../hooks/useAuth';
 import axios from 'axios';
 import { MemoryRouter } from 'react-router-dom';
+import { notification } from 'antd';
 
 // Mock the useAuth hook
 jest.mock('../../../hooks/useAuth');
@@ -17,7 +18,7 @@ jest.mock('antd', () => ({
     success: jest.fn(),
     error: jest.fn(),
   },
-  Skeleton: () => <div>Mocked Skeleton</div>, // Mock Skeleton to avoid rendering issues
+  Skeleton: () => <div>Mocked Skeleton</div>,
 }));
 
 describe('InfoSaldo Component', () => {
@@ -37,7 +38,7 @@ describe('InfoSaldo Component', () => {
     (axios.get as jest.Mock).mockResolvedValue({
       data: {
         data: {
-          balance: 10000, // Mocked balance value
+          balance: 10000,
         },
       },
     });
@@ -49,15 +50,32 @@ describe('InfoSaldo Component', () => {
       expect(screen.getByLabelText('Informasi Saldo Rekening')).toBeInTheDocument();
     });
     
+    const copyIcon = screen.getByLabelText('Salin nomer rekening');
+    expect(copyIcon).toBeInTheDocument();
+
+    // Mock clipboard API
+    Object.assign(navigator, {
+      clipboard: {
+        writeText: jest.fn().mockResolvedValue(true),
+      },
+    });
+
 
     expect(screen.getByLabelText("Saldo ditampilkan")).toBeInTheDocument();
   
-    // Simulate a click to toggle the balance visibility
     fireEvent.click(screen.getByRole('button', { name: 'Saldo ditampilkan' }));
     fireEvent.click(screen.getByRole('button', { name: 'Saldo disembunyikan' }));
+    fireEvent.click(copyIcon);
 
-    expect(
-      screen.getByLabelText("Salin nomor rekening 1234-5678-90")
-    ).toBeInTheDocument();
+    await waitFor(() => {
+      expect(navigator.clipboard.writeText).toHaveBeenCalledTimes(1);
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(mockUser.user.account_number);
+      expect(notification.success).toHaveBeenCalledTimes(1);
+      expect(notification.success).toHaveBeenCalledWith({
+        message: 'Success',
+        description: 'No. Rekening berhasil disalin',
+        duration: 2,
+      });
+    });
   });
 });

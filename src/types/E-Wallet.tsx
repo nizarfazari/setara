@@ -95,3 +95,9 @@ export interface UpdateFavoriteResponse {
 }
 
 export type UpdateFavourieRequest = UpdateFavoriteData
+
+
+export type BalanceData = {
+    check_time: string; // ISO 8601 formatted date string
+    balance: number;   // Balance amount in float
+  };

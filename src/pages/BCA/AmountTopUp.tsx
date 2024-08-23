@@ -5,22 +5,17 @@ import FormTopUp from "../../components/FormTopUp";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../hooks/useAuth";
 
-
-
-
 export default function AmountTopUpPage() {
   const { slug } = useParams<{ slug: string }>();
   const { transactions } = useAuth();
 
   const USER = {
-    id : '',
+    id: '',
     account_name: transactions.recipients.nama,
     bank_name: transactions.recipients.bank,
     account_number: transactions.recipients.numberDestination,
     user_image_path: transactions.recipients.imageUrl,
   };
-
-
 
   const toTitleCase = (str: string) => {
     return str.toLowerCase().split(' ').map((word: string) => {

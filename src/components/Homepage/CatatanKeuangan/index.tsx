@@ -1,43 +1,49 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
-import axios, { AxiosError } from "axios";
+import axios from "axios";
 import { MonthlyReport } from "../../../types/Home";
-import { Button, DatePicker, notification, Skeleton } from "antd";
-import { ArrowDown, ArrowUp } from "@phosphor-icons/react";
+import {
+  Button,
+  DatePicker,
+  DatePickerProps,
+  Dropdown,
+  Skeleton,
+  Space,
+} from "antd";
+import { ArrowDown, ArrowUp, CaretDown } from "@phosphor-icons/react";
 import { FormatCurrency } from "../../../utils";
 import dayjs from "dayjs";
-import "dayjs/locale/id";
-dayjs.locale("id");
+import { DATA_MONTH } from "../../../utils/constant";
 
 export const CatatanKeuangan = () => {
-  const [error, setError] = useState<AxiosError | null>(null);
+  // const [error, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [monthlyReport, setMonthlyReport] = useState<MonthlyReport | null>(
     null
   );
-  const [selectedMonth, setSelectedMonth] = useState<number>(
-    new Date().getMonth() + 1
+  const [selectedMonth, setSelectedMonth] = useState(
+    DATA_MONTH.find((item) => item.monthNumber === new Date().getMonth() + 1)
+      ?.month || ""
   );
-  const [selectedYear, setSelectedYear] = useState<string>(
+  const [selectedYear, setSelectedYear] = useState(
     new Date().getFullYear().toString()
   );
+  const [liveYear, setLiveYear] = useState<string>("");
   const { user } = useAuth();
   const today = new Date();
 
-  const getMonthName = (monthNumber: number) => {
-    return dayjs()
-      .month(monthNumber - 1)
-      .format("MMMM");
-  };
+  // const getMonthName = (monthNumber: number) => {
+  //   return dayjs()
+  //     .month(monthNumber - 1)
+  //     .format("MMMM");
+  // };
 
   const fetchMonthlyReport = async (month: number, year: string) => {
     const token = user?.token;
     setLoading(true);
-    setError(null);
-
     try {
       const response = await axios.get(
-        `${import.meta.env.VITE_API_URL}/transactions/get-monthly-report`,
+        `${process.env.VITE_API_URL}/transactions/get-monthly-report`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -49,7 +55,6 @@ export const CatatanKeuangan = () => {
       setMonthlyReport(response.data.data);
       console.log(response.data.data);
     } catch (error) {
-      setError(error as AxiosError);
       console.error("Error fetching monthly report:", error);
     } finally {
       setLoading(false);
@@ -61,24 +66,31 @@ export const CatatanKeuangan = () => {
     setSelectedMonth(month);
   };
 
-  const handleYearChange = (date: any) => {
-    setSelectedYear(date?.format("YYYY"));
+  const handleYearChange: DatePickerProps["onChange"] = (_, dateString) => {
+    if (typeof dateString === "string") {
+      setSelectedYear(dateString);
+      setLiveYear(dateString);
+    }
   };
 
   const handleFilterTransaction = () => {
-    fetchMonthlyReport(selectedMonth, selectedYear);
-
-    const monthName = getMonthName(selectedMonth); // Use selectedMonth instead of undefined 'month'
-    notification.success({
-      message: "Success",
-      description: `Filter diterapkan untuk bulan ${monthName} tahun ${selectedYear}`,
-      duration: 2, // Duration in seconds
-    });
+    const selectedMonthNumber = DATA_MONTH.find(
+      (item) => item.month === selectedMonth
+    )?.monthNumber;
+    selectedMonthNumber &&
+      fetchMonthlyReport(selectedMonthNumber, selectedYear);
   };
 
   useEffect(() => {
     fetchMonthlyReport(today.getMonth() + 1, today.getFullYear().toString());
   }, []);
+
+  const handleMouseEnter = (month: string) => {
+    const liveRegion = document.getElementById("dropdown-live-region");
+    if (liveRegion) {
+      liveRegion.textContent = `Sorot di bulan: ${month}`;
+    }
+  };
 
   return (
     <div
@@ -95,32 +107,79 @@ export const CatatanKeuangan = () => {
       ) : (
         <div className="flex gap-4 flex-col sm:flex-row">
           <div
-            className="w-full sm:w-[175px]"
+            className="border rounded-lg w-full sm:w-[175px]"
             role="combobox"
             aria-expanded="false"
           >
-            <DatePicker
-              defaultValue={dayjs()}
-              className="rounded-xl py-3 px-5"
-              onChange={handleMonthChange}
-              picker="month"
-              placeholder="Pilih Bulan"
-              role="combobox"
-              aria-label={`Pilih bulan: ${selectedMonth}`}
-              format="MMMM"
-            />
+            <Dropdown
+              menu={{
+                items: DATA_MONTH.map((item, index) => ({
+                  label: (
+                    <div
+                      onMouseEnter={() => handleMouseEnter(item.month)}
+                      onFocus={() => handleMouseEnter(item.month)}
+                      tabIndex={0}
+                      role="menuitem"
+                      aria-label={`Bulan ${item.month}`}
+                    >
+                      {item.month}
+                    </div>
+                  ),
+                  key: index.toString(),
+                })),
+                onClick: (e) => {
+                  handleMonthChange(+e.key);
+                  const selectedMonth = DATA_MONTH[+e.key].month;
+                  const liveRegion = document.getElementById(
+                    "dropdown-live-region"
+                  );
+                  if (liveRegion) {
+                    liveRegion.textContent = `Bulan terpilih: ${selectedMonth}`;
+                  }
+                },
+              }}
+              trigger={["click"]}
+              placement="bottom"
+            >
+              <a
+                onClick={(e) => e.preventDefault()}
+                role="button"
+                aria-haspopup="true"
+              >
+                <Space
+                  className="flex justify-between px-5 py-3"
+                  aria-label={`Pilih bulan: ${selectedMonth}`}
+                >
+                  <p>{selectedMonth}</p>
+                  <CaretDown size={16} color="#115DA9" />
+                </Space>
+              </a>
+            </Dropdown>
+
+            <div
+              id="dropdown-live-region"
+              aria-live="polite"
+              style={{ position: "absolute", left: "-9999px" }}
+            ></div>
           </div>
           <DatePicker
-            defaultValue={dayjs()}
             className="rounded-xl py-3 px-5"
             onChange={handleYearChange}
             picker="year"
-            placeholder="Pilih Tahun"
+            value={dayjs(selectedYear)}
             role="combobox"
             aria-label={`Pilih tahun: ${selectedYear}`}
             format="YYYY"
           />
+          <div
+            id="year-live-region"
+            aria-live="polite"
+            style={{ position: "absolute", left: "-9999px" }}
+          >
+            {liveYear ? `Tahun yang dipilih: ${liveYear}` : ""}
+          </div>
           <Button
+            type="primary"
             className="bg-primary-100 text-white w-full sm:w-[175px] rounded-xl font-semibold text-body-small md:text-body-large h-[50px]"
             htmlType="submit"
             onClick={handleFilterTransaction}
@@ -142,16 +201,13 @@ export const CatatanKeuangan = () => {
             aria-labelledby="income-label"
           >
             {loading ? (
-              <div
-                className="animate-pulse flex flex-col space-y-1 w-full"
-                aria-hidden="true"
-              >
-                <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-gray-400 rounded text-white text-caption-large"></div>
-                <div className="bg-gray-400 h-5 rounded w-7"></div>
+              <div className="grid gap-3">
+                <Skeleton.Input active />
+                <Skeleton.Input active />
               </div>
             ) : (
               <>
-                <div className="flex gap-1">
+                <div className="flex gap-1" tabIndex={0}>
                   <ArrowDown
                     weight="fill"
                     size={20}
@@ -165,6 +221,7 @@ export const CatatanKeuangan = () => {
                   aria-label={`Total pemasukan bulan ini: ${FormatCurrency(
                     monthlyReport?.income
                   )}`}
+                  tabIndex={0}
                 >
                   {FormatCurrency(monthlyReport?.income)}
                 </h5>
@@ -177,16 +234,13 @@ export const CatatanKeuangan = () => {
             aria-labelledby="expense-label"
           >
             {loading ? (
-              <div
-                className="animate-pulse flex flex-col space-y-1 w-full"
-                aria-hidden="true"
-              >
-                <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-gray-400 rounded text-white text-caption-large"></div>
-                <div className="bg-gray-400 h-5 rounded w-7"></div>
+              <div className="grid gap-3">
+                <Skeleton.Input active />
+                <Skeleton.Input active />
               </div>
             ) : (
               <>
-                <div className="flex gap-1">
+                <div className="flex gap-1" tabIndex={0}>
                   <ArrowUp
                     weight="fill"
                     size={20}
@@ -200,6 +254,7 @@ export const CatatanKeuangan = () => {
                   aria-label={`Total pengeluaran bulan ini: ${FormatCurrency(
                     monthlyReport?.expense
                   )}`}
+                  tabIndex={0}
                 >
                   {FormatCurrency(monthlyReport?.expense)}
                 </h5>
@@ -208,15 +263,9 @@ export const CatatanKeuangan = () => {
           </div>
         </div>
         {loading ? (
-          <div
-            className="animate-pulse flex flex-col space-y-1 w-full"
-            aria-hidden="true"
-          >
-            <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-gray-400 rounded text-white text-caption-large"></div>
-            <div className="bg-gray-400 h-5 rounded w-7"></div>
-          </div>
+          <Skeleton.Input active />
         ) : (
-          <div>
+          <div tabIndex={0}>
             <h5 id="balance-label">Selisih</h5>
             <h5
               className={`${

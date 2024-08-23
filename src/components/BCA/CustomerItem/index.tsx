@@ -40,16 +40,16 @@ export default function CustomerItem({ id, user_image_path, account_name, accoun
       <Flex gap="1rem">
         <img src={user_image_path} alt="avatar" className="size-[47px] md:size-[54px]" />
         <Flex vertical gap={4} justify="center">
-          <h6 className="text-caption-small md:text-body-large">{account_name}</h6>
+          <h6 tabIndex={0} className="text-caption-small md:text-body-large">{account_name}</h6>
           <Flex gap={5} align="center">
-            <span className="text-[10px] leading-[14px] font-normal md:font-bold md:text-caption-large">{bank_name}</span>
+            <span tabIndex={0} className="text-[10px] leading-[14px] font-normal md:font-bold md:text-caption-large">{bank_name}</span>
             <img src={dotIcon} alt="dot-icon" className="size-[5px] md:size-[8px]" />
-            <span className="text-[10px] leading-[14px] font-normal md:font-bold md:text-caption-large">{account_number}</span>
+            <span tabIndex={0} className="text-[10px] leading-[14px] font-normal md:font-bold md:text-caption-large">{account_number}</span>
           </Flex>
         </Flex>
       </Flex>
       {favorite !== undefined && (
-        <Heart weight={`${favorite ? "fill" : "regular"}`} className="size-[22px] md:size-[32px] " onClick={onClickFavourite} />
+        <Heart tabIndex={0} weight={`${favorite ? "fill" : "regular"}`} className="size-[22px] md:size-[32px] " onClick={onClickFavourite} />
       )}
     </Flex>
   );

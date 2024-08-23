@@ -53,6 +53,7 @@ const Navbar = () => {
       <header className="bg-primary-100 py-6">
         <div className="container flex justify-between items-center max-w-[1240px] mx-auto">
           <img
+            tabIndex={0}
             onClick={() => navigate('/')}
             src="/images/logo.png"
             alt="Logo"
@@ -64,35 +65,35 @@ const Navbar = () => {
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <House size={20} color="#fff" weight="fill" />
-              <p>Beranda</p>
+              <p tabIndex={0}>Beranda</p>
             </a>
             <a
               onClick={() => navigate('/mutasi')}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <Receipt size={20} color="#fff" weight="fill" />
-              <p>Mutasi</p>
+              <p tabIndex={0}>Mutasi</p>
             </a>
             <a
               onClick={() => navigate('/notifikasi')}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <Bell size={20} color="#fff" weight="fill" />
-              <p>Notifikasi</p>
+              <p tabIndex={0}>Notifikasi</p>
             </a>
             <a
               onClick={() => navigate('/')}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <User size={20} color="#fff" weight="fill" />
-              <p>Profile</p>
+              <p tabIndex={0}>Profile</p>
             </a>
             <a
               onClick={togglePopup}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <SignOut size={20} color="#fff" weight="fill" />
-              <p>Logout</p>
+              <p tabIndex={0}>Logout</p>
             </a>
           </ul>
           <div onClick={handleNav} className="block md:hidden z-10 text-white">

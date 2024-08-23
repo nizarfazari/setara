@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "../../../hooks/useAuth";
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { MonthlyReport } from "../../../types/Home";
 import {
   Button,
@@ -16,7 +16,7 @@ import dayjs from "dayjs";
 import { DATA_MONTH } from "../../../utils/constant";
 
 export const CatatanKeuangan = () => {
-  // const [error, setError] = useState<AxiosError | null>(null);
+  const [, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [monthlyReport, setMonthlyReport] = useState<MonthlyReport | null>(
     null
@@ -32,15 +32,10 @@ export const CatatanKeuangan = () => {
   const { user } = useAuth();
   const today = new Date();
 
-  // const getMonthName = (monthNumber: number) => {
-  //   return dayjs()
-  //     .month(monthNumber - 1)
-  //     .format("MMMM");
-  // };
-
   const fetchMonthlyReport = async (month: number, year: string) => {
     const token = user?.token;
     setLoading(true);
+    setError(null);
     try {
       const response = await axios.get(
         `${process.env.VITE_API_URL}/transactions/get-monthly-report`,
@@ -53,16 +48,16 @@ export const CatatanKeuangan = () => {
       );
 
       setMonthlyReport(response.data.data);
-      console.log(response.data.data);
     } catch (error) {
+      setError(error as AxiosError);
       console.error("Error fetching monthly report:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleMonthChange = (date: any) => {
-    const month = date?.month() + 1;
+  const handleMonthChange = (key: number) => {
+    const month = DATA_MONTH[key].month;
     setSelectedMonth(month);
   };
 
@@ -83,6 +78,7 @@ export const CatatanKeuangan = () => {
 
   useEffect(() => {
     fetchMonthlyReport(today.getMonth() + 1, today.getFullYear().toString());
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleMouseEnter = (month: string) => {
@@ -110,6 +106,7 @@ export const CatatanKeuangan = () => {
             className="border rounded-lg w-full sm:w-[175px]"
             role="combobox"
             aria-expanded="false"
+            tabIndex={0}
           >
             <Dropdown
               menu={{
@@ -169,7 +166,6 @@ export const CatatanKeuangan = () => {
             value={dayjs(selectedYear)}
             role="combobox"
             aria-label={`Pilih tahun: ${selectedYear}`}
-            format="YYYY"
           />
           <div
             id="year-live-region"
@@ -184,6 +180,7 @@ export const CatatanKeuangan = () => {
             htmlType="submit"
             onClick={handleFilterTransaction}
             role="button"
+            aria-labelledby="financial-records-filter-button"
           >
             Filter
           </Button>
@@ -201,13 +198,13 @@ export const CatatanKeuangan = () => {
             aria-labelledby="income-label"
           >
             {loading ? (
-              <div className="grid gap-3">
-                <Skeleton.Input active />
-                <Skeleton.Input active />
+              <div className="grid gap-3" aria-hidden="true">
+                <Skeleton.Input active block size="default" />
+                <Skeleton.Input active block size="default" />
               </div>
             ) : (
-              <>
-                <div className="flex gap-1" tabIndex={0}>
+              <div tabIndex={0}>
+                <div className="flex gap-1">
                   <ArrowDown
                     weight="fill"
                     size={20}
@@ -221,11 +218,11 @@ export const CatatanKeuangan = () => {
                   aria-label={`Total pemasukan bulan ini: ${FormatCurrency(
                     monthlyReport?.income
                   )}`}
-                  tabIndex={0}
+                 
                 >
                   {FormatCurrency(monthlyReport?.income)}
                 </h5>
-              </>
+              </div>
             )}
           </div>
           <div
@@ -234,13 +231,13 @@ export const CatatanKeuangan = () => {
             aria-labelledby="expense-label"
           >
             {loading ? (
-              <div className="grid gap-3">
-                <Skeleton.Input active />
-                <Skeleton.Input active />
+              <div className="grid gap-3" aria-hidden="true">
+                <Skeleton.Input active block size="default" />
+                <Skeleton.Input active block size="default" />
               </div>
             ) : (
-              <>
-                <div className="flex gap-1" tabIndex={0}>
+              <div tabIndex={0}>
+                <div className="flex gap-1">
                   <ArrowUp
                     weight="fill"
                     size={20}
@@ -254,19 +251,21 @@ export const CatatanKeuangan = () => {
                   aria-label={`Total pengeluaran bulan ini: ${FormatCurrency(
                     monthlyReport?.expense
                   )}`}
-                  tabIndex={0}
                 >
                   {FormatCurrency(monthlyReport?.expense)}
                 </h5>
-              </>
+              </div>
             )}
           </div>
         </div>
         {loading ? (
-          <Skeleton.Input active />
+          <div className="grid gap-3" aria-hidden="true">
+            <Skeleton.Input active block size="default" />
+            <Skeleton.Input active block size="default" />
+          </div>
         ) : (
           <div tabIndex={0}>
-            <h5 id="balance-label">Selisih</h5>
+            <p id="balance-label">Selisih</p>
             <h5
               className={`${
                 (monthlyReport?.total ?? 0) < 0

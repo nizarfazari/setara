@@ -52,6 +52,7 @@ export const MenuList = () => {
 
   useEffect(() => {
     fetchBalance();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.token]);
 
   const handleFeatureClick = (feature: string) => {

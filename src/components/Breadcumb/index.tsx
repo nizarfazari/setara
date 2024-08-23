@@ -17,7 +17,7 @@ const Breadcrumb: React.FC<Props> = ({ title, subtitle }) => {
 
   return (
     <div className="flex gap-4">
-      <ArrowLeft size={27} weight="bold" color='#343330' className='mt-[5px] cursor-pointer' onClick={handleBackClick} />
+      <ArrowLeft tabIndex={0} size={27} weight="bold" color='#343330' className='mt-[5px] cursor-pointer' onClick={handleBackClick} />
       <div className="font-bold">
         <h5 className="text-neutral-400 text-heading-6 md:text-heading-5" tabIndex={0}>{title}</h5>
         <p className="text-neutral-300 text-body-larg text-[14px] md:text-[16px]" tabIndex={0}>{subtitle}</p>

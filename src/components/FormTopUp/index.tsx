@@ -30,9 +30,9 @@ const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl, isTfBa = false }) => {
   };
 
   const onFinishFailed: FormProps<TFormTopUp>['onFinishFailed'] = (
-    errorInfo
+
   ) => {
-    console.log('Failed:', errorInfo);
+
   };
 
   return (
@@ -73,6 +73,7 @@ const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl, isTfBa = false }) => {
         required
       >
         <InputNumber<number>
+          tabIndex={0}
           type="text"
           prefix="Rp."
           formatter={(value) =>
@@ -87,11 +88,12 @@ const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl, isTfBa = false }) => {
       </Form.Item>
 
       <Form.Item label="Catatan" name="notes">
-        <Input type="text" placeholder="Masukkan Catatan (Opsional)" />
+        <Input tabIndex={0} type="text" placeholder="Masukkan Catatan (Opsional)" />
       </Form.Item>
 
       <Button
         type="primary"
+        tabIndex={0}
         className="bg-primary-100 text-white w-full h-10 rounded-xl font-semibold text-body-small md:text-heading-6 md:h-[60px]"
         htmlType="submit"
       >

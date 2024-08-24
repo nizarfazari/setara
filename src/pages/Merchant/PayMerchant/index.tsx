@@ -15,8 +15,6 @@ const PayQris = () => {
   const transactionDetail = location.state?.transactionDetail;
   const apiAmount = transactionDetail?.amount;
 
-  console.log(transactionDetail);
-
   const onFinish = (values: TFormPayQris) => {
     setProcessTransaction({
       nominal: values.amount.toString(),

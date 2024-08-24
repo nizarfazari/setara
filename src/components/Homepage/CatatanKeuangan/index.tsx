@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react';
-import { useAuth } from '../../../hooks/useAuth';
-import axios, { AxiosError } from 'axios';
-import { MonthlyReport } from '../../../types/Home';
+import { useEffect, useState } from "react";
+import { useAuth } from "../../../hooks/useAuth";
+import axios, { AxiosError } from "axios";
+import { MonthlyReport } from "../../../types/Home";
 import {
   Button,
   DatePicker,
@@ -9,11 +9,11 @@ import {
   Dropdown,
   Skeleton,
   Space,
-} from 'antd';
-import { ArrowDown, ArrowUp, CaretDown } from '@phosphor-icons/react';
-import { FormatCurrency } from '../../../utils';
-import dayjs from 'dayjs';
-import { DATA_MONTH } from '../../../utils/constant';
+} from "antd";
+import { ArrowDown, ArrowUp, CaretDown } from "@phosphor-icons/react";
+import { FormatCurrency } from "../../../utils";
+import dayjs from "dayjs";
+import { DATA_MONTH } from "../../../utils/constant";
 
 export const CatatanKeuangan = () => {
   const [, setError] = useState<AxiosError | null>(null);
@@ -23,16 +23,14 @@ export const CatatanKeuangan = () => {
   );
   const [selectedMonth, setSelectedMonth] = useState(
     DATA_MONTH.find((item) => item.monthNumber === new Date().getMonth() + 1)
-      ?.month || ''
+      ?.month || ""
   );
   const [selectedYear, setSelectedYear] = useState(
     new Date().getFullYear().toString()
   );
-  const [liveYear, setLiveYear] = useState<string>('');
+  const [liveYear, setLiveYear] = useState<string>("");
   const { user } = useAuth();
   const today = new Date();
-
- 
 
   const fetchMonthlyReport = async (month: number, year: string) => {
     const token = user?.token;
@@ -52,7 +50,7 @@ export const CatatanKeuangan = () => {
       setMonthlyReport(response.data.data);
     } catch (error) {
       setError(error as AxiosError);
-      console.error('Error fetching monthly report:', error);
+      console.error("Error fetching monthly report:", error);
     } finally {
       setLoading(false);
     }
@@ -63,8 +61,8 @@ export const CatatanKeuangan = () => {
     setSelectedMonth(month);
   };
 
-  const handleYearChange: DatePickerProps['onChange'] = (_, dateString) => {
-    if (typeof dateString === 'string') {
+  const handleYearChange: DatePickerProps["onChange"] = (_, dateString) => {
+    if (typeof dateString === "string") {
       setSelectedYear(dateString);
       setLiveYear(dateString);
     }
@@ -84,7 +82,7 @@ export const CatatanKeuangan = () => {
   }, []);
 
   const handleMouseEnter = (month: string) => {
-    const liveRegion = document.getElementById('dropdown-live-region');
+    const liveRegion = document.getElementById("dropdown-live-region");
     if (liveRegion) {
       liveRegion.textContent = `Sorot di bulan: ${month}`;
     }
@@ -108,6 +106,7 @@ export const CatatanKeuangan = () => {
             className="border rounded-lg w-full sm:w-[175px]"
             role="combobox"
             aria-expanded="false"
+            tabIndex={0}
           >
             <Dropdown
               menu={{
@@ -129,14 +128,14 @@ export const CatatanKeuangan = () => {
                   handleMonthChange(+e.key);
                   const selectedMonth = DATA_MONTH[+e.key].month;
                   const liveRegion = document.getElementById(
-                    'dropdown-live-region'
+                    "dropdown-live-region"
                   );
                   if (liveRegion) {
                     liveRegion.textContent = `Bulan terpilih: ${selectedMonth}`;
                   }
                 },
               }}
-              trigger={['click']}
+              trigger={["click"]}
               placement="bottom"
             >
               <a
@@ -157,7 +156,7 @@ export const CatatanKeuangan = () => {
             <div
               id="dropdown-live-region"
               aria-live="polite"
-              style={{ position: 'absolute', left: '-9999px' }}
+              style={{ position: "absolute", left: "-9999px" }}
             ></div>
           </div>
           <DatePicker
@@ -171,9 +170,9 @@ export const CatatanKeuangan = () => {
           <div
             id="year-live-region"
             aria-live="polite"
-            style={{ position: 'absolute', left: '-9999px' }}
+            style={{ position: "absolute", left: "-9999px" }}
           >
-            {liveYear ? `Tahun yang dipilih: ${liveYear}` : ''}
+            {liveYear ? `Tahun yang dipilih: ${liveYear}` : ""}
           </div>
           <Button
             type="primary"
@@ -199,15 +198,12 @@ export const CatatanKeuangan = () => {
             aria-labelledby="income-label"
           >
             {loading ? (
-              <div
-                className="animate-pulse flex flex-col space-y-1 w-full"
-                aria-hidden="true"
-              >
-                <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-gray-400 rounded text-white text-caption-large"></div>
-                <div className="bg-gray-400 h-5 rounded w-7"></div>
+              <div className="grid gap-3" aria-hidden="true">
+                <Skeleton.Input active block size="default" />
+                <Skeleton.Input active block size="default" />
               </div>
             ) : (
-              <>
+              <div tabIndex={0}>
                 <div className="flex gap-1">
                   <ArrowDown
                     weight="fill"
@@ -222,10 +218,11 @@ export const CatatanKeuangan = () => {
                   aria-label={`Total pemasukan bulan ini: ${FormatCurrency(
                     monthlyReport?.income
                   )}`}
+                 
                 >
                   {FormatCurrency(monthlyReport?.income)}
                 </h5>
-              </>
+              </div>
             )}
           </div>
           <div
@@ -234,15 +231,12 @@ export const CatatanKeuangan = () => {
             aria-labelledby="expense-label"
           >
             {loading ? (
-              <div
-                className="animate-pulse flex flex-col space-y-1 w-full"
-                aria-hidden="true"
-              >
-                <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-gray-400 rounded text-white text-caption-large"></div>
-                <div className="bg-gray-400 h-5 rounded w-7"></div>
+              <div className="grid gap-3" aria-hidden="true">
+                <Skeleton.Input active block size="default" />
+                <Skeleton.Input active block size="default" />
               </div>
             ) : (
-              <>
+              <div tabIndex={0}>
                 <div className="flex gap-1">
                   <ArrowUp
                     weight="fill"
@@ -260,26 +254,24 @@ export const CatatanKeuangan = () => {
                 >
                   {FormatCurrency(monthlyReport?.expense)}
                 </h5>
-              </>
+              </div>
             )}
           </div>
         </div>
         {loading ? (
-          <div
-            className="animate-pulse flex flex-col space-y-1 w-full"
-            aria-hidden="true"
-          >
-            <div className="flex gap-2 items-center py-1 px-2 w-20 h-5 bg-gray-400 rounded text-white text-caption-large"></div>
-            <div className="bg-gray-400 h-5 rounded w-7"></div>
+          <div className="grid gap-3" aria-hidden="true">
+            <Skeleton.Input active block size="default" />
+            <Skeleton.Input active block size="default" />
           </div>
         ) : (
-          <div>
-            <h5 id="balance-label">Selisih</h5>
+          <div tabIndex={0}>
+            <p id="balance-label">Selisih</p>
             <h5
-              className={`${(monthlyReport?.total ?? 0) < 0
-                  ? 'text-red-500'
-                  : 'text-green-600'
-                } text-heading-6 font-bold`}
+              className={`${
+                (monthlyReport?.total ?? 0) < 0
+                  ? "text-red-500"
+                  : "text-green-600"
+              } text-heading-6 font-bold`}
               aria-label={`Selisih bulan ini: ${FormatCurrency(
                 monthlyReport?.total
               )}`}

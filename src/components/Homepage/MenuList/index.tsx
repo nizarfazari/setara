@@ -65,7 +65,7 @@ export const MenuList = () => {
         {feedback}
       </div>{' '}
       <div className="grid grid-cols-3 md:grid-cols-7 py-4 gap-y-4 rounded-lg border border-primary-300">
-        <div className="text-center" aria-modal="true" aria-live="polite">
+        <div tabIndex={0} className="text-center" aria-modal="true" aria-live="polite">
           <img
             src={iconInfo}
             onClick={showModal}
@@ -118,7 +118,7 @@ export const MenuList = () => {
           <p className="pt-2">Info</p>
         </div>
 
-        <div className="text-center" onClick={() => navigate('/bca')}>
+        <div tabIndex={0} className="text-center" onClick={() => navigate('/bca')}>
           <img
             src={iconTransfer}
             alt="Transfer"
@@ -128,7 +128,7 @@ export const MenuList = () => {
           <p className="pt-2">Transfer</p>
         </div>
 
-        <div
+        <div tabIndex={0}
           className="text-center"
           aria-label="E-wallet"
           onClick={() => navigate('/e-wallet')}
@@ -141,7 +141,7 @@ export const MenuList = () => {
           <p className="pt-2">E-Wallet</p>
         </div>
 
-        <div className=" text-center" onClick={() => navigate('/qr')}>
+        <div tabIndex={0} className=" text-center" onClick={() => navigate('/qr')}>
           <img
             src={iconQR}
             alt="info"

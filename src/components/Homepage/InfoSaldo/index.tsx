@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios, { AxiosError } from "axios";
 import { notification, Skeleton } from "antd";
-import { GoDotFill } from "react-icons/go";
-import { CopySimple, Eye, EyeSlash } from "@phosphor-icons/react";
+import { CopySimple, Eye, EyeSlash, Circle } from "@phosphor-icons/react";
 import { FormatCurrency, formatNorek } from "../../../utils/index";
 import { useAuth } from "../../../hooks/useAuth";
 
@@ -11,7 +10,7 @@ const InfoSaldo: React.FC = () => {
   const [balance, setBalance] = useState<number>();
   const [, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  
+
   const { user } = useAuth();
   const dots = new Array(7).fill(null);
 
@@ -44,7 +43,7 @@ const InfoSaldo: React.FC = () => {
     if (user) {
       fetchBalance();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const copyToClipboard = () => {
@@ -113,11 +112,11 @@ const InfoSaldo: React.FC = () => {
                       <p className="text-heading-6 font-semibold text-neutral-50">
                         {isBalanceHidden ? (
                           <span
-                            className="text-neutral-50 flex gap-0"
+                            className="text-neutral-50 flex gap-0 mt-1"
                             aria-label="Saldo tersembunyi"
                           >
                             {dots.map((_, index) => (
-                              <GoDotFill key={index} aria-hidden="true" />
+                              <Circle key={index} size={15} className="mx-1"  weight="fill" aria-hidden="true" />
                             ))}
                           </span>
                         ) : (

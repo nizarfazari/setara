@@ -7,7 +7,7 @@ import { MemoryRouter } from 'react-router-dom';
 import { notification } from 'antd';
 
 // Mock the useAuth hook
-jest.mock('../../../hooks/useAuth');
+jest.mock('../../../../hooks/useAuth');
 
 // Mock axios
 jest.mock('axios');

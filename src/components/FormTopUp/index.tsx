@@ -51,20 +51,20 @@ const FormTopUp: React.FC<PropsFormTopup> = ({ pathUrl, isTfBa = false }) => {
         rules={[
           {
             validator(_, value) {
-              if (!value) {
+              if (!value && value !== 0) {
                 return Promise.reject(new Error('Nominal Tidak Boleh Kosong'));
               }
               if (isTfBa ? value < 1 : value < 10000) {
                 return Promise.reject(
                   new Error(
                     isTfBa
-                      ? 'Minimum transfer adalah Rp. 1, mohon isikan kembali'
+                      ? 'Minimum transfer adalah 1, mohon isikan kembali'
                       : 'Minimum transfer adalah Rp. 10.000, mohon isikan kembali'
                   )
                 );
               }
               if (data?.balance !== undefined && data.balance < value) {
-                return Promise.reject(new Error('Saldo tidak mencukupi'));
+                return Promise.reject(new Error('Saldo Tidak Cukup, mohon isikan kembali'));
               }
               return Promise.resolve();
             },

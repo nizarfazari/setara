@@ -90,7 +90,9 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
             <div>
               <label
                 htmlFor=""
+                aria-label='Pin Anda'
                 className="text-body-large text-neutral-400 font-bold required"
+                tabIndex={0}
               >
                 PIN Anda
               </label>
@@ -98,6 +100,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
                 className="input-label mt-3 py-[18px] px-6"
                 value={pin}
                 onChange={handlePinChange}
+                aria-label='Masukan Pin Anda'
                 placeholder="Masukkan PIN Anda"
               />
             </div>
@@ -108,6 +111,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
               type="primary"
               className="mt-5 bg-primary-100 text-white w-full h-[60px] rounded-xl text-heading-5 font-semibold"
               htmlType="submit"
+              aria-label='lanjutkan'
             >
               Lanjutkan
             </Button>
@@ -119,7 +123,7 @@ const ConfirmationPIN: React.FunctionComponent<IConfirmationPINProps> = () => {
         <div className="absolute inset-0 flex justify-center items-center bg-white opacity-75 z-10">
           <div className="text-center">
             <Spin size="large" />
-            <p className="text-heading-6 mt-2">Loading...</p>
+            <p className="text-heading-6 mt-2" aria-label='menunggu'>Loading...</p>
           </div>
         </div>
       )}

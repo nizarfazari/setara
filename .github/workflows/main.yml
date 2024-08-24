@@ -1,4 +1,4 @@
-name: CI/CD CLIENT BCR
+name: CI/CD Client-Side SETARA
 on:
   push:
     branches:

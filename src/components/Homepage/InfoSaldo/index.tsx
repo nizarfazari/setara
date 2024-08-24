@@ -1,18 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import axios, { AxiosError } from 'axios';
-import { notification, Skeleton } from 'antd';
-import { GoDotFill } from 'react-icons/go';
-import { CopySimple, Eye, EyeSlash } from '@phosphor-icons/react';
-import { FormatCurrency, formatNorek } from '../../../utils/index';
-import SkeletonInput from 'antd/es/skeleton/Input';
-import { useAuth } from '../../../hooks/useAuth';
+import React, { useEffect, useState } from "react";
+import axios, { AxiosError } from "axios";
+import { notification, Skeleton } from "antd";
+import { CopySimple, Eye, EyeSlash, Circle } from "@phosphor-icons/react";
+import { FormatCurrency, formatNorek } from "../../../utils/index";
+import { useAuth } from "../../../hooks/useAuth";
 
 const InfoSaldo: React.FC = () => {
   const [isBalanceHidden, setIsBalanceHidden] = useState<boolean>(true);
   const [balance, setBalance] = useState<number>();
   const [, setError] = useState<AxiosError | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
-  
+
   const { user } = useAuth();
   const dots = new Array(7).fill(null);
 
@@ -32,8 +30,8 @@ const InfoSaldo: React.FC = () => {
     } catch (error) {
       setError(error as AxiosError);
       notification.error({
-        message: 'Error',
-        description: 'Terjadi kesalahan saat memuat saldo.',
+        message: "Error",
+        description: "Terjadi kesalahan saat memuat saldo.",
         duration: 2, // Duration in seconds
       });
     } finally {
@@ -45,7 +43,7 @@ const InfoSaldo: React.FC = () => {
     if (user) {
       fetchBalance();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user]);
 
   const copyToClipboard = () => {
@@ -56,23 +54,23 @@ const InfoSaldo: React.FC = () => {
         .writeText(accountNumber.toString())
         .then(() => {
           notification.success({
-            message: 'Success',
-            description: 'No. Rekening berhasil disalin',
+            message: "Success",
+            description: "No. Rekening berhasil disalin",
             duration: 2,
           });
         })
         .catch((err) => {
-          console.error('Could not copy text: ', err);
+          console.error("Could not copy text: ", err);
           notification.error({
-            message: 'Error',
-            description: 'Tidak dapat menyalin nomor rekening.',
+            message: "Error",
+            description: "Tidak dapat menyalin nomor rekening.",
             duration: 2,
           });
         });
     } else {
       notification.error({
-        message: 'Error',
-        description: 'No. Rekening tidak tersedia.',
+        message: "Error",
+        description: "No. Rekening tidak tersedia.",
         duration: 2,
       });
     }
@@ -83,10 +81,9 @@ const InfoSaldo: React.FC = () => {
   };
 
   return (
-    <>
+    <div>
       {loading ? (
         <div className="my-3 border p-5 md:w-1/3 grid gap-3">
-          <SkeletonInput active size="small" />
           <Skeleton loading={loading} active avatar></Skeleton>
         </div>
       ) : (
@@ -96,12 +93,12 @@ const InfoSaldo: React.FC = () => {
               className="bg-primary-100 rounded-lg md:w-1/3 px-7 py-5"
               aria-live="polite"
             >
-              <h5
+              <p tabIndex={0}
                 className="text-white font-bold text-heading-6 mb-7"
                 aria-label="Informasi Saldo Rekening"
               >
                 Informasi Saldo Rekening
-              </h5>
+              </p>
               <div className="flex gap-7">
                 <img
                   src={user?.user.image_path}
@@ -109,29 +106,29 @@ const InfoSaldo: React.FC = () => {
                   className="w-16 h-16"
                 />
                 <div>
-                  <div className="items-center">
-                    <h5 className="text-neutral-50">Total Saldo</h5>
+                  <div tabIndex={0} className="items-center">
+                    <p className="text-neutral-50">Total Saldo</p>
                     <div className="flex gap-2">
-                      <h5 className="text-heading-6 font-semibold text-neutral-50">
+                      <p className="text-heading-6 font-semibold text-neutral-50">
                         {isBalanceHidden ? (
                           <span
-                            className="text-neutral-50 flex gap-0"
+                            className="text-neutral-50 flex gap-0 mt-1"
                             aria-label="Saldo tersembunyi"
                           >
                             {dots.map((_, index) => (
-                              <GoDotFill key={index} aria-hidden="true" />
+                              <Circle key={index} size={15} className="mx-1"  weight="fill" aria-hidden="true" />
                             ))}
                           </span>
                         ) : (
                           <span>{FormatCurrency(balance)}</span>
                         )}
-                      </h5>
+                      </p>
                       <button
                         onClick={toggleBalanceVisibility}
                         aria-label={
                           isBalanceHidden
-                            ? 'Saldo ditampilkan'
-                            : 'Saldo disembunyikan'
+                            ? "Saldo ditampilkan"
+                            : "Saldo disembunyikan"
                         }
                       >
                         {isBalanceHidden ? (
@@ -150,22 +147,20 @@ const InfoSaldo: React.FC = () => {
                     </div>
                   </div>
 
-                  <p className="text-neutral-100 text-caption-small mt-3 flex gap-2 items-center">
+                  <p tabIndex={0} className="text-neutral-100 text-caption-small mt-3 flex gap-2 items-center">
                     No. Rekening:
                     <span className="font-bold text-caption-large">
                       {formatNorek(user?.user.account_number)}
                     </span>
                     <button
                       onClick={copyToClipboard}
-                      aria-label={`Salin nomor rekening ${formatNorek(
-                        user?.user.account_number
-                      )}`}
+                      aria-label={`Salin nomer rekening ${formatNorek(user?.user.account_number)}`}
                       className="items-center"
                     >
                       <CopySimple
                         size={16}
                         weight="fill"
-                        aria-label="salin nomer rekening"
+                        aria-label="Salin nomer rekening"
                       />
                     </button>
                   </p>
@@ -175,7 +170,7 @@ const InfoSaldo: React.FC = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

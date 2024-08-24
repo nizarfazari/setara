@@ -65,6 +65,8 @@ export const FavoriteTransaction: React.FC = () => {
       if (axios.isAxiosError(error)) {
         if (error.code === 'ECONNABORTED') {
           setErrorMessage('Belum ada transaksi akun favorit.');
+        } else {
+          setErrorMessage('Terjadi kesalahan dalam pengambilan data.');
         }
       } else {
         setErrorMessage('Terjadi kesalahan yang tidak terduga.');
@@ -95,7 +97,7 @@ export const FavoriteTransaction: React.FC = () => {
 
   if (favorites.length === 0) {
     return (
-      <p className="text-primary-100 text-body-large font-semibold">
+      <p tabIndex={0} aria-label='No favorite transactions found' className="text-primary-100 text-body-large font-semibold">
         No favorite transactions found.
       </p>
     );
@@ -103,7 +105,6 @@ export const FavoriteTransaction: React.FC = () => {
 
   return (
     <div>
-      {' '}
       <div className="py-3">
         <Swiper
           modules={[Navigation, Autoplay]}
@@ -128,7 +129,7 @@ export const FavoriteTransaction: React.FC = () => {
         >
           {favorites.map((transaction) => (
             <SwiperSlide key={transaction.id}>
-              <div
+              <div tabIndex={0}
                 className="border border-primary-300 shadow-lg rounded-lg xl:p-7 p-4"
                 role="group"
                 aria-label={`Transaksi favorit: ${
@@ -149,7 +150,7 @@ export const FavoriteTransaction: React.FC = () => {
                         ? 'Ikon transfer favorit'
                         : 'Ikon topup favorit'
                     }
-                    className="w-[10px] items-center h-[10px]"
+                    className="w-[10px] h-[10px]"
                   />
                   <p className="text-caption-small">
                     {transaction.type === 'transfer' ? 'Transfer' : 'Top Up'}

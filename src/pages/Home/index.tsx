@@ -9,41 +9,44 @@ const Home = () => {
 
   return (
     <div className="mx-auto container mt-5 mb-20">
-      <h1
+      <p
         aria-label={`Halo, ${user?.user.name}`}
         className="text-heading-5 font-bold text-primary-100"
+        tabIndex={0}
       >
         <span>Halo, {user?.user.name}</span>
-      </h1>
+      </p>
       <div>
         <InfoSaldo />
       </div>
       <div>
         <div className="my-10">
-          <h1 className="text-primary-100 font-bold text-heading-6 py-3">
+          <p className="text-primary-100 font-bold text-heading-6 py-3" tabIndex={0}>
             Menu
-          </h1>
+          </p>
           <div className="pt-0 pb-3">
             <MenuList />
           </div>
         </div>
         <>
-          <h1
+          <p
             className="text-primary-100 text-heading-6 font-bold"
             aria-label="Transaksi Favorit"
+            tabIndex={0}
           >
             Transaksi Favorit
-          </h1>
+          </p>
           <FavoriteTransaction />
         </>
       </div>
       <div>
-        <h1
+        <p
           className="text-primary-100 text-heading-6 font-bold py-3"
           aria-label="Catatan Keuangan"
+          tabIndex={0}
         >
           Catatan Keuangan
-        </h1>
+        </p>
         <CatatanKeuangan />
       </div>
     </div>

@@ -2,6 +2,8 @@ import { Button, Form, Input, InputNumber } from 'antd';
 import Breadcrumb from '../../../components/Breadcumb';
 import { useAuth } from '../../../hooks/useAuth';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useFetchData } from '../../../hooks/useFetchData';
+import { UserBalance } from '../../../types/Bank';
 
 type TFormPayQris = {
   amount: number;
@@ -14,6 +16,10 @@ const PayQris = () => {
   const location = useLocation();
   const transactionDetail = location.state?.transactionDetail;
   const apiAmount = transactionDetail?.amount;
+  const { data: userBalance } = useFetchData<UserBalance>(
+    `/user/getBalance`,
+    user?.token
+  );
 
   const onFinish = (values: TFormPayQris) => {
     setProcessTransaction({
@@ -99,22 +105,16 @@ const PayQris = () => {
                     <span className="text-primary-100">Masukkan Nominal</span>
                   }
                   rules={[
+                    { required: true, message: 'Nominal Tidak Boleh Kosong' },
                     {
-                      validator(_, value) {
-                        if (!value) {
-                          return Promise.reject(
-                            new Error('Nominal Tidak Boleh Kosong')
-                          );
-                        }
-                        if (value < 1) {
-                          return Promise.reject(
-                            new Error(
-                              'Minimum transfer adalah Rp. 1, mohon isikan kembali'
-                            )
-                          );
-                        }
-                        return Promise.resolve();
-                      },
+                      type: 'number',
+                      min: 1,
+                      message: 'Minimum transfer adalah 1, mohon isikan kembali',
+                    },
+                    {
+                      type: 'number',
+                      max: userBalance?.balance,
+                      message: 'Saldo Tidak Cukup, mohon isikan kembali',
                     },
                   ]}
                   required

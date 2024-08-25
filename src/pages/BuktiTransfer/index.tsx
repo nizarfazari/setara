@@ -78,7 +78,7 @@ const BuktiTransfer = () => {
         />
         <Card className="p-5 lg:w-[45%] text-primary-100 shadow-lg">
           <div>
-            <p className="font-bold text-lg">Pengirim</p>
+            <p className="font-bold text-lg" tabIndex={0}>Pengirim</p>
             <div className="flex items-center mt-2">
               <img
                 className="w-[70px] mr-4"
@@ -86,16 +86,16 @@ const BuktiTransfer = () => {
                 alt=""
               />
               <div>
-                <p className="font-bold text-lg">{data?.sender?.name}</p>
+                <p className="font-bold text-lg" tabIndex={0}>{data?.sender?.name}</p>
                 <div className="flex items-center">
-                  <p className="font-bold text-lg">
+                  <p className="font-bold text-lg" tabIndex={0}>
                     {data?.sender?.vendor_name}
                   </p>
                   <img
                     className="w-[6px] h-[6px] mx-2"
                     src="/images/icons/dot.png"
                   ></img>
-                  <p className="font-bold text-lg">
+                  <p className="font-bold text-lg" tabIndex={0}>
                     {data?.sender?.account_number}
                   </p>
                 </div>
@@ -103,7 +103,7 @@ const BuktiTransfer = () => {
             </div>
           </div>
           <div className="my-2 mb-5">
-            <p className="font-bold text-lg">Penerima</p>
+            <p className="font-bold text-lg" tabIndex={0}>Penerima</p>
             <div className="flex items-center">
               <img
                 className="w-[70px] mr-4"
@@ -111,43 +111,43 @@ const BuktiTransfer = () => {
                 alt=""
               />
               <div>
-                <p className="font-bold text-lg">{data?.receiver?.name}</p>
+                <p className="font-bold text-lg" tabIndex={0}>{data?.receiver?.name}</p>
                 <div className="flex items-center">
-                  <p className="font-bold text-lg">
+                  <p className="font-bold text-lg" tabIndex={0}>
                     {data?.receiver?.vendor_name}
                   </p>
                   <img
                     className="w-[6px] h-[6px] mx-2"
                     src="/images/icons/dot.png"
                   ></img>
-                  <p className="font-bold text-lg">
+                  <p className="font-bold text-lg" tabIndex={0}>
                     {data?.receiver?.account_number}
                   </p>
                 </div>
               </div>
             </div>
           </div>
-          <p className="font-bold text-lg">Detail</p>
+          <p className="font-bold text-lg" tabIndex={0}>Detail</p>
           <div className="flex justify-between mt-4">
             <div className="text-neutral-300 font-normal">
-              <p className="font-bold text-lg">Nominal Top Up</p>
-              <p className="font-bold text-lg">Biaya Admin</p>
-              <p className="font-bold text-lg">Catatan</p>
+              <p className="font-bold text-lg" tabIndex={0}>Nominal Top Up</p>
+              <p className="font-bold text-lg" tabIndex={0}>Biaya Admin</p>
+              <p className="font-bold text-lg" tabIndex={0}>Catatan</p>
             </div>
             <div className="flex flex-col items-end">
-              <p className="font-bold text-lg">
+              <p className="font-bold text-lg" tabIndex={0}>
                 {FormatCurrency(data?.amount)}
               </p>
-              <p className="font-bold text-lg">
+              <p className="font-bold text-lg" tabIndex={0}>
                 {FormatCurrency(data?.admin_fee)}
               </p>
-              <p className="font-bold text-lg">{data?.note || '-'}</p>
+              <p className="font-bold text-lg" tabIndex={0}>{data?.note || '-'}</p>
             </div>
           </div>
           <hr className="border-neutral-300 my-2" />
           <div className="flex justify-between font-bold">
-            <p className="font-bold text-lg">Total</p>
-            <p className="font-bold text-lg">
+            <p className="font-bold text-lg" tabIndex={0}>Total</p>
+            <p className="font-bold text-lg" tabIndex={0}>
               {FormatCurrency(data?.total_amount)}
             </p>
           </div>
@@ -155,6 +155,7 @@ const BuktiTransfer = () => {
       </div>
       <Button
         onClick={onDownloadFile}
+        tabIndex={0}
         type="primary"
         className="bg-primary-100 h-10 w-full md:w-[33%] md:ml-[33.5%] mt-5 lg:mt-10 rounded-lg"
         disabled={loading}

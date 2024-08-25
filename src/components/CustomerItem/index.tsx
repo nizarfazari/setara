@@ -40,11 +40,11 @@ export default function CustomerItem({ id, ewallet_user_image_path, ewallet_name
       <Flex gap="1rem">
         <img src={ewallet_user_image_path} alt="avatar" className="size-[47px] md:size-[54px]" />
         <Flex vertical gap={4} justify="center">
-          <h6 className="text-caption-small md:text-body-large">{ewallet_user_name.toLocaleUpperCase()}</h6>
+          <h6 className="text-caption-small md:text-body-large" tabIndex={0}>{ewallet_user_name.toLocaleUpperCase()}</h6>
           <Flex gap={5} align="center">
-            <span className="text-[10px] leading-[14px] font-normal md:font-bold md:text-caption-large">{ewallet_name.toLocaleUpperCase()}</span>
+            <span className="text-[10px] leading-[14px] font-normal md:font-bold md:text-caption-large" tabIndex={0}>{ewallet_name.toLocaleUpperCase()}</span>
             <img src={dotIcon} alt="dot-icon" className="size-[5px] md:size-[8px]" />
-            <span className="text-[10px] leading-[14px] font-normal md:font-bold md:text-caption-large">{ewallet_user_phone_number}</span>
+            <span className="text-[10px] leading-[14px] font-normal md:font-bold md:text-caption-large" tabIndex={0}>{ewallet_user_phone_number}</span>
           </Flex>
         </Flex>
       </Flex>

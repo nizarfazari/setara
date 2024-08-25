@@ -32,7 +32,7 @@ export default function CustomerList({ pathUrl, header, contacts, setRecipients,
   
   return (
     <div className="text-primary-100 w-full">
-      <h5 className="font-bold mb-3 text-body-small md:text-heading-5">{`${header} (${contacts.length})`}</h5>
+      <h5 className="font-bold mb-3 text-body-small md:text-heading-5" tabIndex={0}>{`${header} (${contacts.length})`}</h5>
       {contacts.length !== 0 ? (
         <Card
           className="lg:p-0 py-[23px] px-[18px] rounded-xl shadow-[0px_5px_30px_0px_#0000000D] lg:shadow-none lg:border-none"

@@ -45,9 +45,9 @@ const Mutasi = () => {
     searchParams
       ? searchParams.get('startDate') && searchParams.get('endDate')
         ? [
-            dayjs(searchParams.get('startDate')),
-            dayjs(searchParams.get('endDate')),
-          ]
+          dayjs(searchParams.get('startDate')),
+          dayjs(searchParams.get('endDate')),
+        ]
         : [dayjs(), dayjs()]
       : [dayjs(), dayjs()]
   );
@@ -191,25 +191,22 @@ const Mutasi = () => {
       <div className="my-5 lg:my-10">
         <button
           onClick={() => onFilter('ALL_TRANSACTIONS')}
-          className={`btn text-primary-100 rounded-full ${
-            filteredBy === 'ALL_TRANSACTIONS' ? 'bg-primary-100 text-white' : ''
-          }`}
+          className={`btn text-primary-100 rounded-full ${filteredBy === 'ALL_TRANSACTIONS' ? 'bg-primary-100 text-white' : ''
+            }`}
         >
           Semua
         </button>
         <button
           onClick={() => onFilter('INCOMING')}
-          className={`btn text-primary-100 rounded-full mx-2 ${
-            filteredBy === 'INCOMING' ? 'bg-primary-100 text-white' : ''
-          }`}
+          className={`btn text-primary-100 rounded-full mx-2 ${filteredBy === 'INCOMING' ? 'bg-primary-100 text-white' : ''
+            }`}
         >
           Pemasukan
         </button>
         <button
           onClick={() => onFilter('OUTGOING')}
-          className={`btn text-primary-100 rounded-full ${
-            filteredBy === 'OUTGOING' ? 'bg-primary-100 text-white' : ''
-          }`}
+          className={`btn text-primary-100 rounded-full ${filteredBy === 'OUTGOING' ? 'bg-primary-100 text-white' : ''
+            }`}
         >
           Pengeluaran
         </button>
@@ -286,7 +283,7 @@ const Mutasi = () => {
           {groupedTransactions.map((group, index) => (
             <div key={index}>
               <div className="my-4">
-                <p className="text-primary-100 font-bold">
+                <p className="text-primary-100 font-bold" tabIndex={0}>
                   {new Date(group.date).toLocaleDateString('id-ID', {
                     day: 'numeric',
                     month: 'long',
@@ -298,24 +295,25 @@ const Mutasi = () => {
               {group.transactions.map((value: Transaction, index: number) => (
                 <div className="flex justify-between mb-4" key={index}>
                   <div className="">
-                    <p className="text-secondary-200 font-bold mb-2">SUKSES</p>
-                    <p className="mb-2">{value.unique_code}</p>
-                    <p className="font-bold mb-2">{value.type}</p>
+                    <p className="text-secondary-200 font-bold mb-2" tabIndex={0}>SUKSES</p>
+                    <p className="mb-2" tabIndex={0}>{value.unique_code}</p>
+                    <p className="font-bold mb-2" tabIndex={0}>{value.type}</p>
                   </div>
                   <div className="text-right">
                     {value.type === 'DEPOSIT' ? (
-                      <p className="text-green-700 font-semibold mb-2">
+                      <p className="text-green-700 font-semibold mb-2" tabIndex={0}>
                         + {FormatCurrency(value.total_amount)},00
                       </p>
                     ) : (
-                      <p className="text-red-700 font-semibold mb-2">
+                      <p className="text-red-700 font-semibold mb-2" tabIndex={0}>
                         - {FormatCurrency(value.total_amount)},00
                       </p>
                     )}
-                    <p className="text-slate-500 font-light mb-2">
+                    <p className="text-slate-500 font-light mb-2" tabIndex={0}>
                       {value.formatted_time} WIB
                     </p>
                     <p
+                      tabIndex={0}
                       onClick={() =>
                         navigate(`/mutasi/${value.transaction_id}`)
                       }

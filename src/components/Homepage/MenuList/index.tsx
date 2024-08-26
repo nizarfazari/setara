@@ -6,6 +6,7 @@ import iconBuy from '/images/homepage/Pembelian.svg';
 import iconInvest from '/images/homepage/investasi.svg';
 import iconCardless from '/images/homepage/Cardless.svg';
 import iconQR from '/images/homepage/scanqr.svg';
+import { Link } from 'react-router-dom';
 import { Button, Modal } from 'antd';
 import {
   FormatCurrency,
@@ -15,7 +16,7 @@ import {
 import { formattedDate } from '../../../utils';
 import { useAuth } from '../../../hooks/useAuth';
 import axios, { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom';
+
 
 export const MenuList = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -23,7 +24,6 @@ export const MenuList = () => {
   const [, setError] = useState<AxiosError | null>(null);
   const [feedback, setFeedback] = useState<string>('');
   const { user } = useAuth();
-  const navigate = useNavigate();
 
   const showModal = () => {
     setIsModalOpen(true);
@@ -52,7 +52,7 @@ export const MenuList = () => {
 
   useEffect(() => {
     fetchBalance();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user?.token]);
 
   const handleFeatureClick = (feature: string) => {
@@ -90,7 +90,7 @@ export const MenuList = () => {
             <h1 className="text-body-large text-primary-100 font-semibold text-center">
               Info Saldo
             </h1>
-            
+
             <div className="border rounded-xl p-5 my-7 shadow-sm">
               <p
                 className="text-primary-100"
@@ -118,7 +118,7 @@ export const MenuList = () => {
           <p className="pt-2">Info</p>
         </div>
 
-        <div tabIndex={0} className="text-center" onClick={() => navigate('/bca')}>
+        <Link tabIndex={0} className="text-center" to={'/bca'}>
           <img
             src={iconTransfer}
             alt="Transfer"
@@ -126,12 +126,14 @@ export const MenuList = () => {
             className="mx-auto w-16 p-3 shadow-md cursor-pointer rounded-xl border border-primary-300"
           />
           <p className="pt-2">Transfer</p>
-        </div>
+        </Link>
 
-        <div tabIndex={0}
+        <Link
+          to={'/e-wallet'}
+          tabIndex={0}
           className="text-center"
           aria-label="E-wallet"
-          onClick={() => navigate('/e-wallet')}
+
         >
           <img
             src={iconEwallet}
@@ -139,16 +141,16 @@ export const MenuList = () => {
             className="mx-auto w-16 p-3 shadow-md rounded-xl border border-primary-300 cursor-pointer"
           />
           <p className="pt-2">E-Wallet</p>
-        </div>
+        </Link>
 
-        <div tabIndex={0} className=" text-center" onClick={() => navigate('/qr')}>
+        <Link tabIndex={0} className=" text-center" to={'/qr'}>
           <img
             src={iconQR}
             alt="info"
             className="mx-auto w-16 p-3 shadow-md  rounded-xl border border-primary-300 cursor-pointer"
           />
           <p className="pt-2">Info QR</p>
-        </div>
+        </Link>
 
         <button
           type="button"

@@ -8,7 +8,7 @@ import {
   Bell,
   SignOut,
 } from '@phosphor-icons/react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Popup from '../popup';
 
 const Navbar = () => {
@@ -60,34 +60,34 @@ const Navbar = () => {
             className="h-8 cursor-pointer"
           />
           <ul className="hidden md:flex gap-6 text-white">
-            <a
-              onClick={() => navigate('/')}
+            <Link
+            to={'/'}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <House size={20} color="#fff" weight="fill" />
               <p tabIndex={0}>Beranda</p>
-            </a>
-            <a
-              onClick={() => navigate('/mutasi')}
+            </Link>
+            <Link
+              to={'/mutasi'}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <Receipt size={20} color="#fff" weight="fill" />
               <p tabIndex={0}>Mutasi</p>
-            </a>
-            <a
-              onClick={() => navigate('/notifikasi')}
+            </Link>
+            <Link
+              to={'/notifikasi'}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <Bell size={20} color="#fff" weight="fill" />
               <p tabIndex={0}>Notifikasi</p>
-            </a>
-            <a
-              onClick={() => navigate('/')}
+            </Link>
+            <Link
+              to={'/'}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <User size={20} color="#fff" weight="fill" />
               <p tabIndex={0}>Profile</p>
-            </a>
+            </Link>
             <a
               onClick={togglePopup}
               className="cursor-pointer gap-[6px] flex items-center"

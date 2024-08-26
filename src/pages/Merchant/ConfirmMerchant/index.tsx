@@ -18,19 +18,21 @@ const Konfirmasi = () => {
       <div className="md:flex text-primary-100 justify-between md:gap-5 lg:gap-10 mx-11 mt-6">
         <div>
           <div className="my-5 mb-5">
-            <p className="font-bold text-lg">Penerima</p>
+            <p className="font-bold text-lg"    tabIndex={0}>Penerima</p>
             <div className="flex items-center">
               <img
                 className="w-[70px] mr-4"
+                tabIndex={0}
+                aria-label='avatar penerima'
                 src={transactions.recipients.imageUrl}
                 alt="Penerima"
               />
               <div className="text-[12px] md:text-[14px]">
-                <p className="font-bold text-lg">
+                <p className="font-bold text-lg" tabIndex={0}>
                   {transactions.recipients.nama}
                 </p>
                 <div className="flex items-center">
-                  <p className="font-bold text-lg">
+                  <p className="font-bold text-lg" tabIndex={0}>
                     {transactions.recipients.wallet}
                   </p>
                   <img
@@ -38,7 +40,7 @@ const Konfirmasi = () => {
                     src="/images/icons/dot.png"
                     alt="Dot"
                   />
-                  <p className="font-bold text-lg">
+                  <p className="font-bold text-lg" tabIndex={0}>
                     {transactions.recipients.numberDestination}
                   </p>
                 </div>
@@ -47,23 +49,24 @@ const Konfirmasi = () => {
           </div>
 
           <div>
-            <p className="font-bold text-lg">Pengirim</p>
+            <p className="font-bold text-lg" tabIndex={0}>Pengirim</p>
             <div className="flex items-center mt-2">
               <img
                 className="w-[70px] mr-4"
                 src={user?.user.image_path}
+                aria-label='avatar pengirim'
                 alt="Pengirim"
               />
               <div className="text-[12px] md:text-[14px]">
-                <p className="font-bold text-lg">{user?.user.name}</p>
+                <p className="font-bold text-lg" tabIndex={0}>{user?.user.name}</p>
                 <div className="flex items-center">
-                  <p className="font-bold text-lg">{user?.user.bank_name}</p>
+                  <p className="font-bold text-lg" tabIndex={0}>{user?.user.bank_name}</p>
                   <img
                     className="w-[6px] h-[6px] mx-2"
                     src="/images/icons/dot.png"
                     alt="Dot"
                   />
-                  <p className="font-bold text-lg">
+                  <p className="font-bold text-lg" tabIndex={0}>
                     {user?.user.account_number}
                   </p>
                 </div>
@@ -74,23 +77,23 @@ const Konfirmasi = () => {
 
         <div className="md:w-[50%]">
           <Card className="mt-5 p-3 text-primary-100 shadow-lg">
-            <p className="font-bold text-lg">Detail</p>
+            <p className="font-bold text-lg" tabIndex={0}>Detail</p>
             <div className="flex justify-between mt-4">
               <div className="text-neutral-300 font-normal">
-                <p className="font-bold text-lg">Nominal Top Up</p>
-                <p className="font-bold text-lg">Biaya Admin</p>
-                <p className="font-bold text-lg">Catatan</p>
+                <p className="font-bold text-lg" tabIndex={0}>Nominal Top Up</p>
+                <p className="font-bold text-lg" tabIndex={0}>Biaya Admin</p>
+                <p className="font-bold text-lg" tabIndex={0}>Catatan</p>
               </div>
               <div className="flex flex-col items-end">
-                <p className="font-bold text-lg">{FormatCurrency(+transactions.transaction.nominal)}</p>
-                <p className="font-bold text-lg">{FormatCurrency(admin)}</p>
-                <p className="font-bold text-lg">{transactions.transaction.notes || '-'}</p>
+                <p className="font-bold text-lg" tabIndex={0}>{FormatCurrency(+transactions.transaction.nominal)}</p>
+                <p className="font-bold text-lg" tabIndex={0}>{FormatCurrency(admin)}</p>
+                <p className="font-bold text-lg" tabIndex={0}>{transactions.transaction.notes || '-'}</p>
               </div>
             </div>
             <hr className="border-neutral-300 my-2" />
             <div className="flex justify-between font-bold">
-              <p className="font-bold text-lg">Total</p>
-              <p className="font-bold text-lg">
+              <p className="font-bold text-lg"tabIndex={0}>Total</p>
+              <p className="font-bold text-lg" tabIndex={0}>
                 {FormatCurrency(+transactions.transaction.nominal + admin)}
               </p>
             </div>

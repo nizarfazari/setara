@@ -12,7 +12,7 @@ import {
   Spin,
 } from 'antd';
 import { SlidersHorizontal, DownloadSimple } from '@phosphor-icons/react';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { usePostData } from '../../hooks/usePostData';
 import { useAuth } from '../../hooks/useAuth';
 import dayjs, { Dayjs } from 'dayjs';
@@ -28,7 +28,6 @@ import {
 import { GetData } from '../../utils/GetData';
 
 const Mutasi = () => {
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const [filteredBy, setFilteredBy] = useState<string>(
     searchParams
@@ -312,15 +311,13 @@ const Mutasi = () => {
                     <p className="text-slate-500 font-light mb-2" tabIndex={0}>
                       {value.formatted_time} WIB
                     </p>
-                    <p
+                    <Link
                       tabIndex={0}
-                      onClick={() =>
-                        navigate(`/mutasi/${value.transaction_id}`)
-                      }
+                      to={`/mutasi/${value.transaction_id}`}
                       className="mb-2 cursor-pointer underline text-primary-100 font-semibold"
                     >
                       Lihat Bukti Transfer
-                    </p>
+                    </Link>
                   </div>
                 </div>
               ))}

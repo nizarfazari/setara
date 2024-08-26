@@ -88,6 +88,11 @@ const Transfer: React.FC = () => {
                     wallet.isActive
                   )
                 }
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') {
+                    handleWalletClick(wallet.id, `/bca/${wallet.slug}`, wallet.isActive);
+                  }
+                }}
                 className={`flex justify-center shadow-inner mb-3 ${
                   selectedWallet === wallet.id
                     ? 'bg-primary-100'

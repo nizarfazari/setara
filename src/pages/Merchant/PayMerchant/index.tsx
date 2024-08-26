@@ -57,34 +57,42 @@ const PayQris = () => {
               <div className="text-center my-4 lg:order-1 lg:w-1/2">
                 <img
                   className="w-[200px] lg:w-[200px] m-auto lg:h-[200px]"
+                  tabIndex={0}
+                  aria-label={`Merchant ${transactions?.recipients?.nama}`}
                   src={transactions.recipients.imageUrl}
                   alt="Merchant (src ganti image path dari api)"
                 />
-                <p className="mt-2 font-bold text-2xl text-primary-100">
+                <p className="mt-2 font-bold text-2xl text-primary-100" tabIndex={0}>
                   {transactions.recipients.nama}
                 </p>
-                <p className="text-lg text-primary-100">
+                <p className="text-lg text-primary-100" tabIndex={0}>
                   {transactions.recipients.address}
                 </p>
               </div>
 
               <div className="lg:w-1/2 lg:order-2">
-                <p className="font-bold text-lg text-primary-100">
+                <p className="font-bold text-lg text-primary-100" tabIndex={0}>
                   Sumber Rekening
                 </p>
 
                 <div className="flex flex-nowrap items-start mt-2">
                   <img
+                    tabIndex={0}
+                    aria-label='avatar account'
                     className="w-[70px] mr-4"
                     src={user?.user.image_path}
                     alt="Account"
                   />
                   <div className="text-[12px] md:text-[14px]">
-                    <p className="font-bold text-lg text-primary-100">
+                    <p className="font-bold text-lg text-primary-100" tabIndex={0}>
                       {user?.user.name}
                     </p>
                     <div className="flex items-center mb-8">
-                      <p className="font-bold text-lg text-primary-100">
+                      <p
+                        className="font-bold text-lg text-primary-100"
+                        tabIndex={0}
+                        aria-label='nama bank'
+                        >
                         {user?.user.bank_name}
                       </p>
                       <img
@@ -92,7 +100,7 @@ const PayQris = () => {
                         src="/images/icons/dot.png"
                         alt="Dot"
                       />
-                      <p className="font-bold text-lg text-primary-100">
+                      <p className="font-bold text-lg text-primary-100" tabIndex={0} aria-label='account number'>
                         {user?.user.account_number}
                       </p>
                     </div>
@@ -128,7 +136,7 @@ const PayQris = () => {
                     parser={(value) =>
                       value?.replace(/\.\s?|(,*)/g, '') as unknown as number
                     }
-                    className={`w-full px-[15px] py-3 md:px-6 md:py-4 ${apiAmount ? 'font-bold !text-[#000]' : '' }`}
+                    className={`w-full px-[15px] py-3 md:px-6 md:py-4 ${apiAmount ? 'font-bold !text-[#000]' : ''}`}
                     placeholder="Masukkan Nominal"
                     disabled={!!apiAmount}
                   />

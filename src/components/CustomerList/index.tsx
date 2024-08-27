@@ -40,7 +40,7 @@ export default function CustomerList({ pathUrl, header, contacts, setRecipients,
         >
           <Flex vertical gap={12}>
             {contacts.map((contact, index) => (
-              <Card className="border-white lg:border-primary-300" id="contact-item" key={index} onClick={() => onClickCard(contact)}>
+              <Card className="border-white lg:border-primary-300" id="contact-item" tabIndex={0} key={index} onClick={() => onClickCard(contact)}>
                 <CustomerItem  {...contact}  refetch={refetch}/>
               </Card>
             ))}

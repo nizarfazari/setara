@@ -61,39 +61,44 @@ const Navbar = () => {
           />
           <ul className="hidden md:flex gap-6 text-white">
             <Link
-            to={'/'}
+              to={'/'}
+              tabIndex={0}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <House size={20} color="#fff" weight="fill" />
-              <p tabIndex={0}>Beranda</p>
+              <p>Beranda</p>
             </Link>
             <Link
+              tabIndex={0}
               to={'/mutasi'}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <Receipt size={20} color="#fff" weight="fill" />
-              <p tabIndex={0}>Mutasi</p>
+              <p >Mutasi</p>
             </Link>
             <Link
+              tabIndex={0}
               to={'/notifikasi'}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <Bell size={20} color="#fff" weight="fill" />
-              <p tabIndex={0}>Notifikasi</p>
+              <p >Notifikasi</p>
             </Link>
             <Link
               to={'/'}
+              tabIndex={0}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <User size={20} color="#fff" weight="fill" />
-              <p tabIndex={0}>Profile</p>
+              <p >Profile</p>
             </Link>
             <a
+              tabIndex={0}
               onClick={togglePopup}
               className="cursor-pointer gap-[6px] flex items-center"
             >
               <SignOut size={20} color="#fff" weight="fill" />
-              <p tabIndex={0}>Logout</p>
+              <p >Logout</p>
             </a>
           </ul>
           <div onClick={handleNav} className="block md:hidden z-10 text-white">

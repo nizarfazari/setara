@@ -49,7 +49,7 @@ export default function CustomerItem({ id, ewallet_user_image_path, ewallet_name
         </Flex>
       </Flex>
       {favorite !== undefined && (
-        <Heart weight={`${favorite ? "fill" : "regular"}`} className="size-[22px] md:size-[32px] " onClick={onClickFavourite} />
+        <Heart weight={`${favorite ? "fill" : "regular"}`} className="size-[22px] md:size-[32px] " tabIndex={0} onClick={onClickFavourite} />
       )}
     </Flex>
   );

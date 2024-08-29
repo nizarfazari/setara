@@ -90,7 +90,7 @@ const InfoSaldo: React.FC = () => {
         <div>
           <div className="my-3">
             <div
-              className="bg-primary-100 rounded-lg md:w-1/3 px-7 py-5"
+              className="bg-primary-100 rounded-lg max-w-[400px] px-7 py-5"
               aria-live="polite"
             >
               <p tabIndex={0}

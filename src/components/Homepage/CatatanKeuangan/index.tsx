@@ -188,7 +188,7 @@ export const CatatanKeuangan = () => {
       )}
       <div>
         <div
-          className="rounded-lg my-6 flex justify-between justify-items-center gap-2"
+          className="rounded-lg my-6 flex justify-between justify-items-center gap-2 flex-col sm:flex-row"
           role="region"
           aria-labelledby="financial-summary-title"
         >
